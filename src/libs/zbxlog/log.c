@@ -237,8 +237,11 @@ static void	lock_log(void)
 
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGUSR1);
-	sigaddset(&mask, SIGTERM);	/* block SIGTERM, SIGINT to prevent deadlock on log file mutex */
+	sigaddset(&mask, SIGUSR2);
+	sigaddset(&mask, SIGTERM);
 	sigaddset(&mask, SIGINT);
+	sigaddset(&mask, SIGQUIT);
+	sigaddset(&mask, SIGABRT);
 
 	if (0 > sigprocmask(SIG_BLOCK, &mask, &orig_mask))
 		zbx_error("cannot set sigprocmask to block the user signal");

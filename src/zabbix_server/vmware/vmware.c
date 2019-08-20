@@ -4954,7 +4954,7 @@ ZBX_THREAD_ENTRY(vmware_thread, args)
 
 	last_stat_time = time(NULL);
 
-	for (;;)
+	while (ZBX_IS_RUNNING())
 	{
 		sec = zbx_time();
 		zbx_update_env(sec);
@@ -5074,6 +5074,11 @@ ZBX_THREAD_ENTRY(vmware_thread, args)
 
 		zbx_sleep_loop(sleeptime);
 	}
+
+	zbx_setproctitle("%s #%d [terminated]", get_process_type_string(process_type), process_num);
+
+	while (1)
+		zbx_sleep(SEC_PER_MIN);
 #undef STAT_INTERVAL
 #else
 	ZBX_UNUSED(args);

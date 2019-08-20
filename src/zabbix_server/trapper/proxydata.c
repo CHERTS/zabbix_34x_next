@@ -21,6 +21,7 @@
 #include "db.h"
 #include "log.h"
 #include "proxy.h"
+#include "daemon.h"
 
 #include "proxydata.h"
 #include "../../libs/zbxcrypto/tls_tcp_active.h"
@@ -113,7 +114,17 @@ void	zbx_recv_proxy_data(zbx_socket_t *sock, struct zbx_json_parse *jp, zbx_time
 		goto out;
 	}
 
+	if (!ZBX_IS_RUNNING())
+	{
+		error = zbx_strdup(error, "Zabbix server shutdown in progress");
+		zabbix_log(LOG_LEVEL_WARNING, "cannot process proxy data from active proxy at \"%s\": %s",
+				sock->peer, error);
+		ret = status = FAIL;
+		goto out;
+	}
+	else
 	zbx_send_proxy_data_respose(&proxy, sock, error);
+
 out:
 	if (FAIL == ret)
 		zbx_send_response(sock, status, error, CONFIG_TIMEOUT);

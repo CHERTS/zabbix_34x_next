@@ -25,6 +25,7 @@
 #endif
 
 extern char	*CONFIG_PID_FILE;
+extern volatile sig_atomic_t    sig_exiting;
 
 #include "threads.h"
 
@@ -33,7 +34,7 @@ void	daemon_stop(void);
 
 int	zbx_sigusr_send(int flags);
 
-#define ZBX_IS_RUNNING()	1
+#define ZBX_IS_RUNNING()	(0 == sig_exiting)
 #define ZBX_DO_EXIT()
 
 #define START_MAIN_ZABBIX_ENTRY(allow_root, user, flags)	daemon_start(allow_root, user, flags)

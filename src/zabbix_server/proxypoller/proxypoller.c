@@ -183,6 +183,19 @@ static int	get_data_from_proxy(const DC_PROXY *proxy, const char *request, char 
 		{
 			if (SUCCEED == (ret = recv_data_from_proxy(proxy, &s)))
 			{
+				if (!ZBX_IS_RUNNING())
+				{
+					int	flags = ZBX_TCP_PROTOCOL;
+
+					zbx_send_response_ext(&s, FAIL, "Zabbix server shutdown in progress",
+							flags, CONFIG_TIMEOUT);
+
+					zabbix_log(LOG_LEVEL_WARNING, "cannot process proxy data from passive proxy at"
+							" \"%s\": Zabbix server shutdown in progress", s.peer);
+					ret = FAIL;
+				}
+				else
+				{
 				if (ZBX_TASKS_IGNORE == tasks)
 					ret = zbx_send_response(&s, SUCCEED, NULL, 0);
 				else
@@ -191,6 +204,7 @@ static int	get_data_from_proxy(const DC_PROXY *proxy, const char *request, char 
 				if (SUCCEED == ret)
 					*data = zbx_strdup(*data, s.buffer);
 			}
+		}
 		}
 
 		disconnect_proxy(&s);
@@ -892,7 +906,7 @@ ZBX_THREAD_ENTRY(proxypoller_thread, args)
 
 	DBconnect(ZBX_DB_CONNECT_NORMAL);
 
-	for (;;)
+	while (ZBX_IS_RUNNING())
 	{
 		sec = zbx_time();
 		zbx_update_env(sec);
@@ -933,5 +947,10 @@ ZBX_THREAD_ENTRY(proxypoller_thread, args)
 
 		zbx_sleep_loop(sleeptime);
 	}
+
+	zbx_setproctitle("%s #%d [terminated]", get_process_type_string(process_type), process_num);
+
+	while (1)
+		zbx_sleep(SEC_PER_MIN);
 #undef STAT_INTERVAL
 }

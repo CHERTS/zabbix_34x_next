@@ -186,6 +186,7 @@ static char	shortopts[] =
 static char		*TEST_METRIC = NULL;
 int			threads_num = 0;
 ZBX_THREAD_HANDLE	*threads = NULL;
+static int		*threads_flags;
 
 unsigned char	program_type = ZBX_PROGRAM_TYPE_AGENTD;
 
@@ -231,6 +232,7 @@ void	zbx_co_uninitialize();
 #endif
 
 int	get_process_info_by_thread(int local_server_num, unsigned char *local_process_type, int *local_process_num);
+void	zbx_free_service_resources(int ret);
 
 int	get_process_info_by_thread(int local_server_num, unsigned char *local_process_type, int *local_process_num)
 {
@@ -966,7 +968,8 @@ int	MAIN_ZABBIX_ENTRY(int flags)
 		exit(EXIT_FAILURE);
 	}
 #endif
-	threads = zbx_calloc(threads, threads_num, sizeof(ZBX_THREAD_HANDLE));
+	threads = (ZBX_THREAD_HANDLE *)zbx_calloc(threads, threads_num, sizeof(ZBX_THREAD_HANDLE));
+	threads_flags = (int *)zbx_calloc(threads_flags, threads_num, sizeof(int));
 
 	zabbix_log(LOG_LEVEL_INFORMATION, "agent #0 started [main process]");
 
@@ -1042,7 +1045,7 @@ int	MAIN_ZABBIX_ENTRY(int flags)
 	/* all exiting child processes should be caught by signal handlers */
 	THIS_SHOULD_NEVER_HAPPEN;
 #endif
-	zbx_on_exit();
+	zbx_on_exit(SUCCEED);
 
 	return SUCCEED;
 }
@@ -1054,37 +1057,13 @@ int	MAIN_ZABBIX_ENTRY(int flags)
  * Purpose: free service resources allocated by main thread                   *
  *                                                                            *
  ******************************************************************************/
-void	zbx_free_service_resources(void)
+void	zbx_free_service_resources(int ret)
 {
 	if (NULL != threads)
 	{
-		int		i;
-#if !defined(_WINDOWS)
-		sigset_t	set;
-
-		/* ignore SIGCHLD signals in order for zbx_sleep() to work */
-		sigemptyset(&set);
-		sigaddset(&set, SIGCHLD);
-		sigprocmask(SIG_BLOCK, &set, NULL);
-#else
-		/* wait for threads to finish first. although listener threads will never end */
-		WaitForMultipleObjectsEx(threads_num, threads, TRUE, 1000, FALSE);
-#endif
-		for (i = 0; i < threads_num; i++)
-		{
-			if (threads[i])
-				zbx_thread_kill(threads[i]);
-		}
-
-		for (i = 0; i < threads_num; i++)
-		{
-			if (threads[i])
-				zbx_thread_wait(threads[i]);
-
-			threads[i] = ZBX_THREAD_HANDLE_NULL;
-		}
-
+		zbx_threads_wait(threads, threads_flags, threads_num, ret);	/* wait for all child processes to exit */
 		zbx_free(threads);
+		zbx_free(threads_flags);
 	}
 
 	free_metrics();
@@ -1103,11 +1082,11 @@ void	zbx_free_service_resources(void)
 	zabbix_close_log();
 }
 
-void	zbx_on_exit(void)
+void	zbx_on_exit(int ret)
 {
 	zabbix_log(LOG_LEVEL_DEBUG, "zbx_on_exit() called");
 
-	zbx_free_service_resources();
+	zbx_free_service_resources(ret);
 
 #if defined(_WINDOWS) && (defined(HAVE_POLARSSL) || defined(HAVE_GNUTLS) || defined(HAVE_OPENSSL))
 	zbx_tls_free();

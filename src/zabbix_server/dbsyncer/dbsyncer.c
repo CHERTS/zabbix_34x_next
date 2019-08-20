@@ -100,8 +100,13 @@ ZBX_THREAD_ENTRY(dbsyncer_thread, args)
 			last_stat_time = time(NULL);
 		}
 
+		if (!ZBX_IS_RUNNING())
+			break;
+
 		zbx_sleep_loop(sleeptime);
 	}
 
+	DBclose();
+	exit(EXIT_SUCCESS);
 #undef STAT_INTERVAL
 }

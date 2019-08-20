@@ -204,7 +204,7 @@ ZBX_THREAD_ENTRY(ipmi_poller_thread, args)
 
 	update_selfmon_counter(ZBX_PROCESS_STATE_BUSY);
 
-	for (;;)
+	while (ZBX_IS_RUNNING())
 	{
 		time_now = zbx_time();
 
@@ -229,6 +229,9 @@ ZBX_THREAD_ENTRY(ipmi_poller_thread, args)
 
 		update_selfmon_counter(ZBX_PROCESS_STATE_BUSY);
 
+		if (NULL == message)
+			break;
+
 		time_read = zbx_time();
 		time_idle += time_read - time_now;
 		zbx_update_env(time_read);
@@ -249,6 +252,11 @@ ZBX_THREAD_ENTRY(ipmi_poller_thread, args)
 
 		zbx_ipc_message_clean(&message);
 	}
+
+	zbx_setproctitle("%s #%d [terminated]", get_process_type_string(process_type), process_num);
+
+	while (1)
+		zbx_sleep(SEC_PER_MIN);
 
 	zbx_ipc_socket_close(&ipmi_socket);
 

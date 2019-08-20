@@ -648,7 +648,7 @@ ZBX_THREAD_ENTRY(timer_thread, args)
 
 	DBconnect(ZBX_DB_CONNECT_NORMAL);
 
-	for (;;)
+	while (ZBX_IS_RUNNING())
 	{
 		now = time(NULL);
 		nextcheck = now + TIMER_DELAY - (now % TIMER_DELAY);
@@ -767,5 +767,9 @@ ZBX_THREAD_ENTRY(timer_thread, args)
 		}
 	}
 
+	zbx_setproctitle("%s #%d [terminated]", get_process_type_string(process_type), process_num);
+
+	while (1)
+		zbx_sleep(SEC_PER_MIN);
 #undef STAT_INTERVAL
 }
