@@ -75,6 +75,7 @@ struct zbx_db_result
 
 static int	txn_level = 0;	/* transaction level, nested transactions are not supported */
 static int	txn_error = 0;	/* failed transaction */
+static int  txn_end_error = 0;  /* transaction result */
 
 extern int	CONFIG_LOG_SLOW_QUERIES;
 
@@ -966,6 +967,11 @@ int	zbx_db_txn_level(void)
 int	zbx_db_txn_error(void)
 {
 	return txn_error;
+}
+
+int zbx_db_txn_end_error(void)
+{
+        return txn_end_error;
 }
 
 #ifdef HAVE_ORACLE

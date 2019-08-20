@@ -183,23 +183,37 @@ struct	_DC_TRIGGER;
 #define ZBX_SQL_ITEM_SELECT	ZBX_SQL_ITEM_FIELDS " from " ZBX_SQL_ITEM_TABLES
 
 #ifdef HAVE_ORACLE
-#define	DBbegin_multiple_update(sql, sql_alloc, sql_offset)	zbx_strcpy_alloc(sql, sql_alloc, sql_offset, "begin\n")
-#define	DBend_multiple_update(sql, sql_alloc, sql_offset)	zbx_strcpy_alloc(sql, sql_alloc, sql_offset, "end;")
+#	define ZBX_PLSQL_BEGIN	"begin\n"
+#	define ZBX_PLSQL_END	"end;"
+#	define	DBbegin_multiple_update(sql, sql_alloc, sql_offset)			\
+			zbx_strcpy_alloc(sql, sql_alloc, sql_offset, ZBX_PLSQL_BEGIN)
+#	define	DBend_multiple_update(sql, sql_alloc, sql_offset)			\
+			zbx_strcpy_alloc(sql, sql_alloc, sql_offset, ZBX_PLSQL_END)
+#	if 0 == ZBX_MAX_OVERFLOW_SQL_SIZE
+#		define	ZBX_SQL_EXEC_FROM	ZBX_CONST_STRLEN(ZBX_PLSQL_BEGIN)
+#	else
+#		define	ZBX_SQL_EXEC_FROM	0
+#	endif
 
-#define	ZBX_SQL_STRCMP		"%s%s%s"
-#define	ZBX_SQL_STRVAL_EQ(str)	'\0' != *str ? "='"  : "",		\
+#	define	ZBX_SQL_STRCMP		"%s%s%s"
+#	define	ZBX_SQL_STRVAL_EQ(str)				\
+			'\0' != *str ? "='"  : "",		\
 				'\0' != *str ? str   : " is null",	\
 				'\0' != *str ? "'"   : ""
-#define	ZBX_SQL_STRVAL_NE(str)	'\0' != *str ? "<>'" : "",		\
+#	define	ZBX_SQL_STRVAL_NE(str)				\
+			'\0' != *str ? "<>'" : "",		\
 				'\0' != *str ? str   : " is not null",	\
 				'\0' != *str ? "'"   : ""
-#else
-#define	DBbegin_multiple_update(sql, sql_alloc, sql_offset)
-#define	DBend_multiple_update(sql, sql_alloc, sql_offset)
 
-#define	ZBX_SQL_STRCMP		"%s'%s'"
-#define	ZBX_SQL_STRVAL_EQ(str)	"=", str
-#define	ZBX_SQL_STRVAL_NE(str)	"<>", str
+#else
+#	define	DBbegin_multiple_update(sql, sql_alloc, sql_offset)	do {} while (0)
+#	define	DBend_multiple_update(sql, sql_alloc, sql_offset)	do {} while (0)
+
+#	define	ZBX_SQL_EXEC_FROM	0
+
+#	define	ZBX_SQL_STRCMP		"%s'%s'"
+#	define	ZBX_SQL_STRVAL_EQ(str)	"=", str
+#	define	ZBX_SQL_STRVAL_NE(str)	"<>", str
 #endif
 
 #define ZBX_SQL_NULLCMP(f1, f2)	"((" f1 " is null and " f2 " is null) or " f1 "=" f2 ")"
@@ -436,35 +450,18 @@ void	DBclose(void);
 
 #ifdef HAVE_ORACLE
 void	DBstatement_prepare(const char *sql);
-int	DBstatement_execute();
 #endif
-#ifdef HAVE___VA_ARGS__
-#	define DBexecute(fmt, ...) __zbx_DBexecute(ZBX_CONST_STRING(fmt), ##__VA_ARGS__)
-#	define DBexecute_once(fmt, ...) __zbx_DBexecute_once(ZBX_CONST_STRING(fmt), ##__VA_ARGS__)
-#else
-#	define DBexecute __zbx_DBexecute
-#	define DBexecute_once __zbx_DBexecute_once
-#endif
-int	__zbx_DBexecute(const char *fmt, ...);
-int	__zbx_DBexecute_once(const char *fmt, ...);
-
-#ifdef HAVE___VA_ARGS__
-#	define DBselect_once(fmt, ...)	__zbx_DBselect_once(ZBX_CONST_STRING(fmt), ##__VA_ARGS__)
-#	define DBselect(fmt, ...)	__zbx_DBselect(ZBX_CONST_STRING(fmt), ##__VA_ARGS__)
-#else
-#	define DBselect_once	__zbx_DBselect_once
-#	define DBselect		__zbx_DBselect
-#endif
-DB_RESULT	__zbx_DBselect_once(const char *fmt, ...);
-DB_RESULT	__zbx_DBselect(const char *fmt, ...);
-
+int     DBexecute(const char *fmt, ...) __zbx_attr_format_printf(1, 2);
+int     DBexecute_once(const char *fmt, ...) __zbx_attr_format_printf(1, 2);
+DB_RESULT   DBselect_once(const char *fmt, ...) __zbx_attr_format_printf(1, 2);
+DB_RESULT   DBselect(const char *fmt, ...) __zbx_attr_format_printf(1, 2);
 DB_RESULT	DBselectN(const char *query, int n);
 DB_ROW		DBfetch(DB_RESULT result);
 int		DBis_null(const char *field);
 void		DBbegin(void);
-void		DBcommit(void);
+int     DBcommit(void);
 void		DBrollback(void);
-void		DBend(int ret);
+int		DBend(int ret);
 
 const ZBX_TABLE	*DBget_table(const char *tablename);
 const ZBX_FIELD	*DBget_field(const ZBX_TABLE *table, const char *fieldname);

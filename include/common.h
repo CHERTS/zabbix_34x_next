@@ -980,6 +980,12 @@ void	zbx_strarr_init(char ***arr);
 void	zbx_strarr_add(char ***arr, const char *entry);
 void	zbx_strarr_free(char **arr);
 
+#if defined(__GNUC__) || defined(__clang__)
+#   define __zbx_attr_format_printf(idx1, idx2) __attribute__((__format__(__printf__, (idx1), (idx2))))
+#else
+#   define __zbx_attr_format_printf(idx1, idx2)
+#endif
+
 #ifdef HAVE___VA_ARGS__
 #	define zbx_setproctitle(fmt, ...) __zbx_zbx_setproctitle(ZBX_CONST_STRING(fmt), ##__VA_ARGS__)
 #else
