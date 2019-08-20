@@ -1451,5 +1451,9 @@ const char	*zbx_variant_type_desc(const zbx_variant_t *value);
 int	zbx_validate_value_dbl(double value);
 void	zbx_update_env(double time_now);
 
+#ifdef _WINDOWS
+#define ZBX_PCRE_RECURSION_LIMIT	2000	/* assume ~1 MB stack and ~500 bytes per recursion */
+#endif
+
 #endif
 
