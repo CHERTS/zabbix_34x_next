@@ -8294,9 +8294,12 @@ void	*DCconfig_get_stats(int request)
 		case ZBX_CONFSTATS_BUFFER_FREE:
 			value_uint = config_mem->free_size + strpool_mem->free_size;
 			return &value_uint;
+		case ZBX_CONFSTATS_BUFFER_PUSED:
+			value_double = 100 * (double)(config_mem->orig_size - config_mem->free_size) /
+					config_mem->orig_size;
+			return &value_double;
 		case ZBX_CONFSTATS_BUFFER_PFREE:
-			value_double = 100.0 * ((double)(config_mem->free_size + strpool_mem->free_size) /
-							(config_mem->orig_size + strpool_mem->orig_size));
+			value_double = 100 * (double)config_mem->free_size / config_mem->orig_size;
 			return &value_double;
 		default:
 			return NULL;
