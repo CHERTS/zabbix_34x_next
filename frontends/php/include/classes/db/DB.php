@@ -1043,12 +1043,19 @@ class DB {
 			if (!is_array($options[$pk_option])) {
 				$options[$pk_option] = [$options[$pk_option]];
 			}
-
 			$field_schema = $table_schema['fields'][$pk];
-
-			$sql_parts['where'][] = self::isNumericFieldType($field_schema['type'])
-				? dbConditionInt(self::fieldId($pk, $table_alias), $options[$pk_option], false, true, false)
-				: dbConditionString(self::fieldId($pk, $table_alias), $options[$pk_option]);
+			$field_name = self::fieldId($pk, $table_alias);
+			switch ($field_schema['type']) {
+				case self::FIELD_TYPE_ID:
+					$sql_parts['where'][] = dbConditionId($field_name, $options[$pk_option]);
+					break;
+				case self::FIELD_TYPE_INT:
+				case self::FIELD_TYPE_UINT:
+					$sql_parts['where'][] = dbConditionInt($field_name, $options[$pk_option]);
+					break;
+				default:
+					$sql_parts['where'][] = dbConditionString($field_name, $options[$pk_option]);
+			}
 		}
 
 		// filters
@@ -1096,9 +1103,17 @@ class DB {
 				$value = [$value];
 			}
 
-			$filter[] = self::isNumericFieldType($field_schema['type'])
-				? dbConditionInt(self::fieldId($field_name, $table_alias), $value, false, true, false)
-				: dbConditionString(self::fieldId($field_name, $table_alias), $value);
+			switch ($field_schema['type']) {
+				case self::FIELD_TYPE_ID:
+					$filter[] = dbConditionId(self::fieldId($field_name, $table_alias), $value);
+					break;
+				case self::FIELD_TYPE_INT:
+				case self::FIELD_TYPE_UINT:
+					$filter[] = dbConditionInt(self::fieldId($field_name, $table_alias), $value);
+					break;
+				default:
+					$filter[] = dbConditionString(self::fieldId($field_name, $table_alias), $value);
+			}
 		}
 
 		if ($filter) {
