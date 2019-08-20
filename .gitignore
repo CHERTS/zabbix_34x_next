@@ -1,0 +1,13 @@
+/.buildpath
+/.project
+/.settings
+/autom4te.cache
+/config.log
+/config.status
+/cscope.*
+/nbproject
+/tags
+/zabbix-*.tar.gz
+/commit.sh
+/*.patch
+/*.orig
