@@ -493,7 +493,7 @@ static int	lld_rows_get(const char *value, lld_filter_t *filter, zbx_vector_ptr_
 
 	if (SUCCEED != zbx_json_open(value, &jp))
 	{
-		*error = zbx_strdup(*error, "Value should be a JSON object.");
+		*error = zbx_dsprintf(*error, "Value should be a JSON object: %s.", zbx_json_strerror());
 		goto out;
 	}
 
@@ -633,7 +633,11 @@ void	lld_process_discovery_rule(zbx_uint64_t lld_ruleid, const char *value, cons
 		goto error;
 
 	if (SUCCEED != lld_rows_get(value, &filter, &lld_rows, &info, &error))
+	{
+		zabbix_log(LOG_LEVEL_WARNING, "Cannot get data for LLD rule \"%s\": %s Raw JSON value: '%s'",
+				zbx_host_key_string(lld_ruleid), error, value);
 		goto error;
+	}
 
 	error = zbx_strdup(error, "");
 
