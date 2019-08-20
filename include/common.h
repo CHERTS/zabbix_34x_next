@@ -78,6 +78,12 @@ extern char ZABBIX_EVENT_SOURCE[ZBX_SERVICE_NAME_LEN];
 #	pragma warning (disable: 4996)	/* warning C4996: <function> was declared deprecated */
 #endif
 
+#if defined(__GNUC__) && __GNUC__ >= 7
+#	define ZBX_FALLTHROUGH	__attribute__ ((fallthrough))
+#else
+#	define ZBX_FALLTHROUGH
+#endif
+
 #define	SUCCEED		0
 #define	FAIL		-1
 #define	NOTSUPPORTED	-2
@@ -801,9 +807,6 @@ do														\
 }														\
 while (0)
 
-#define MIN_ZABBIX_PORT 1024u
-#define MAX_ZABBIX_PORT 65535u
-
 extern const char	*progname;
 extern const char	title_message[];
 extern const char	syslog_app_name[];
@@ -979,6 +982,12 @@ char	*str_linefeed(const char *src, size_t maxline, const char *delim);
 void	zbx_strarr_init(char ***arr);
 void	zbx_strarr_add(char ***arr, const char *entry);
 void	zbx_strarr_free(char **arr);
+
+#if defined(__GNUC__) || defined(__clang__)
+#   define __zbx_attr_format_printf(idx1, idx2) __attribute__((__format__(__printf__, (idx1), (idx2))))
+#else
+#   define __zbx_attr_format_printf(idx1, idx2)
+#endif
 
 #if defined(__GNUC__) || defined(__clang__)
 #   define __zbx_attr_format_printf(idx1, idx2) __attribute__((__format__(__printf__, (idx1), (idx2))))

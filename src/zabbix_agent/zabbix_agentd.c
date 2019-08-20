@@ -1143,6 +1143,16 @@ int	main(int argc, char **argv)
 
 	import_symbols();
 
+#ifdef _WINDOWS
+	if (ZBX_TASK_SHOW_USAGE != t.task && ZBX_TASK_SHOW_VERSION != t.task && ZBX_TASK_SHOW_HELP != t.task &&
+			SUCCEED != zbx_socket_start(&error))
+	{
+		zbx_error(error);
+		zbx_free(error);
+		exit(EXIT_FAILURE);
+	}
+#endif
+
 	/* this is needed to set default hostname in zbx_load_config() */
 	init_metrics();
 
