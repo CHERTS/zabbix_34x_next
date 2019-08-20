@@ -4727,6 +4727,14 @@ msgstr "Обнаружено"
 msgid "Discovered device"
 msgstr "Обнаруженное устройство"
 
+#: include/forms.inc.php:480
+msgid "Discovered items"
+msgstr "Обнаруженные элементы данных"
+
+#: include/forms.inc.php:480
+msgid "Regular items"
+msgstr "Обычные элементы данных"
+
 #: include/menu.inc.php:104 include/menu.inc.php:236
 #: include/views/configuration.action.list.php:32
 #: include/views/configuration.host.list.php:69
