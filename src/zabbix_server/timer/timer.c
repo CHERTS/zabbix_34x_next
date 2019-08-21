@@ -466,9 +466,9 @@ static int	process_maintenance(void)
 			" from maintenances m,maintenances_windows mw,timeperiods tp"
 			" where m.maintenanceid=mw.maintenanceid"
 				" and mw.timeperiodid=tp.timeperiodid"
-				" and m.active_since<=%d"
-				" and m.active_till>%d",
-			now, now);
+				" and m.active_since<=" ZBX_FS_TIME_T
+				" and m.active_till>" ZBX_FS_TIME_T,
+			(zbx_fs_time_t)now, (zbx_fs_time_t)now);
 
 	while (NULL != (row = DBfetch(result)))
 	{

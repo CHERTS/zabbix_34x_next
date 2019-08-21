@@ -33,4 +33,5 @@
 [ZBX-16277] fixed compilation Zabbix agent for Windows with options available for Windows Vista and newer (MVekslers)
 [ZBX-16315] fixed Zabbix server not to cause foreign key constraint failure on Zabbix proxy when changing and sending configuration at the same time (vso) (https://support.zabbix.com/browse/ZBX-16315)
 [ZBX-16346] fixed compilation for Oracle Instant Client v18.5 and higher (asestakovs) (https://support.zabbix.com/browse/ZBX-16346)
+[DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
 ~~~~
