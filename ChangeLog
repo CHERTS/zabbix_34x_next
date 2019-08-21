@@ -1,3 +1,40 @@
+Changes for 3.4.16 (unofficial)
+
+New features:
+.......PS. [ZBXNEXT-435] add Oracle TNSNAMES connect support (mgrigorev)
+...G...... [ZBXNEXT-1302] added low-level discovery of block devices (asestakovs)
+..F....... [ZBXNEXT-1456] added filter by item discovery status for item configuration view; thanks to Volker Fröhlich for the original patch (Alexei)
+..F....PS. [ZBXNEXT-2315] implemented content matching in web monitoring headers (talbergs, vso)
+...G...... [ZBXNEXT-4577] (partially) moved ZBXEndThread function from service (zbxwin32) to threads (zbxsys)
+.......PS. [ZBXNEXT-4757] added support of "pused" mode for cache-related internal items (Sasha)
+...G...... [ZBXNEXT-4967] added Zabbix sender data sending to multiple destinations given in ServerActive configuration parameter (viktors)
+...G...PS. [ZBXNEXT-5179] added option to specify absolute path in LoadModule; thanks to Glebs Ivanovskis for the patch (asestakovs)
+
+Bug fixes:
+.......PS. [ZBXNEXT-4941] changed overflow statements to execute one by one for Oracle for better performance (kalimulin)
+...G...PS. [ZBX-9867] improved Zabbix daemon termination by not using signal unsafe functions in signal handler; improved Zabbix server and Zabbix proxy process termination by stopping data collection and waiting for history syncers to finish (vso)
+...G...... [ZBX-11970] fixed style for some enumerators and structure type declarations (abs, Andris)
+...G....S. [ZBX-12671] refactoring the code base to support the compiler flag -Wstrict-prototypes
+...G...PS. [ZBX-12983] fixed compilation warnings under Windows (valdis)
+.......PS. [ZBX-13186] Show discovery error "Value should be a JSON object" in zabbix log file
+A......... [ZBX-13266] improved performance of the SQL queries with lot of IDs in the condition (Sasha)
+.......PS. [ZBX-14853] fixed error of vmware items caused by misconfigured vmware maxQueryMetrics parameter (MVekslers)
+...G...... [ZBX-15225] improved handling of timeouts in "vfs.dir.size" and "vfs.dir.count" items on Windows agent (asitals)
+...G...PS. [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris)
+...G...... [ZBX-15915] fixed linking error if round() is undefined (akozlovs)
+...G...PS. [ZBX-15955] fixed security vulnerability - accepting connections from not allowed addresses (Andris, vso)
+...G...... [ZBX-15962] added mounted filesystems to vfs.fs.discovery of windows agent (asestakovs)
+...G...PS. [ZBX-16103] reduced PCRE recursion limit (asestakovs)
+.......PS. [ZBX-16166] fixed Zabbix fping feature detection does not work with fping builds since 10 Feb 2017 (akozlovs)
+...G...... [ZBX-16218] fixed zabbix_sender does not clean up its semaphores (akozlovs)
+...G...PS. [ZBX-16239] fixed compilation warining related to prototypes of module API functions (viktors)
+.......PS. [ZBX-16256] eliminated possible infinite fetch loop with OracleDB (viktors)
+.......PS. [ZBX-16270] fixed memory leak in IPC service when queueing multiple messages to client (akozlovs)
+....I..... [ZBX-16277] fixed compilation Zabbix agent for Windows with options available for Windows Vista and newer (MVekslers)
+........S. [ZBX-16315] fixed Zabbix server not to cause foreign key constraint failure on Zabbix proxy when changing and sending configuration at the same time (vso)
+.......PS. [ZBX-16346] fixed compilation for Oracle Instant Client v18.5 and higher (asestakovs)
+
+--------------------------------------------------------------------------------
 Changes for 3.4.15
 
 3.4.15rc1 was released as 3.4.15 without any changes
