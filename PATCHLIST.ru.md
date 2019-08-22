@@ -1,6 +1,6 @@
-# Список бэкпортированных патчей из версии 4.0/4.2/4.4
+# РЎРїРёСЃРѕРє Р±СЌРєРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹С… РїР°С‚С‡РµР№ РёР· РІРµСЂСЃРёРё 4.0/4.2/4.4
 
-[In English / По-английски](PATCHLIST.md)
+[In English / РџРѕ-Р°РЅРіР»РёР№СЃРєРё](PATCHLIST.md)
 
 ~~~~
 [ZBXNEXT-435] Add Oracle TNSNAMES connect support (https://support.zabbix.com/browse/ZBXNEXT-435)
