@@ -1,5 +1,7 @@
 # Продолжение развития Zabbix версии 3.4.x
 
+[![Build Status](https://travis-ci.org/CHERTS/zabbix_34x_next.svg?branch=master)](https://travis-ci.org/CHERTS/zabbix_34x_next)
+
 [In English / По-английски](README.md)
 
 Поддержка Zabbix версии 3.4.15 закончена, но он до сих пор используется во многих компаниях и у меня.<br>
