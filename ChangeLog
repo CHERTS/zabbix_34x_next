@@ -1,7 +1,7 @@
 Changes for 3.4.16 (unofficial)
 
 New features:
-.......PS. [ZBXNEXT-435] add Oracle TNSNAMES connect support (mgrigorev)
+..F....PS. [ZBXNEXT-435] add Oracle TNSNAMES connect support (mgrigorev)
 ...G...... [ZBXNEXT-1302] added low-level discovery of block devices (asestakovs)
 ..F....... [ZBXNEXT-1456] added filter by item discovery status for item configuration view; thanks to Volker Fröhlich for the original patch (Alexei)
 ..F....PS. [ZBXNEXT-2315] implemented content matching in web monitoring headers (talbergs, vso)
