@@ -25,7 +25,7 @@
 #include "sigcommon.h"
 #include "../../libs/zbxcrypto/tls.h"
 
-int	sig_parent_pid = -1;
+int			sig_parent_pid = -1;
 volatile sig_atomic_t	sig_exiting;
 
 static void	log_fatal_signal(int sig, siginfo_t *siginfo, void *context)
@@ -105,7 +105,7 @@ static void	terminate_signal_handler(int sig, siginfo_t *siginfo, void *context)
 		/* the parent process can either politely ask a child process to finish it's work and perform cleanup */
 		/* by sending SIGUSR2 or terminate child process immediately without cleanup by sending SIGABRT       */
 		if (SIGABRT == sig)
-		exit_with_failure();
+			exit_with_failure();
 
 		if (SIGUSR2 == sig)
 			sig_exiting = 1;
