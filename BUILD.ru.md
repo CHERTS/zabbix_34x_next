@@ -24,12 +24,13 @@ export PATH="~/dart-sass:$PATH"
 ~~~~
 wget https://github.com/CHERTS/zabbix_34x_next/archive/master.zip -O zabbix-3.4.16.zip
 unzip zabbix-3.4.16.zip
+cd zabbix_34x_next-master
 ~~~~
 
 ### 3. Сборка всех компонентов Zabbix с поддержкой (MariaDB) MySQL:
 
 ~~~~
-autoreconf
+bash bootstrap.sh
 ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
 sed -i 's/sass --no-cache --sourcemap=none/sass/g' Makefile
 make
@@ -81,12 +82,13 @@ export PATH="~/dart-sass:$PATH"
 ~~~~
 wget https://github.com/CHERTS/zabbix_34x_next/archive/master.zip -O zabbix-3.4.16.zip
 unzip zabbix-3.4.16.zip
+cd zabbix_34x_next-master
 ~~~~
 
 ### 3. Сборка всех компонентов Zabbix с поддержкой (MariaDB) MySQL:
 
 ~~~~
-autoreconf
+bash bootstrap.sh
 ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
 sed -i 's/sass --no-cache --sourcemap=none/sass/g' Makefile
 make
