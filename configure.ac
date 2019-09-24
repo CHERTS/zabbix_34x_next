@@ -37,7 +37,7 @@ dnl *                     Checks for programs                       *
 dnl *                                                               *
 dnl *****************************************************************
 
-AC_PROG_CC
+AC_PROG_CC([cc c99 gcc clang])
 AM_PROG_CC_C_O
 
 dnl *****************************************************************
@@ -1423,7 +1423,28 @@ if test "x$server" = "xyes" || test "x$proxy" = "xyes"; then
 	PROXY_LIBS="$PROXY_LIBS $OPENIPMI_LIBS"
 
 	AC_SUBST(OPENIPMI_CFLAGS)
+
+	dnl Check for 'libpthread' library that supports PTHREAD_PROCESS_SHARED flag
+	LIBPTHREAD_CHECK_CONFIG([no])
+	if test "x$found_libpthread" != "xyes"; then
+		AC_MSG_ERROR([Unable to use libpthread (libpthread check failed)])
+	fi
 fi
+
+SERVER_LDFLAGS="$SERVER_LDFLAGS $ZLIB_LDFLAGS $LIBPTHREAD_LDFLAGS"
+SERVER_LIBS="$SERVER_LIBS $ZLIB_LIBS $LIBPTHREAD_LIBS"
+
+PROXY_LDFLAGS="$PROXY_LDFLAGS $ZLIB_LDFLAGS $LIBPTHREAD_LDFLAGS"
+PROXY_LIBS="$PROXY_LIBS $ZLIB_LIBS $LIBPTHREAD_LIBS"
+
+AGENT_LDFLAGS="$AGENT_LDFLAGS $ZLIB_LDFLAGS $LIBPTHREAD_LDFLAGS"
+AGENT_LIBS="$AGENT_LIBS $ZLIB_LIBS $LIBPTHREAD_LIBS"
+
+ZBXGET_LDFLAGS="$ZBXGET_LDFLAGS $ZLIB_LDFLAGS $LIBPTHREAD_LDFLAGS"
+ZBXGET_LIBS="$ZBXGET_LIBS $ZLIB_LIBS $LIBPTHREAD_LIBS"
+
+SENDER_LDFLAGS="$SENDER_LDFLAGS $ZLIB_LDFLAGS $LIBPTHREAD_LDFLAGS"
+SENDER_LIBS="$SENDER_LIBS $ZLIB_LIBS $LIBPTHREAD_LIBS"
 
 AM_CONDITIONAL(HAVE_IPMI, [test "x$have_ipmi" = "xyes"])
 
@@ -1652,7 +1673,6 @@ case "x$ARCH" in
 		AC_DEFINE(ZBX_PROCSTAT_COLLECTOR, 1 , [Define to 1 on linux and solaris platforms])
 		;;
 esac
-
 
 dnl *****************************************************************
 dnl *                                                               *

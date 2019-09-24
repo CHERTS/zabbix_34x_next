@@ -5,7 +5,7 @@ New features:
 ...G...... [ZBXNEXT-1302] added low-level discovery of block devices (asestakovs)
 ..F....... [ZBXNEXT-1456] added filter by item discovery status for item configuration view; thanks to Volker Fröhlich for the original patch (Alexei)
 ..F....PS. [ZBXNEXT-2315] implemented content matching in web monitoring headers (talbergs, vso)
-...G...... [ZBXNEXT-4577] (partially) moved ZBXEndThread function from service (zbxwin32) to threads (zbxsys)
+...GI..PS. [ZBXNEXT-4577] improved performance of Zabbix server by replacing semaphores to pthread mutexes and read-write locks (vso, wiper)
 .......PS. [ZBXNEXT-4757] added support of "pused" mode for cache-related internal items (Sasha)
 ...G...... [ZBXNEXT-4967] added Zabbix sender data sending to multiple destinations given in ServerActive configuration parameter (viktors)
 ...G...PS. [ZBXNEXT-5179] added option to specify absolute path in LoadModule; thanks to Glebs Ivanovskis for the patch (asestakovs)

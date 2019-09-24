@@ -67,7 +67,7 @@ static time_t (*vc_time)(time_t *) = time;
 
 static zbx_mem_info_t	*vc_mem = NULL;
 
-static ZBX_MUTEX	vc_lock = ZBX_MUTEX_NULL;
+static zbx_mutex_t	vc_lock = ZBX_MUTEX_NULL;
 
 /* flag indicating that the cache was explicitly locked by this process */
 static int	vc_locked = 0;
@@ -257,7 +257,7 @@ static void	vch_item_clean_cache(zbx_vc_item_t *item);
 static void	vc_try_lock(void)
 {
 	if (NULL != vc_cache && 0 == vc_locked)
-		zbx_mutex_lock(&vc_lock);
+		zbx_mutex_lock(vc_lock);
 }
 
 /******************************************************************************
@@ -271,7 +271,7 @@ static void	vc_try_lock(void)
 static void	vc_try_unlock(void)
 {
 	if (NULL != vc_cache && 0 == vc_locked)
-		zbx_mutex_unlock(&vc_lock);
+		zbx_mutex_unlock(vc_lock);
 }
 
 /*********************************************************************************
@@ -2952,7 +2952,7 @@ int	zbx_vc_get_statistics(zbx_vc_stats_t *stats)
  ******************************************************************************/
 void	zbx_vc_lock(void)
 {
-	zbx_mutex_lock(&vc_lock);
+	zbx_mutex_lock(vc_lock);
 	vc_locked = 1;
 }
 
@@ -2968,5 +2968,5 @@ void	zbx_vc_lock(void)
 void	zbx_vc_unlock(void)
 {
 	vc_locked = 0;
-	zbx_mutex_unlock(&vc_lock);
+	zbx_mutex_unlock(vc_lock);
 }

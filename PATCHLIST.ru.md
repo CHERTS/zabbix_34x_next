@@ -7,7 +7,7 @@
 [ZBXNEXT-1302] added low-level discovery of block devices (asestakovs) (https://support.zabbix.com/browse/ZBXNEXT-1302)
 [ZBXNEXT-1456] ability to filter for discovered items (https://support.zabbix.com/browse/ZBXNEXT-1456)
 [ZBXNEXT-2315] allow matching content in web monitoring headers (https://support.zabbix.com/browse/ZBXNEXT-2315)
-[ZBXNEXT-4577] moved ZBXEndThread function from service (zbxwin32) to threads (zbxsys)
+[ZBXNEXT-4577] improved performance of Zabbix server by replacing semaphores to pthread mutexes and read-write locks (vso, wiper)
 [ZBXNEXT-4757] added support of "pused" mode for cache-related internal items (Sasha)
 [ZBXNEXT-4941] Investigate Oracle bulk update performance (https://support.zabbix.com/browse/ZBXNEXT-4941)
 [ZBXNEXT-4967] added Zabbix sender data sending to multiple destinations given in ServerActive configuration parameter (viktors)

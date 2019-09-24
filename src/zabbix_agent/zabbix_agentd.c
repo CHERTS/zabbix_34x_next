@@ -881,7 +881,14 @@ int	MAIN_ZABBIX_ENTRY(int flags)
 		printf("Starting Zabbix Agent [%s]. Zabbix %s (revision %s).\nPress Ctrl+C to exit.\n\n",
 				CONFIG_HOSTNAME, ZABBIX_VERSION, ZABBIX_REVISION);
 	}
-
+#ifndef _WINDOWS
+	if (SUCCEED != zbx_locks_create(&error))
+	{
+		zbx_error("cannot create locks: %s", error);
+		zbx_free(error);
+		exit(EXIT_FAILURE);
+	}
+#endif
 	if (SUCCEED != zabbix_open_log(CONFIG_LOG_TYPE, CONFIG_LOG_LEVEL, CONFIG_LOG_FILE, &error))
 	{
 		zbx_error("cannot open log: %s", error);
@@ -1027,8 +1034,11 @@ int	MAIN_ZABBIX_ENTRY(int flags)
 	}
 	else
 	{
-		/* wait for the service worker thread to terminate us */
-		zbx_sleep(3);
+		zbx_tcp_close(&listen_sock);
+
+		/* Wait for the service worker thread to terminate us. Listener threads may not exit up to */
+		/* CONFIG_TIMEOUT seconds if they're waiting for external processes to finish / timeout */
+		zbx_sleep(CONFIG_TIMEOUT);
 
 		THIS_SHOULD_NEVER_HAPPEN;
 	}
@@ -1065,7 +1075,9 @@ void	zbx_free_service_resources(int ret)
 		zbx_free(threads);
 		zbx_free(threads_flags);
 	}
-
+#ifdef HAVE_PTHREAD_PROCESS_SHARED
+	zbx_locks_disable();
+#endif
 	free_metrics();
 	alias_list_free();
 	free_collector_data();
@@ -1094,6 +1106,10 @@ void	zbx_on_exit(int ret)
 #endif
 #if defined(PS_OVERWRITE_ARGV)
 	setproctitle_free_env();
+#endif
+#ifdef _WINDOWS
+	while (0 == WSACleanup())
+		;
 #endif
 
 	exit(EXIT_SUCCESS);
@@ -1166,6 +1182,10 @@ int	main(int argc, char **argv)
 			zbx_free_config();
 
 			ret = zbx_exec_service_task(argv[0], &t);
+
+			while (0 == WSACleanup())
+				;
+
 			free_metrics();
 			exit(SUCCEED == ret ? EXIT_SUCCESS : EXIT_FAILURE);
 			break;
@@ -1201,6 +1221,9 @@ int	main(int argc, char **argv)
 				test_parameters();
 #ifdef _WINDOWS
 			free_perf_collector();	/* cpu_collector must be freed before perf_collector is freed */
+
+			while (0 == WSACleanup())
+				;
 #endif
 #ifndef _WINDOWS
 			zbx_unload_modules();

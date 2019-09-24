@@ -663,6 +663,14 @@ typedef struct
 }
 ZBX_DC_CONFIG;
 
+extern int	sync_in_progress;
+extern ZBX_DC_CONFIG	*config;
+extern zbx_rwlock_t	config_lock;
+
+#define	RDLOCK_CACHE	if (0 == sync_in_progress) zbx_rwlock_rdlock(config_lock)
+#define	WRLOCK_CACHE	if (0 == sync_in_progress) zbx_rwlock_wrlock(config_lock)
+#define	UNLOCK_CACHE	if (0 == sync_in_progress) zbx_rwlock_unlock(config_lock)
+
 #define ZBX_IPMI_DEFAULT_AUTHTYPE	-1
 #define ZBX_IPMI_DEFAULT_PRIVILEGE	2
 
