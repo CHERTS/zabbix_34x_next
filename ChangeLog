@@ -12,6 +12,7 @@ New features:
 
 Bug fixes:
 .......PS. [ZBXNEXT-4941] changed overflow statements to execute one by one for Oracle for better performance (kalimulin)
+........S. [ZBX-7798] improved performance of icmpping* for fping v4.0 and more (MVekslers)
 ...G...PS. [ZBX-9867] improved Zabbix daemon termination by not using signal unsafe functions in signal handler; improved Zabbix server and Zabbix proxy process termination by stopping data collection and waiting for history syncers to finish (vso)
 ...G...... [ZBX-11970] fixed style for some enumerators and structure type declarations (abs, Andris)
 ...G....S. [ZBX-12671] refactoring the code base to support the compiler flag -Wstrict-prototypes
