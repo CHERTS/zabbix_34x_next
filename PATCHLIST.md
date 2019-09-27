@@ -35,5 +35,6 @@
 [ZBX-16315] fixed Zabbix server not to cause foreign key constraint failure on Zabbix proxy when changing and sending configuration at the same time (vso) (https://support.zabbix.com/browse/ZBX-16315)
 [ZBX-16346] fixed compilation for Oracle Instant Client v18.5 and higher (asestakovs) (https://support.zabbix.com/browse/ZBX-16346)
 [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso) (https://support.zabbix.com/browse/ZBX-16460)
+[ZBX-16545] fixed shell script execution timeout log message (atumilovics) (https://support.zabbix.com/browse/ZBX-16545)
 [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
 ~~~~

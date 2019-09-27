@@ -35,6 +35,7 @@ A......... [ZBX-13266] improved performance of the SQL queries with lot of IDs i
 ........S. [ZBX-16315] fixed Zabbix server not to cause foreign key constraint failure on Zabbix proxy when changing and sending configuration at the same time (vso)
 .......PS. [ZBX-16346] fixed compilation for Oracle Instant Client v18.5 and higher (asestakovs)
 ...G...PS. [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso)
+...G...PS. [ZBX-16545] fixed shell script execution timeout log message (atumilovics)
 ........S. [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
 
 --------------------------------------------------------------------------------
