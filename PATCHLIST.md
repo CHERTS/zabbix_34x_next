@@ -25,6 +25,7 @@
 [ZBX-15915] fixed linking error if round() is undefined (https://support.zabbix.com/browse/ZBX-15915)
 [ZBX-15955] fixed security vulnerability - accepting connections from not allowed addresses (Andris, vso) (https://support.zabbix.com/browse/ZBX-15955)
 [ZBX-15962] added mounted filesystems to vfs.fs.discovery of windows agent (asestakovs) (https://support.zabbix.com/browse/ZBX-15962)
+[ZBX-16096] fixed "system.cpu.util" reporting incorrect CPU utilisation due to guest time sometimes not being fully included in user time by "/proc/stat" (vso) (https://support.zabbix.com/browse/ZBX-16096)
 [ZBX-16103] Lower PCRE recursion limit (https://support.zabbix.com/browse/ZBX-16103)
 [ZBX-16166] fixed Zabbix fping feature detection does not work with fping builds since 10 Feb 2017 (akozlovs) (https://support.zabbix.com/browse/ZBX-16166)
 [ZBX-16218] fixed zabbix_sender does not clean up its semaphores (akozlovs) (https://support.zabbix.com/browse/ZBX-16218)

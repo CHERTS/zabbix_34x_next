@@ -25,6 +25,7 @@ A......... [ZBX-13266] improved performance of the SQL queries with lot of IDs i
 ...G...... [ZBX-15915] fixed linking error if round() is undefined (akozlovs)
 ...G...PS. [ZBX-15955] fixed security vulnerability - accepting connections from not allowed addresses (Andris, vso)
 ...G...... [ZBX-15962] added mounted filesystems to vfs.fs.discovery of windows agent (asestakovs)
+...G...... [ZBX-16096] fixed "system.cpu.util" reporting incorrect CPU utilisation due to guest time sometimes not being fully included in user time by "/proc/stat" (vso)
 ...G...PS. [ZBX-16103] reduced PCRE recursion limit (asestakovs)
 .......PS. [ZBX-16166] fixed Zabbix fping feature detection does not work with fping builds since 10 Feb 2017 (akozlovs)
 ...G...... [ZBX-16218] fixed zabbix_sender does not clean up its semaphores (akozlovs)
