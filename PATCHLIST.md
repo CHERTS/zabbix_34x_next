@@ -19,6 +19,7 @@
 [ZBX-12983] fixed compilation warnings under Windows (valdis) (https://support.zabbix.com/browse/ZBX-12983)
 [ZBX-13186] Show discovery error "Value should be a JSON object" in zabbix log file (https://support.zabbix.com/browse/ZBX-13186)
 [ZBX-13266] improved performance of the SQL queries with lot of IDs in the condition (https://support.zabbix.com/browse/ZBX-13266)
+[ZBX-14624] fixed agent collector not releasing connection to missing/removed disk devices (Andris, yurii) (https://support.zabbix.com/browse/ZBX-14624)
 [ZBX-14853] fixed error of vmware items caused by misconfigured vmware maxQueryMetrics parameter (MVekslers) (https://support.zabbix.com/browse/ZBX-14853)
 [ZBX-15225] improved handling of timeouts in vfs.dir.size and vfs.dir.count items on Windows agent (asitals) (https://support.zabbix.com/browse/ZBX-15225)
 [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris) (https://support.zabbix.com/browse/ZBX-15552)

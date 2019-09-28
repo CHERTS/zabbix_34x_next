@@ -19,6 +19,7 @@ Bug fixes:
 ...G...PS. [ZBX-12983] fixed compilation warnings under Windows (valdis)
 .......PS. [ZBX-13186] Show discovery error "Value should be a JSON object" in zabbix log file
 A......... [ZBX-13266] improved performance of the SQL queries with lot of IDs in the condition (Sasha)
+...G...... [ZBX-14624] fixed agent collector not releasing connection to missing/removed disk devices (Andris, yurii)
 .......PS. [ZBX-14853] fixed error of vmware items caused by misconfigured vmware maxQueryMetrics parameter (MVekslers)
 ...G...... [ZBX-15225] improved handling of timeouts in "vfs.dir.size" and "vfs.dir.count" items on Windows agent (asitals)
 ...G...PS. [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris)
