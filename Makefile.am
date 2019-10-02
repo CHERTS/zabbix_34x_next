@@ -32,13 +32,13 @@ dist-hook:
 #      1 - alpha, 2 - beta, 3 - rc, 4 - release, 0 - unknown.
 # 'type_count' expression tries to find out number of "alpha", "beta" or "rc" (e.g. 1 from "rc1").
 	@branch=`(git symbolic-ref -q HEAD > /dev/null && echo 1) || (git tag -l --points-at HEAD| grep "."| grep -q -v "-" && echo 2) || echo 1`; \
-	type_name=`cat $(top_distdir)/include/version.h| sed -n -e '/ZABBIX_REVISION/s/.*"\([a-z]*\)[0-9]*"/\1/p'`; \
+	type_name=`cat $(top_distdir)/include/version.h| sed -n -e '/ZABBIX_VERSION_RC/s/.*"\([a-z]*\)[0-9]*"/\1/p'`; \
 	type_num=`(test "x$$type_name" = "xalpha" && echo "1") || echo ""`; \
 	type_num=`(test -z $$type_num && test "x$$type_name" = "xbeta" && echo "2") || echo "$$type_num"`; \
 	type_num=`(test -z $$type_num && test "x$$type_name" = "xrc" && echo "3") || echo "$$type_num"`; \
 	type_num=`(test -z $$type_num && test -z $$type_name && echo "4") || echo "$$type_num"`; \
 	type_num=`(test -z $$type_num && echo "0") || echo "$$type_num"`; \
-	type_count=`cat $(top_distdir)/include/version.h|sed -n -e '/ZABBIX_REVISION/s/.*"[a-z]*\([0-9]*\)"/\1/p'`; \
+	type_count=`cat $(top_distdir)/include/version.h|sed -n -e '/ZABBIX_VERSION_RC/s/.*"[a-z]*\([0-9]*\)"/\1/p'`; \
 	type_count=`printf '%02d' $$type_count`; \
 	zabbix_revision=`git rev-parse --short HEAD`; \
 	cat $(top_distdir)/include/version.h|sed "s/{ZABBIX_RC_NUM}/$$branch$$type_num$$type_count/g"| \
