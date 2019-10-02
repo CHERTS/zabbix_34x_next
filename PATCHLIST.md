@@ -39,5 +39,6 @@
 [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso) (https://support.zabbix.com/browse/ZBX-16460)
 [ZBX-16545] fixed shell script execution timeout log message (atumilovics) (https://support.zabbix.com/browse/ZBX-16545)
 [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
+[DEV-698] removed unused local variables
 [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
 ~~~~
