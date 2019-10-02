@@ -1161,6 +1161,8 @@ esac],
 [ipv6=no])
 AM_CONDITIONAL(IPV6, test "x$ipv6" = "xyes")
 
+AM_CONDITIONAL([DBSCHEMA], [test -d create])
+
 AM_CONDITIONAL([ZBXCUNIT], [test -f src/libs/zbxcunit/zbxcunit.c])
 
 have_db="no"
@@ -1447,6 +1449,7 @@ SENDER_LDFLAGS="$SENDER_LDFLAGS $ZLIB_LDFLAGS $LIBPTHREAD_LDFLAGS"
 SENDER_LIBS="$SENDER_LIBS $ZLIB_LIBS $LIBPTHREAD_LIBS"
 
 AM_CONDITIONAL(HAVE_IPMI, [test "x$have_ipmi" = "xyes"])
+AM_CONDITIONAL(HAVE_LIBXML2, test "x$have_libxml2" = "xyes")
 
 dnl Check if Zabbix internal IPC services are used
 have_ipcservice="no"
@@ -1600,6 +1603,8 @@ SERVER_LIBS="$SERVER_LIBS $LIBCURL_LIBS"
 PROXY_LDFLAGS="$PROXY_LDFLAGS $LIBCURL_LDFLAGS"
 PROXY_LIBS="$PROXY_LIBS $LIBCURL_LIBS"
 
+AM_CONDITIONAL(HAVE_LIBCURL, test "x$found_curl" = "xyes")
+
 dnl Starting from 2.0 agent can do web monitoring
 AGENT_LDFLAGS="$AGENT_LDFLAGS $LIBCURL_LDFLAGS"
 AGENT_LIBS="$AGENT_LIBS $LIBCURL_LIBS"
@@ -1683,6 +1688,11 @@ dnl *****************************************************************
 AC_OUTPUT([
 	Makefile
 	database/Makefile
+	database/ibm_db2/Makefile
+	database/mysql/Makefile
+	database/oracle/Makefile
+	database/postgresql/Makefile
+	database/sqlite3/Makefile
 	misc/Makefile
 	src/Makefile
 	src/libs/Makefile

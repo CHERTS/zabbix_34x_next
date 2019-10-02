@@ -20,7 +20,7 @@ AC_TRY_LINK(
 [
 	const char* error = NULL;
 	int error_offset = -1;
-	pcre *regexp = pcre_compile("test", PCRE_UTF8, error, error_offset, 0);
+	pcre *regexp = pcre_compile("test", PCRE_UTF8, &error, &error_offset, NULL);
 	pcre_free(regexp);
 ],
 found_libpcre="yes")
@@ -75,6 +75,16 @@ AC_HELP_STRING([--with-libpcre@<:@=DIR@:>@], [use libpcre from given base instal
 	elif test -f /usr/pkg/include/pcre.h; then
 		LIBPCRE_CFLAGS="-I/usr/pkg/include"
 		LIBPCRE_LDFLAGS="-L/usr/pkg/lib"
+		LIBPCRE_LDFLAGS="$LIBPCRE_LDFLAGS -Wl,-R/usr/pkg/lib"
+		found_libpcre="yes"
+	elif test -f /opt/csw/include/pcre.h; then
+		LIBPCRE_CFLAGS="-I/opt/csw/include"
+		LIBPCRE_LDFLAGS="-L/opt/csw/lib"
+		if $(echo "$CFLAGS"|grep -q -- "-m64") ; then
+			LIBPCRE_LDFLAGS="$LIBPCRE_LDFLAGS/64 -Wl,-R/opt/csw/lib/64"
+		else
+			LIBPCRE_LDFLAGS="$LIBPCRE_LDFLAGS -Wl,-R/opt/csw/lib"
+		fi
 		found_libpcre="yes"
 	else
 		found_libpcre="no"
