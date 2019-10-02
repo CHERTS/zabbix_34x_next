@@ -26,6 +26,7 @@ A......... [ZBX-13266] improved performance of the SQL queries with lot of IDs i
 ...G...... [ZBX-15225] improved handling of timeouts in "vfs.dir.size" and "vfs.dir.count" items on Windows agent (asitals)
 ...G...PS. [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris)
 ..F....... [ZBX-15609] added missing optional parameter "<regex_excl_dir>" for "vfs.dir.count" and "vfs.dir.size" item keys in item helper (Ivo)
+...G...... [ZBX-15898] fixed compilation warning regarding too large integer constant (akozlovs)
 ...G...... [ZBX-15915] fixed linking error if round() is undefined (akozlovs)
 ...G...PS. [ZBX-15955] fixed security vulnerability - accepting connections from not allowed addresses (Andris, vso)
 ...G...... [ZBX-15962] added mounted filesystems to vfs.fs.discovery of windows agent (asestakovs)
