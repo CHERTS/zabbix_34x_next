@@ -29,6 +29,7 @@ cd zabbix_34x_next-master
 
 ~~~~
 bash bootstrap.sh
+chmod a+x create/bin/*.{sh,pl}
 ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
 sed -i 's/sass --no-cache --sourcemap=none/sass/g' Makefile
 make
@@ -84,6 +85,7 @@ cd zabbix_34x_next-master
 
 ~~~~
 bash bootstrap.sh
+chmod a+x create/bin/*.{sh,pl}
 ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
 sed -i 's/sass --no-cache --sourcemap=none/sass/g' Makefile
 make
