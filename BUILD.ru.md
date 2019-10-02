@@ -10,7 +10,7 @@
 yum group install "Development Tools"
 yum-config-manager --enable ol7_optional_latest
 yum-config-manager --enable ol7_developer
-yum install -y wget unzip libxml2-devel openssl-devel libcurl-devel net-snmp-devel libevent-devel sqlite-devel pcre-devel libssh2-devel iksemel-devel OpenIPMI-devel unixODBC-devel
+yum install -y wget unzip gettext libxml2-devel openssl-devel libcurl-devel net-snmp-devel libevent-devel sqlite-devel pcre-devel libssh2-devel iksemel-devel OpenIPMI-devel unixODBC-devel
 yum install -y MariaDB-client MariaDB-devel MariaDB-shared
 wget https://github.com/sass/dart-sass/releases/download/1.22.10/dart-sass-1.22.10-linux-x64.tar.gz
 tar -zxf dart-sass-1.22.10-linux-x64.tar.gz
@@ -67,7 +67,7 @@ cp src/zabbix_get/zabbix_get zabbix_get_v3.4.16
 
 ~~~~
 sudo apt-get update
-sudo apt-get install -y autoconf automake gcc make wget unzip libxml2-dev libssl-dev libcurl4-openssl-dev libsnmp-dev libevent-dev libsqlite3-dev libpcre2-dev libssh2-1-dev libiksemel-dev libmariadbclient-dev-compat libopenipmi-dev unixodbc-dev
+sudo apt-get install -y autoconf automake gcc make wget unzip gettext libxml2-dev libssl-dev libcurl4-openssl-dev libsnmp-dev libevent-dev libsqlite3-dev libpcre2-dev libssh2-1-dev libiksemel-dev libmariadbclient-dev-compat libopenipmi-dev unixodbc-dev
 wget https://github.com/sass/dart-sass/releases/download/1.22.10/dart-sass-1.22.10-linux-x64.tar.gz
 tar -zxf dart-sass-1.22.10-linux-x64.tar.gz
 export PATH="~/dart-sass:$PATH"
