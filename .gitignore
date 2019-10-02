@@ -11,3 +11,5 @@
 /commit.sh
 /*.patch
 /*.orig
+.vscode/*
+*.swp
