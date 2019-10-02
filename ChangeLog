@@ -9,6 +9,8 @@ New features:
 .......PS. [ZBXNEXT-4757] added support of "pused" mode for cache-related internal items (Sasha)
 ...G...... [ZBXNEXT-4967] added Zabbix sender data sending to multiple destinations given in ServerActive configuration parameter (viktors)
 ...G...PS. [ZBXNEXT-5179] added option to specify absolute path in LoadModule; thanks to Glebs Ivanovskis for the patch (asestakovs)
+...G...... [ZBXNEXT-1567] added item "vfs.dir.count" for counting directory entries (valdis)
+...G...... [ZBX-14876] added a new optional parameter <regex_excl_dir> to items vfs.dir.size[] and vfs.dir.count[] (viktors)
 
 Bug fixes:
 .......PS. [ZBXNEXT-4941] changed overflow statements to execute one by one for Oracle for better performance (kalimulin)
@@ -23,6 +25,7 @@ A......... [ZBX-13266] improved performance of the SQL queries with lot of IDs i
 .......PS. [ZBX-14853] fixed error of vmware items caused by misconfigured vmware maxQueryMetrics parameter (MVekslers)
 ...G...... [ZBX-15225] improved handling of timeouts in "vfs.dir.size" and "vfs.dir.count" items on Windows agent (asitals)
 ...G...PS. [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris)
+..F....... [ZBX-15609] added missing optional parameter "<regex_excl_dir>" for "vfs.dir.count" and "vfs.dir.size" item keys in item helper (Ivo)
 ...G...... [ZBX-15915] fixed linking error if round() is undefined (akozlovs)
 ...G...PS. [ZBX-15955] fixed security vulnerability - accepting connections from not allowed addresses (Andris, vso)
 ...G...... [ZBX-15962] added mounted filesystems to vfs.fs.discovery of windows agent (asestakovs)
