@@ -253,6 +253,44 @@ static void	descriptors_vector_destroy(zbx_vector_ptr_t *descriptors)
  *****************************************************************************/
 #ifdef _WINDOWS
 #define	DW2UI64(h,l) ((zbx_uint64_t)h << 32 | l)
+
+/******************************************************************************
+ *                                                                            *
+ * Function: has_timed_out                                                    *
+ *                                                                            *
+ * Purpose: Checks if timeout has occurred. If it is, thread should           *
+ *          immediately stop whatever it is doing, clean up everything and    *
+ *          return SYSINFO_RET_FAIL.                                          *
+ *                                                                            *
+ * Parameters: timeout_event - [IN] handle of a timeout event that was passed *
+ *                                  to the metric function                    *
+ *                                                                            *
+ * Return value: TRUE, if timeout or error was detected, FALSE otherwise.     *
+ *                                                                            *
+ ******************************************************************************/
+static BOOL	has_timed_out(HANDLE timeout_event)
+{
+	DWORD rc;
+
+	rc = WaitForSingleObject(timeout_event, 0);
+
+	switch (rc)
+	{
+		case WAIT_OBJECT_0:
+			return TRUE;
+		case WAIT_TIMEOUT:
+			return FALSE;
+		case WAIT_FAILED:
+			zabbix_log(LOG_LEVEL_CRIT, "WaitForSingleObject() returned WAIT_FAILED: %s",
+					strerror_from_system(GetLastError()));
+			return TRUE;
+		default:
+			zabbix_log(LOG_LEVEL_CRIT, "WaitForSingleObject() returned 0x%x", (unsigned int)rc);
+			THIS_SHOULD_NEVER_HAPPEN;
+			return TRUE;
+	}
+}
+
 static int	get_file_info_by_handle(wchar_t *wpath, BY_HANDLE_FILE_INFORMATION *link_info, char **error)
 {
 	HANDLE	file_handle;
@@ -321,7 +359,7 @@ static int	link_processed(DWORD attrib, wchar_t *wpath, zbx_vector_ptr_t *descri
 	return FAIL;
 }
 
-static int	vfs_dir_size(AGENT_REQUEST *request, AGENT_RESULT *result)
+static int	vfs_dir_size(AGENT_REQUEST *request, AGENT_RESULT *result, HANDLE timeout_event)
 {
 	const char		*__function_name = "vfs_dir_size";
 	char			*dir = NULL;
@@ -344,9 +382,9 @@ static int	vfs_dir_size(AGENT_REQUEST *request, AGENT_RESULT *result)
 	else
 		goto err2;
 
-	while (0 < list.values_num)
+	while (0 < list.values_num && FALSE == has_timed_out(timeout_event))
 	{
-		char		*name, *error = NULL;
+		char		*name;
 		wchar_t		*wpath;
 		zbx_uint64_t	cluster_size = 0;
 		HANDLE		handle;
@@ -451,7 +489,7 @@ static int	vfs_dir_size(AGENT_REQUEST *request, AGENT_RESULT *result)
 			zbx_free(name);
 
 		}
-		while (0 != FindNextFile(handle, &data));
+		while (0 != FindNextFile(handle, &data) && FALSE == has_timed_out(timeout_event));
 
 		if (0 == FindClose(handle))
 		{
@@ -461,6 +499,11 @@ static int	vfs_dir_size(AGENT_REQUEST *request, AGENT_RESULT *result)
 skip:
 		zbx_free(item->path);
 		zbx_free(item);
+	}
+
+	if (TRUE == has_timed_out(timeout_event))
+	{
+		goto err2;
 	}
 
 	SET_UI64_RESULT(result, size);
