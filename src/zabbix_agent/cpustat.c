@@ -739,13 +739,13 @@ int	get_cpustat(AGENT_RESULT *result, int cpu_num, int state, int mode)
 		for (i = 0; i < ZBX_CPU_STATE_COUNT; i++)
 		{
 			if (cpu->h_counter[i][idx_curr] > cpu->h_counter[i][idx_base])
-				total += cpu->h_counter[i][idx_curr] - cpu->h_counter[i][idx_base];
+			total += cpu->h_counter[i][idx_curr] - cpu->h_counter[i][idx_base];
 		}
 
 		/* current counter might be less than previous due to guest time sometimes not being fully included */
 		/* in user time by "/proc/stat" */
 		if (cpu->h_counter[state][idx_curr] > cpu->h_counter[state][idx_base])
-			counter = cpu->h_counter[state][idx_curr] - cpu->h_counter[state][idx_base];
+		counter = cpu->h_counter[state][idx_curr] - cpu->h_counter[state][idx_base];
 		else
 			counter = 0;
 	}
