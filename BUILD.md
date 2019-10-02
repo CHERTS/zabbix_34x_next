@@ -12,7 +12,7 @@ yum-config-manager --enable ol7_optional_latest
 yum-config-manager --enable ol7_developer
 rpm -Uvh https://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
 yum clean all
-yum install -y wget unzip libxml2-devel openssl-devel libcurl-devel net-snmp-devel libevent-devel sqlite-devel pcre-devel libssh2-devel iksemel-devel
+yum install -y wget unzip libxml2-devel openssl-devel libcurl-devel net-snmp-devel libevent-devel sqlite-devel pcre-devel libssh2-devel iksemel-devel OpenIPMI-devel
 yum install -y MariaDB-client MariaDB-devel MariaDB-shared
 wget https://github.com/sass/dart-sass/releases/download/1.22.10/dart-sass-1.22.10-linux-x64.tar.gz
 tar -zxf dart-sass-1.22.10-linux-x64.tar.gz
@@ -31,7 +31,7 @@ cd zabbix_34x_next-master
 
 ~~~~
 bash bootstrap.sh
-./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
+./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
 sed -i 's/sass --no-cache --sourcemap=none/sass/g' Makefile
 make
 make dbschema
@@ -70,7 +70,7 @@ Congratulations! Now you can stop your zabbix components version 3.4.15 and repl
 sudo wget https://repo.zabbix.com/zabbix/3.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.4-1%2Bbionic_all.deb
 sudo dpkg -i zabbix-release_3.4-1+bionic_all.deb && sudo rm -f zabbix-release_3.4-1+bionic_all.deb
 sudo apt-get update
-sudo apt-get install -y autoconf automake gcc make wget unzip libxml2-dev libssl-dev libcurl4-openssl-dev libsnmp-dev libevent-dev libsqlite3-dev libpcre2-dev libssh2-1-dev libiksemel-dev libmariadbclient-dev-compat
+sudo apt-get install -y autoconf automake gcc make wget unzip libxml2-dev libssl-dev libcurl4-openssl-dev libsnmp-dev libevent-dev libsqlite3-dev libpcre2-dev libssh2-1-dev libiksemel-dev libmariadbclient-dev-compat libopenipmi-dev
 wget https://github.com/sass/dart-sass/releases/download/1.22.10/dart-sass-1.22.10-linux-x64.tar.gz
 tar -zxf dart-sass-1.22.10-linux-x64.tar.gz
 export PATH="~/dart-sass:$PATH"
@@ -88,7 +88,7 @@ cd zabbix_34x_next-master
 
 ~~~~
 bash bootstrap.sh
-./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
+./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --enable-server --enable-proxy --enable-agent --sysconfdir=/etc/zabbix --with-mysql
 sed -i 's/sass --no-cache --sourcemap=none/sass/g' Makefile
 make
 make dbschema
