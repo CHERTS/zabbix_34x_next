@@ -19,6 +19,7 @@ all: $(ZJG)
 
 $(ZJG): class src/com/zabbix/gateway/*.java
 	$(JAVAC) -d class/src -classpath $(LIB) src/com/zabbix/gateway/*.java
+	$(MKDIR_P) bin
 	$(JAR) cf $(ZJG) -C class/src .
 
 test: class
