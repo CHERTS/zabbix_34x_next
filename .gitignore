@@ -45,3 +45,5 @@ build/win32/project/resource.res
 /*.orig
 .vscode/*
 *.swp
+include/config.h
+include/config.h.in~
