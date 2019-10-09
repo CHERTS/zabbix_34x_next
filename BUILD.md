@@ -28,7 +28,6 @@ cd zabbix-3.4.16
 ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql
 make
 make gettext
-make css
 ~~~~
 
 ### 4. After successful build, in step 3 you can use zabbix binaries, copy them to the current directory:
@@ -77,7 +76,6 @@ cd zabbix-3.4.16
 ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql
 make
 make gettext
-make css
 ~~~~
 
 ### 4. After successful build, in step 3 you can use zabbix binaries, copy them to the current directory:
