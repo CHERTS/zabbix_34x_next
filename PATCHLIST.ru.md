@@ -44,6 +44,7 @@
 [ZBX-16545] fixed shell script execution timeout log message (atumilovics) (https://support.zabbix.com/browse/ZBX-16545)
 [ZBX-16612] fixed possibility of high CPU usage on Windows (vso) (https://support.zabbix.com/browse/ZBX-16612)
 [ZBX-16677] fixed empty sql query DBexecute_overflowed_sql call during host availability update (atumilovics) (https://support.zabbix.com/browse/ZBX-16677)
+[ZBX-16680] fixed freeing locked resources when Zabbix agent cannot be started and has to exit with failure (https://support.zabbix.com/browse/ZBX-16680)
 [ZBX-16683] fixed race condition between history syncer and escalator that caused recovery operations being delayed by step duration (vso) (https://support.zabbix.com/browse/ZBX-16683)
 [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
 [DEV-698] removed unused local variables
