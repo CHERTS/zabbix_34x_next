@@ -4,7 +4,7 @@
 
 [Сборка на Oracle Linux 7 с поддержкой MySQL (MariaDB)](#oracle-linux-7)
 
-[Сборка на Ubuntu 18.04 LTS (Bionic Beaver) с поддержкой MySQL (MariaDB)](#ubuntu-18.04-bionic-beaver)
+[Сборка на Ubuntu 18.04 LTS (Bionic Beaver) с поддержкой MySQL (MariaDB)](#ubuntu)
 
 # Oracle Linux 7
 ## Сборка на Oracle Linux 7 с поддержкой MySQL (MariaDB)
@@ -58,8 +58,8 @@ cp src/zabbix_get/zabbix_get zabbix_get_v3.4.16
 
 Теперь Вы можете остановить свои компоненты zabbix версии 3.4.15 и заменить их данной сборкой.
 
-# Ubuntu 18.04 (Bionic Beaver)
-## Сборка на Ubuntu с поддержкой MariaDB
+# Ubuntu
+## Сборка на Ubuntu 18.04 LTS (Bionic Beaver) с поддержкой MariaDB
 
 ### 1. Для подготовки к сборки на Ubuntu 18.04 нужно установить дополнительные пакеты:
 
