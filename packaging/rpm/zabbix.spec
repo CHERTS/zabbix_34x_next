@@ -5,7 +5,7 @@ Summary:	The Enterprise-class open source monitoring solution
 Group:		Applications/Internet
 License:	GPLv2+
 URL:		http://www.zabbix.com/
-Source0:	https://github.com/CHERTS/zabbix_34x_next/releases/download/v3.4.16/zabbix-3.4.16.tar.gz
+Source0:	https://github.com/CHERTS/zabbix_34x_next/releases/download/v%{version}%{?alphatag:%{alphatag}}/zabbix-%{version}%{?alphatag:%{alphatag}}.tar.gz
 Source1:	zabbix-web22.conf
 Source2:	zabbix-web24.conf
 Source3:	zabbix-logrotate.in
@@ -293,7 +293,7 @@ Japanese font configuration for Zabbix web frontend
 %endif
 
 %prep
-%setup0 -q -n zabbix_34x_next-master
+%setup0 -q -n %{name}-%{version}%{?alphatag:%{alphatag}}
 %patch0 -p1
 %patch1 -p1
 %if 0%{?rhel} >= 7
