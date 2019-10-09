@@ -1,6 +1,6 @@
 # Continued development of Zabbix version 3.4.x
 
-[![Build Status](https://travis-ci.org/CHERTS/zabbix_34x_next.svg?branch=master)](https://travis-ci.org/CHERTS/zabbix_34x_next)
+[![Build Status](https://travis-ci.org/CHERTS/zabbix_34x_next.svg?branch=master)](https://travis-ci.org/CHERTS/zabbix_34x_next) [![Coverity Scan Build Status](https://scan.coverity.com/projects/19344/badge.svg)](https://scan.coverity.com/projects/zabbix_34x_next)
 
 [По-русски / In Russian](README.ru.md)
 
