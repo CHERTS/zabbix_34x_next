@@ -42,6 +42,7 @@ A......... [ZBX-13266] improved performance of the SQL queries with lot of IDs i
 .......PS. [ZBX-16346] fixed compilation for Oracle Instant Client v18.5 and higher (asestakovs)
 ...G...PS. [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso)
 ...G...PS. [ZBX-16545] fixed shell script execution timeout log message (atumilovics)
+...G...... [ZBX-16612] fixed possibility of high CPU usage on Windows (vso)
 ...G....S. [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
 ...G...... [DEV-698] removed unused local variables
 ........S. [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
