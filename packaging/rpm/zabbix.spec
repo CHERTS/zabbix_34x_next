@@ -250,8 +250,11 @@ Zabbix web frontend common package
 Summary:			Zabbix web frontend for MySQL
 Group:				Applications/Internet
 BuildArch:			noarch
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} == 7
 Requires:			php-mysql
+%endif
+%if 0%{?rhel} == 8
+Requires:			php-mysqlnd
 %endif
 Requires:			zabbix-web = %{version}-%{release}
 Provides:			zabbix-web-database = %{version}-%{release}
@@ -276,7 +279,11 @@ Zabbix web frontend for PostgreSQL
 Summary:			Japanese font settings for frontend
 Group:				Applications/Internet
 BuildArch:			noarch
+%if 0%{?rhel} >= 8
+Requires:			google-noto-sans-cjk-ttc-fonts
+%else
 Requires:			vlgothic-p-fonts
+%endif
 Requires:			zabbix-web = %{version}-%{release}
 Requires(post):		%{_sbindir}/update-alternatives
 Requires(preun):	%{_sbindir}/update-alternatives
@@ -663,8 +670,12 @@ getent passwd zabbix > /dev/null || \
 :
 
 %post web-japanese
-/usr/sbin/update-alternatives --install %{_datadir}/zabbix/fonts/graphfont.ttf \
-	zabbix-web-font %{_datadir}/fonts/vlgothic/VL-PGothic-Regular.ttf 20
+/usr/sbin/update-alternatives --install %{_datadir}/zabbix/fonts/graphfont.ttf zabbix-web-font \
+%if 0%{?rhel} >= 8
+	%{_datadir}/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc 20
+%else
+	%{_datadir}/fonts/vlgothic/VL-PGothic-Regular.ttf 20
+%endif
 :
 %endif
 
@@ -760,7 +771,11 @@ fi
 %preun web
 if [ "$1" = 0 ]; then
 /usr/sbin/update-alternatives --remove zabbix-web-font \
+%if 0%{?rhel} >= 8
+	%{_datadir}/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc
+%else
 	%{_datadir}/fonts/dejavu/DejaVuSans.ttf
+%endif
 fi
 :
 
@@ -1005,6 +1020,8 @@ fi
 %changelog
 * Mon Oct 07 2019 Zabbix Packager <admin@programs74.ru> - 3.4.16-1
 - update to 3.4.16
+- removed jabber notifications support and dependency on iksemel library
+- using google-noto-sans-cjk-ttc-fonts for graphfont in web-japanese package on rhel-8
 
 * Mon Nov 12 2018 Zabbix Packager <info@zabbix.com> - 3.4.15-1
 - update to 3.4.15
