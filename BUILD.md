@@ -2,6 +2,12 @@
 
 [По-русски / In Russian](BUILD.ru.md)
 
+[Build on Oracle Linux 7 with MySQL (MariaDB) support](#oracle-linux-7)
+
+[Build on Ubuntu 18.04 LTS (Bionic Beaver) with MySQL (MariaDB) support](#ubuntu)
+
+
+# Oracle Linux 7
 ## Build on Oracle Linux 7 with MySQL (MariaDB) support
 
 ### 1. To prepare for build on Oracle Linux 7, you need to install additional packages:
@@ -53,6 +59,7 @@ Check for the presence of binary files:
 
 Congratulations! Now you can stop your zabbix components version 3.4.15 and replace them with this build.
 
+# Ubuntu
 ## Build on Ubuntu 18.04 LTS (Bionic Beaver) with MySQL (MariaDB) support
 
 ### 1. To prepare for build on Ubuntu 18.04, you need to install additional packages:
