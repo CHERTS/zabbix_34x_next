@@ -5,7 +5,7 @@ Summary:	The Enterprise-class open source monitoring solution
 Group:		Applications/Internet
 License:	GPLv2+
 URL:		http://www.zabbix.com/
-Source0:	https://github.com/cherts/zabbix_34x_next/archive/master.tar.gz
+Source0:	https://github.com/CHERTS/zabbix_34x_next/releases/download/v3.4.16/zabbix-3.4.16.tar.gz
 Source1:	zabbix-web22.conf
 Source2:	zabbix-web24.conf
 Source3:	zabbix-logrotate.in
