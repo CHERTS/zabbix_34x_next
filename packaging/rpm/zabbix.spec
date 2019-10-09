@@ -5,7 +5,7 @@ Summary:	The Enterprise-class open source monitoring solution
 Group:		Applications/Internet
 License:	GPLv2+
 URL:		http://www.zabbix.com/
-Source0:	https://github.com/chipitsine/zabbix_34x_next/archive/master.tar.gz
+Source0:	https://github.com/cherts/zabbix_34x_next/archive/master.tar.gz
 Source1:	zabbix-web22.conf
 Source2:	zabbix-web24.conf
 Source3:	zabbix-logrotate.in
@@ -21,6 +21,7 @@ Source14:	zabbix_java_gateway-sysd
 Source15:	zabbix-tmpfiles.conf
 Patch0:		config.patch
 Patch1:		fonts-config.patch
+Patch2:		fping3-sourceip-option.patch
 
 Buildroot:	%{_tmppath}/zabbix-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -39,6 +40,7 @@ BuildRequires:	gnutls-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	curl-devel >= 7.13.1
+BuildRequires:	OpenIPMI-devel >= 2
 BuildRequires:	libssh2-devel >= 1.0.0
 BuildRequires:	java-devel >= 1.6.0
 BuildRequires:	libxml2-devel
@@ -287,6 +289,9 @@ Japanese font configuration for Zabbix web frontend
 %setup0 -q -n zabbix_34x_next-master
 %patch0 -p1
 %patch1 -p1
+%if 0%{?rhel} >= 7
+%patch2 -p1
+%endif
 
 ## remove font file
 rm -f frontends/php/fonts/DejaVuSans.ttf
@@ -341,6 +346,7 @@ build_flags="
 	--with-net-snmp
 	--with-ldap
 	--with-libcurl
+	--with-openipmi
 	--with-unixodbc
 	--with-ssh2
 	--with-libxml2
@@ -997,6 +1003,9 @@ fi
 
 
 %changelog
+* Mon Oct 07 2019 Zabbix Packager <admin@programs74.ru> - 3.4.16-1
+- update to 3.4.16
+
 * Mon Nov 12 2018 Zabbix Packager <info@zabbix.com> - 3.4.15-1
 - update to 3.4.15
 
