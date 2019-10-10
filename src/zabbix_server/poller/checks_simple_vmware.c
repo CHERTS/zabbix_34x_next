@@ -517,7 +517,6 @@ static int	get_vcenter_hvprop(AGENT_REQUEST *request, const char *username, cons
 	if (NULL == (hv = hv_get(&service->data->hvs, uuid)))
 	{
 		SET_MSG_RESULT(result, zbx_strdup(NULL, "Unknown hypervisor uuid."));
-		zbx_free(hv_list);
 		goto unlock;
 	}
 
