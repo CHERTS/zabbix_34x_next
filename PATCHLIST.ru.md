@@ -48,5 +48,6 @@
 [ZBX-16683] fixed race condition between history syncer and escalator that caused recovery operations being delayed by step duration (vso) (https://support.zabbix.com/browse/ZBX-16683)
 [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
 [DEV-698] removed unused local variables
+[DEV-1313] fixed a potential leak
 [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
 ~~~~

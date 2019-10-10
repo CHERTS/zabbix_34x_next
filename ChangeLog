@@ -3,6 +3,7 @@ Changes for 3.4.17alpha1 (unofficial)
 New features:
 
 Bug fixes:
+........S. [DEV-1313] fixed a potential leak
 
 --------------------------------------------------------------------------------
 Changes for 3.4.16 (unofficial)
