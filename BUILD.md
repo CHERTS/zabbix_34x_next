@@ -4,8 +4,9 @@
 
 [Build on Oracle Linux 7 with MySQL (MariaDB) support](#oracle-linux-7)
 
-[Build on Ubuntu 18.04 LTS (Bionic Beaver) with MySQL (MariaDB) support](#ubuntu)
+[Build on Red Hat Enterprise Linux 8 with MySQL (MariaDB) support](#red-hat-enterprise-linux-8)
 
+[Build on Ubuntu 18.04 LTS (Bionic Beaver) with MySQL (MariaDB) support](#ubuntu)
 
 # Oracle Linux 7
 ## Build on Oracle Linux 7 with MySQL (MariaDB) support
@@ -55,6 +56,59 @@ Check for the presence of binary files:
 -rwxr-xr-x  1 root root 5029608 Oct  9 21:28 zabbix_proxy_mysql_v3.4.16
 -rwxr-xr-x  1 root root  651216 Oct  9 21:28 zabbix_sender_v3.4.16
 -rwxr-xr-x  1 root root 6405704 Oct  9 21:28 zabbix_server_mysql_v3.4.16
+~~~~
+
+Congratulations! Now you can stop your zabbix components version 3.4.15 and replace them with this build.
+
+# Red Hat Enterprise Linux 8
+## Build on Red Hat Enterprise Linux 8 with MySQL (MariaDB) support
+
+### 1. To prepare for build on Red Hat Enterprise Linux 8, you need to install additional packages:
+
+~~~~
+dnf group install "Development Tools"
+dnf install -y wget unzip gettext java-1.8.0-openjdk java-1.8.0-openjdk-devel libxml2-devel openssl-devel libcurl-devel net-snmp-devel libevent-devel sqlite-devel pcre-devel unixODBC-devel openldap-devel
+dnf install -y mariadb-devel
+subscription-manager repos --enable=codeready-builder-for-rhel-8-x86_64-rpms 
+yum module enable -y virt-devel 
+dnf install -y libssh2-devel OpenIPMI-devel
+~~~~
+
+### 2. Download and unzip the latest version of the source code:
+
+~~~~
+wget https://github.com/CHERTS/zabbix_34x_next/releases/download/v3.4.16/zabbix-3.4.16.tar.gz
+tar -zxf zabbix-3.4.16.tar.gz
+cd zabbix-3.4.16
+~~~~
+
+### 3. Build all Zabbix components with MySQL (MariaDB) support:
+
+~~~~
+./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql
+make
+make gettext
+~~~~
+
+### 4. After successful build, in step 3 you can use zabbix binaries, copy them to the current directory:
+
+~~~~
+cp src/zabbix_server/zabbix_server zabbix_server_mysql_v3.4.16
+cp src/zabbix_proxy/zabbix_proxy zabbix_proxy_mysql_v3.4.16
+cp src/zabbix_agent/zabbix_agentd zabbix_agentd_v3.4.16
+cp src/zabbix_sender/zabbix_sender zabbix_sender_v3.4.16
+cp src/zabbix_get/zabbix_get zabbix_get_v3.4.16
+~~~~
+
+Check for the presence of binary files:
+
+~~~~
+# ls -l | grep 'zabbix_'
+-rwxr-xr-x.  1 root root 1910320 Oct 14 23:37 zabbix_agentd_v3.4.16
+-rwxr-xr-x.  1 root root  634232 Oct 14 23:37 zabbix_get_v3.4.16
+-rwxr-xr-x.  1 root root 5657144 Oct 14 23:37 zabbix_proxy_mysql_v3.4.16
+-rwxr-xr-x.  1 root root  741120 Oct 14 23:37 zabbix_sender_v3.4.16
+-rwxr-xr-x.  1 root root 7140712 Oct 14 23:37 zabbix_server_mysql_v3.4.16
 ~~~~
 
 Congratulations! Now you can stop your zabbix components version 3.4.15 and replace them with this build.
