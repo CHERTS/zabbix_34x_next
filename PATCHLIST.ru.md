@@ -50,6 +50,7 @@
 [ZBX-16680] fixed freeing locked resources when Zabbix agent cannot be started and has to exit with failure (https://support.zabbix.com/browse/ZBX-16680)
 [ZBX-16683] fixed race condition between history syncer and escalator that caused recovery operations being delayed by step duration (vso) (https://support.zabbix.com/browse/ZBX-16683)
 [ZBX-16711] ensuring errbuf is emptied before every curl_easy_perform request (arimdjonoks) (https://support.zabbix.com/browse/ZBX-16711)
+[ZBX-16750] fixed broken validation of peer certificate issuer and subject strings in TLS connect, fixed logging (Andris) (https://support.zabbix.com/browse/ZBX-16750)
 [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
 [DEV-698] removed unused local variables
 [DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro
