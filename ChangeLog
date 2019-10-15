@@ -4,6 +4,7 @@ New features:
 
 Bug fixes:
 ...G...... [ZBX-15685] fixed zabbix_sender failing to report the error due to closed connection (arimdjonoks)
+.......PS. [ZBX-16368] fixed fping double call (akozlovs)
 .......PS. [ZBX-16664] fixed IPMI poller skips processing if one of the elements is missing information (akozlovs)
 ........S. [ZBX-16671] fixed server crashing when linking web scenario template (arimdjonoks)
 ........S. [ZBX-16711] ensuring errbuf is emptied before every curl_easy_perform request (arimdjonoks)

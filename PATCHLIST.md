@@ -41,6 +41,7 @@
 [ZBX-16277] fixed compilation Zabbix agent for Windows with options available for Windows Vista and newer (MVekslers)
 [ZBX-16315] fixed Zabbix server not to cause foreign key constraint failure on Zabbix proxy when changing and sending configuration at the same time (vso) (https://support.zabbix.com/browse/ZBX-16315)
 [ZBX-16346] fixed compilation for Oracle Instant Client v18.5 and higher (asestakovs) (https://support.zabbix.com/browse/ZBX-16346)
+[ZBX-16368] fixed fping double call (akozlovs) (https://support.zabbix.com/browse/ZBX-16368)
 [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso) (https://support.zabbix.com/browse/ZBX-16460)
 [ZBX-16545] fixed shell script execution timeout log message (atumilovics) (https://support.zabbix.com/browse/ZBX-16545)
 [ZBX-16612] fixed possibility of high CPU usage on Windows (vso) (https://support.zabbix.com/browse/ZBX-16612)
