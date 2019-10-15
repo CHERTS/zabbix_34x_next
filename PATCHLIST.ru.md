@@ -44,6 +44,7 @@
 [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso) (https://support.zabbix.com/browse/ZBX-16460)
 [ZBX-16545] fixed shell script execution timeout log message (atumilovics) (https://support.zabbix.com/browse/ZBX-16545)
 [ZBX-16612] fixed possibility of high CPU usage on Windows (vso) (https://support.zabbix.com/browse/ZBX-16612)
+[ZBX-16664] fixed IPMI poller skips processing if one of the elements is missing information (akozlovs) (https://support.zabbix.com/browse/ZBX-16664)
 [ZBX-16671] fixed server crashing when linking web scenario template (arimdjonoks) (https://support.zabbix.com/browse/ZBX-16671)
 [ZBX-16677] fixed empty sql query DBexecute_overflowed_sql call during host availability update (atumilovics) (https://support.zabbix.com/browse/ZBX-16677)
 [ZBX-16680] fixed freeing locked resources when Zabbix agent cannot be started and has to exit with failure (https://support.zabbix.com/browse/ZBX-16680)
