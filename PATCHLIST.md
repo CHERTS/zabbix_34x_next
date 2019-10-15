@@ -26,6 +26,7 @@
 [ZBX-15225] improved handling of timeouts in vfs.dir.size and vfs.dir.count items on Windows agent (asitals) (https://support.zabbix.com/browse/ZBX-15225)
 [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris) (https://support.zabbix.com/browse/ZBX-15552)
 [ZBX-15609] added missing optional parameter "<regex_excl_dir>" for "vfs.dir.count" and "vfs.dir.size" item keys in item helper (Ivo) (https://support.zabbix.com/browse/ZBX-15609)
+[ZBX-15685] fixed zabbix_sender failing to report the error due to closed connection (arimdjonoks)
 [ZBX-15898] fixed compilation warning regarding too large integer constant (akozlovs) (https://support.zabbix.com/browse/ZBX-15898)
 [ZBX-15915] fixed linking error if round() is undefined (https://support.zabbix.com/browse/ZBX-15915)
 [ZBX-15955] fixed security vulnerability - accepting connections from not allowed addresses (Andris, vso) (https://support.zabbix.com/browse/ZBX-15955)
