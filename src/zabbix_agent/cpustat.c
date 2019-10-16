@@ -160,7 +160,7 @@ int	init_cpu_collector(ZBX_CPUS_STAT_DATA *pcpus)
 		else
 			_itow_s(idx - 1, cpu, ARRSIZE(cpu), 10);
 
-			if (ERROR_SUCCESS != zbx_PdhMakeCounterPath(__func__, &cpe, counterPath))
+			if (ERROR_SUCCESS != zbx_PdhMakeCounterPath(__function_name, &cpe, counterPath))
 			goto clean;
 
 		if (NULL == (pcpus->cpu_counter[idx] = add_perf_counter(NULL, counterPath, MAX_COLLECTOR_PERIOD,
@@ -200,12 +200,12 @@ int	init_cpu_collector(ZBX_CPUS_STAT_DATA *pcpus)
 					StringCchPrintf(cpu, ARRSIZE(cpu), L"_Total");
 				}
 				else
-		{
+				{
 					StringCchPrintf(cpu, ARRSIZE(cpu), L"%d,%d", gidx, idx - 1);
 				}
 
-				if (ERROR_SUCCESS != zbx_PdhMakeCounterPath(__func__, &cpe, counterPath))
-			goto clean;
+				if (ERROR_SUCCESS != zbx_PdhMakeCounterPath(__function_name, &cpe, counterPath))
+					goto clean;
 
 				if (NULL == (pcpus->cpu_counter[gidx * cpus_per_group + idx] =
 						add_perf_counter(NULL, counterPath, MAX_COLLECTOR_PERIOD,
