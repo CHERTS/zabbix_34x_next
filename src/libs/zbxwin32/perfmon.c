@@ -278,13 +278,14 @@ DWORD	get_builtin_counter_index(zbx_builtin_counter_ref_t counter_ref)
  ******************************************************************************/
 static wchar_t	*get_all_counter_eng_names(wchar_t *reg_value_name)
 {
+	const char     *__function_name = "get_all_counter_eng_names";
 	wchar_t		*buffer = NULL;
 	DWORD		buffer_size = 0;
 	LSTATUS		status = ERROR_SUCCESS;
 	/* this registry key guaranteed to hold english counter texts even in localized Win versions */
 	static HKEY reg_key = HKEY_PERFORMANCE_TEXT;
 
-	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __func__);
+	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __function_name);
 
 	/* query the size of the text data for further buffer allocation */
 	if (ERROR_SUCCESS != (status = RegQueryValueEx(reg_key, reg_value_name, NULL, NULL, NULL, &buffer_size)))
@@ -304,7 +305,7 @@ static wchar_t	*get_all_counter_eng_names(wchar_t *reg_value_name)
 		goto finish;
 	}
 finish:
-	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __func__);
+	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);
 
 	return buffer;
 }
@@ -325,10 +326,11 @@ finish:
  ******************************************************************************/
 int	init_builtin_counter_indexes(void)
 {
+	const char     *__function_name = "init_builtin_counter_indexes";
 	int 		ret = FAIL, i;
 	wchar_t 	*counter_text, *saved_ptr;
 
-	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __func__);
+	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __function_name);
 
 	/* Get buffer holding a list of performance counter indexes and English counter names. */
 	/* L"Counter" stores names, L"Help" stores descriptions ("Help" is not used).          */
@@ -357,7 +359,7 @@ int	init_builtin_counter_indexes(void)
 	ret = SUCCEED;
 	zbx_free(saved_ptr);
 out:
-	zabbix_log(LOG_LEVEL_DEBUG, "End of %s():%s", __func__, zbx_result_string(ret));
+	zabbix_log(LOG_LEVEL_DEBUG, "End of %s():%s", __function_name, zbx_result_string(ret));
 
 	return ret;
 }
