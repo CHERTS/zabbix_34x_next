@@ -25,9 +25,12 @@ SUBDIRS = \
 sbin_PROGRAMS = zabbix_server
 
 zabbix_server_SOURCES = \
-	actions.c actions.h \
-	operations.c operations.h \
-	events.c events.h \
+	actions.c \
+	actions.h \
+	operations.c \
+	operations.h \
+	events.c \
+	events.h \
 	server.c
 	
 if ZBXCUNIT
@@ -53,35 +56,35 @@ zabbix_server_LDADD = \
 	taskmanager/libzbxtaskmanager.a \
 	scripts/libzbxscripts.a \
 	preprocessor/libpreprocessor.a \
-	$(top_srcdir)/src/libs/zbxsysinfo/libzbxserversysinfo.a \
-	$(top_srcdir)/src/libs/zbxsysinfo/common/libcommonsysinfo.a \
-	$(top_srcdir)/src/libs/zbxsysinfo/simple/libsimplesysinfo.a \
-	$(top_srcdir)/src/libs/zbxlog/libzbxlog.a \
-	$(top_srcdir)/src/libs/zbxserver/libzbxserver.a \
-	$(top_srcdir)/src/libs/zbxdbcache/libzbxdbcache.a \
-	$(top_srcdir)/src/libs/zbxhistory/libzbxhistory.a \
-	$(top_srcdir)/src/libs/zbxmemory/libzbxmemory.a \
-	$(top_srcdir)/src/libs/zbxregexp/libzbxregexp.a \
-	$(top_srcdir)/src/libs/zbxself/libzbxself.a \
-	$(top_srcdir)/src/libs/zbxnix/libzbxnix.a \
-	$(top_srcdir)/src/libs/zbxalgo/libzbxalgo.a \
-	$(top_srcdir)/src/libs/zbxsys/libzbxsys.a \
-	$(top_srcdir)/src/libs/zbxconf/libzbxconf.a \
-	$(top_srcdir)/src/libs/zbxmedia/libzbxmedia.a \
-	$(top_srcdir)/src/libs/zbxcommon/libzbxcommon.a \
-	$(top_srcdir)/src/libs/zbxcrypto/libzbxcrypto.a \
-	$(top_srcdir)/src/libs/zbxcomms/libzbxcomms.a \
-	$(top_srcdir)/src/libs/zbxcommshigh/libzbxcommshigh.a \
-	$(top_srcdir)/src/libs/zbxjson/libzbxjson.a \
-	$(top_srcdir)/src/libs/zbxhttp/libzbxhttp.a \
-	$(top_srcdir)/src/libs/zbxipcservice/libzbxipcservice.a \
-	$(top_srcdir)/src/libs/zbxexec/libzbxexec.a \
-	$(top_srcdir)/src/libs/zbxicmpping/libzbxicmpping.a \
-	$(top_srcdir)/src/libs/zbxdbupgrade/libzbxdbupgrade.a \
-	$(top_srcdir)/src/libs/zbxdbhigh/libzbxdbhigh.a \
-	$(top_srcdir)/src/libs/zbxdb/libzbxdb.a \
-	$(top_srcdir)/src/libs/zbxmodules/libzbxmodules.a \
-	$(top_srcdir)/src/libs/zbxtasks/libzbxtasks.a
+	$(top_builddir)/src/libs/zbxsysinfo/libzbxserversysinfo.a \
+	$(top_builddir)/src/libs/zbxsysinfo/common/libcommonsysinfo.a \
+	$(top_builddir)/src/libs/zbxsysinfo/simple/libsimplesysinfo.a \
+	$(top_builddir)/src/libs/zbxlog/libzbxlog.a \
+	$(top_builddir)/src/libs/zbxserver/libzbxserver.a \
+	$(top_builddir)/src/libs/zbxdbcache/libzbxdbcache.a \
+	$(top_builddir)/src/libs/zbxhistory/libzbxhistory.a \
+	$(top_builddir)/src/libs/zbxmemory/libzbxmemory.a \
+	$(top_builddir)/src/libs/zbxregexp/libzbxregexp.a \
+	$(top_builddir)/src/libs/zbxself/libzbxself.a \
+	$(top_builddir)/src/libs/zbxnix/libzbxnix.a \
+	$(top_builddir)/src/libs/zbxalgo/libzbxalgo.a \
+	$(top_builddir)/src/libs/zbxsys/libzbxsys.a \
+	$(top_builddir)/src/libs/zbxconf/libzbxconf.a \
+	$(top_builddir)/src/libs/zbxmedia/libzbxmedia.a \
+	$(top_builddir)/src/libs/zbxcommon/libzbxcommon.a \
+	$(top_builddir)/src/libs/zbxcrypto/libzbxcrypto.a \
+	$(top_builddir)/src/libs/zbxcomms/libzbxcomms.a \
+	$(top_builddir)/src/libs/zbxcommshigh/libzbxcommshigh.a \
+	$(top_builddir)/src/libs/zbxjson/libzbxjson.a \
+	$(top_builddir)/src/libs/zbxhttp/libzbxhttp.a \
+	$(top_builddir)/src/libs/zbxipcservice/libzbxipcservice.a \
+	$(top_builddir)/src/libs/zbxexec/libzbxexec.a \
+	$(top_builddir)/src/libs/zbxicmpping/libzbxicmpping.a \
+	$(top_builddir)/src/libs/zbxdbupgrade/libzbxdbupgrade.a \
+	$(top_builddir)/src/libs/zbxdbhigh/libzbxdbhigh.a \
+	$(top_builddir)/src/libs/zbxdb/libzbxdb.a \
+	$(top_builddir)/src/libs/zbxmodules/libzbxmodules.a \
+	$(top_builddir)/src/libs/zbxtasks/libzbxtasks.a
 
 if HAVE_IPMI
 zabbix_server_LDADD += ipmi/libipmi.a
@@ -93,20 +96,20 @@ zabbix_server_LDFLAGS = @SERVER_LDFLAGS@
 
 zabbix_server_CFLAGS = \
 	-DZABBIX_DAEMON \
-	-DSYSCONFDIR="\"@sysconfdir@\"" \
-	-DDATADIR="\"@datadir@\"" \
-	-DLIBDIR="\"@libdir@\"" \
-	-I@top_srcdir@/src/libs/zbxdbcache 
+	-DSYSCONFDIR="\"$(sysconfdir)\"" \
+	-DDATADIR="\"$(datadir)\"" \
+	-DLIBDIR="\"$(libdir)\"" \
+	-I$(top_builddir)/src/libs/zbxdbcache 
 
 SERVER_CONFIG = zabbix_server.conf
-INCLUDE_DIR = $(DESTDIR)@sysconfdir@/$(SERVER_CONFIG).d
-EXSCRIPTS_DIR = $(DESTDIR)@datadir@/zabbix/externalscripts
-ALSCRIPTS_DIR = $(DESTDIR)@datadir@/zabbix/alertscripts
-MODULES_DIR = $(DESTDIR)@libdir@
+INCLUDE_DIR = $(DESTDIR)$(sysconfdir)/$(SERVER_CONFIG).d
+EXSCRIPTS_DIR = $(DESTDIR)$(datadir)/zabbix/externalscripts
+ALSCRIPTS_DIR = $(DESTDIR)$(datadir)/zabbix/alertscripts
+MODULES_DIR = $(DESTDIR)$(libdir)
 
 install-data-hook:
 	$(MKDIR_P) "$(INCLUDE_DIR)"
 	$(MKDIR_P) "$(EXSCRIPTS_DIR)"
 	$(MKDIR_P) "$(ALSCRIPTS_DIR)"
 	$(MKDIR_P) "$(MODULES_DIR)"
-	test -f "$(DESTDIR)@sysconfdir@/$(SERVER_CONFIG)" || cp "../../conf/$(SERVER_CONFIG)" "$(DESTDIR)@sysconfdir@"
+	test -f "$(DESTDIR)$(sysconfdir)/$(SERVER_CONFIG)" || cp "../../conf/$(SERVER_CONFIG)" "$(DESTDIR)$(sysconfdir)"

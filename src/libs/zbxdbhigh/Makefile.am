@@ -26,4 +26,7 @@ libzbxdbhigh_a_SOURCES = \
 	trigger.c \
 	event.c
 
-libzbxdbhigh_a_CFLAGS = -I@top_srcdir@/src/zabbix_server/ @UNIXODBC_CFLAGS@
+libzbxdbhigh_a_CFLAGS = \
+	-I$(top_srcdir)/src/zabbix_server/ \
+	@UNIXODBC_CFLAGS@
+

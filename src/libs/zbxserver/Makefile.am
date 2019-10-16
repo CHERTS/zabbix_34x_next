@@ -3,8 +3,10 @@
 noinst_LIBRARIES = libzbxserver.a
 
 libzbxserver_a_SOURCES = \
-	evalfunc.c evalfunc.h \
+	evalfunc.c \
+	evalfunc.h \
 	expression.c \
-	macrofunc.c macrofunc.h
+	macrofunc.c \
+	macrofunc.h
 
-libzbxserver_a_CFLAGS = -I@top_srcdir@/src/libs/zbxdbcache
+libzbxserver_a_CFLAGS = -I$(top_srcdir)/src/libs/zbxdbcache

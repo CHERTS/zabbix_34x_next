@@ -3,6 +3,6 @@
 noinst_LIBRARIES = libzbxhttp.a
 
 libzbxhttp_a_SOURCES = \
-	urlencode.c \
 	punycode.c \
-	punycode.h
+	punycode.h \
+	urlencode.c

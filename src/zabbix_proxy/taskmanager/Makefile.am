@@ -3,5 +3,6 @@
 noinst_LIBRARIES = libzbxtaskmanager.a
 
 libzbxtaskmanager_a_SOURCES = \
-	taskmanager.c taskmanager.h \
+	taskmanager.c \
+	taskmanager.h \
 	server_tasks.c

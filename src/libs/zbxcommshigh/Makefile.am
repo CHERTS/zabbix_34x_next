@@ -2,4 +2,6 @@
 
 noinst_LIBRARIES = libzbxcommshigh.a
 
-libzbxcommshigh_a_SOURCES = comms.c
+libzbxcommshigh_a_SOURCES = \
+	comms.c
+

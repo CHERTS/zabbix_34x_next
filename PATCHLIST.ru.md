@@ -15,6 +15,7 @@
 [ZBXNEXT-5179] added option to specify absolute path in LoadModule; thanks to Glebs Ivanovskis for the patch (asestakovs) (https://support.zabbix.com/browse/ZBXNEXT-5179)
 [ZBX-7798] improved performance of icmpping* for fping v4.0 and more (MVekslers) (https://support.zabbix.com/browse/ZBX-7798)
 [ZBX-9867] improved Zabbix daemon termination by not using signal unsafe functions in signal handler; improved Zabbix server and Zabbix proxy process termination by stopping data collection and waiting for history syncers to finish (vso) (https://support.zabbix.com/browse/ZBX-9867)
+[ZBX-11764] fixed automake scripts; thanks to Tomasz Kłoczko for the patch (akozlovs) (https://support.zabbix.com/browse/ZBX-11764)
 [ZBX-11970] fixed style for some enumerators and structure type declarations (abs, Andris) (https://support.zabbix.com/browse/ZBX-11970)
 [ZBX-12671] refactoring the code base to support the compiler flag -Wstrict-prototypes (https://support.zabbix.com/browse/ZBX-12671)
 [ZBX-12983] fixed compilation warnings under Windows (valdis) (https://support.zabbix.com/browse/ZBX-12983)
