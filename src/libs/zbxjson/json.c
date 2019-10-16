@@ -275,6 +275,21 @@ static char	*__zbx_json_insstring(char *p, const char *string, zbx_json_type_t t
 	return p;
 }
 
+void	zbx_json_escape(char **string)
+{
+	size_t	size;
+	char	*buffer;
+
+	if (0 == (size = __zbx_json_stringsize(*string, ZBX_JSON_TYPE_UNKNOWN)))
+		return;
+
+	buffer = zbx_malloc(NULL, size + 1);
+	buffer[size] = '\0';
+	__zbx_json_insstring(buffer, *string, ZBX_JSON_TYPE_UNKNOWN);
+	zbx_free(*string);
+	*string = buffer;
+}
+
 static void	__zbx_json_addobject(struct zbx_json *j, const char *name, int object)
 {
 	size_t	len = 2; /* brackets */
@@ -382,6 +397,14 @@ void	zbx_json_addint64(struct zbx_json *j, const char *name, zbx_int64_t value)
 	char	buffer[MAX_ID_LEN];
 
 	zbx_snprintf(buffer, sizeof(buffer), ZBX_FS_I64, value);
+	zbx_json_addstring(j, name, buffer, ZBX_JSON_TYPE_INT);
+}
+
+void	zbx_json_addfloat(struct zbx_json *j, const char *name, double value)
+{
+	char	buffer[MAX_ID_LEN];
+
+	zbx_snprintf(buffer, sizeof(buffer), ZBX_FS_DBL, value);
 	zbx_json_addstring(j, name, buffer, ZBX_JSON_TYPE_INT);
 }
 
