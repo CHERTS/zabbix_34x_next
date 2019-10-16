@@ -1,6 +1,7 @@
 Changes for 3.4.17alpha1 (unofficial)
 
 New features:
+...G...... [ZBXNEXT-4898] added support IPv6 for 'net.dns' and 'net.dns.record' (MVekslers)
 
 Bug fixes:
 ....I..... [ZBX-11764] fixed automake scripts; thanks to Tomasz Kłoczko for the patch (akozlovs)
@@ -11,6 +12,8 @@ Bug fixes:
 ........S. [ZBX-16671] fixed server crashing when linking web scenario template (arimdjonoks)
 ........S. [ZBX-16711] ensuring errbuf is emptied before every curl_easy_perform request (arimdjonoks)
 ...G...PS. [ZBX-16750] fixed broken validation of peer certificate issuer and subject strings in TLS connect, fixed logging (Andris)
+...G...PS. [DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
+...G...PS. [DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
 
 --------------------------------------------------------------------------------
 Changes for 3.4.16 (unofficial)

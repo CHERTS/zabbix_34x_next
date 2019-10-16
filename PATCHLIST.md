@@ -8,8 +8,9 @@
 [ZBXNEXT-1456] ability to filter for discovered items (https://support.zabbix.com/browse/ZBXNEXT-1456)
 [ZBXNEXT-1567] added item "vfs.dir.count" for counting directory entries (valdis) (https://support.zabbix.com/browse/ZBXNEXT-1567)
 [ZBXNEXT-2315] allow matching content in web monitoring headers (https://support.zabbix.com/browse/ZBXNEXT-2315)
-[ZBXNEXT-4577] improved performance of Zabbix server by replacing semaphores to pthread mutexes and read-write locks (vso, wiper)
-[ZBXNEXT-4757] added support of "pused" mode for cache-related internal items (Sasha)
+[ZBXNEXT-4577] improved performance of Zabbix server by replacing semaphores to pthread mutexes and read-write locks (vso, wiper) (https://support.zabbix.com/browse/ZBXNEXT-4577)
+[ZBXNEXT-4757] added support of "pused" mode for cache-related internal items (Sasha) (https://support.zabbix.com/browse/ZBXNEXT-4757)
+[ZBXNEXT-4898] added support IPv6 for 'net.dns' and 'net.dns.record' (MVekslers) (https://support.zabbix.com/browse/ZBXNEXT-4898)
 [ZBXNEXT-4941] Investigate Oracle bulk update performance (https://support.zabbix.com/browse/ZBXNEXT-4941)
 [ZBXNEXT-4967] added Zabbix sender data sending to multiple destinations given in ServerActive configuration parameter (viktors)
 [ZBXNEXT-5179] added option to specify absolute path in LoadModule; thanks to Glebs Ivanovskis for the patch (asestakovs) (https://support.zabbix.com/browse/ZBXNEXT-5179)
@@ -56,6 +57,8 @@
 [ZBX-16750] fixed broken validation of peer certificate issuer and subject strings in TLS connect, fixed logging (Andris) (https://support.zabbix.com/browse/ZBX-16750)
 [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
 [DEV-698] removed unused local variables
+[DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
+[DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
 [DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro
 [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
 ~~~~
