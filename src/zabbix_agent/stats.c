@@ -32,6 +32,8 @@
 #ifdef _WINDOWS
 #	include "service.h"
 #	include "perfstat.h"
+/* defined in sysinfo lib */
+extern int get_cpu_num_win32(void);
 #else
 #	include "daemon.h"
 #	include "ipc.h"
@@ -64,31 +66,7 @@ zbx_mutex_t		diskstats_lock = ZBX_MUTEX_NULL;
 static int	zbx_get_cpu_num(void)
 {
 #if defined(_WINDOWS)
-	/* Define a function pointer type for the GetActiveProcessorCount API */
-	typedef DWORD (WINAPI *GETACTIVEPC) (WORD);
-
-	GETACTIVEPC	get_act;
-	SYSTEM_INFO	sysInfo;
-
-	/* The rationale for checking dynamically if the GetActiveProcessorCount is implemented */
-	/* in kernel32.lib, is because the function is implemented only on 64 bit versions of Windows */
-	/* from Windows 7 onward. Windows Vista 64 bit doesn't have it and also Windows XP does */
-	/* not. We can't resolve this using conditional compilation unless we release multiple agents */
-	/* targeting different sets of Windows APIs. */
-	get_act = (GETACTIVEPC)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "GetActiveProcessorCount");
-
-	if (NULL != get_act)
-	{
-		return (int)get_act(ALL_PROCESSOR_GROUPS);
-	}
-	else
-	{
-		zabbix_log(LOG_LEVEL_DEBUG, "Cannot find address of GetActiveProcessorCount function");
-
-		GetNativeSystemInfo(&sysInfo);
-
-		return (int)sysInfo.dwNumberOfProcessors;
-	}
+	return get_cpu_num_win32();
 #elif defined(HAVE_SYS_PSTAT_H)
 	struct pst_dynamic	psd;
 
@@ -170,8 +148,9 @@ int	init_collector_data(char **error)
 	sz = ZBX_SIZE_T_ALIGN8(sizeof(ZBX_COLLECTOR_DATA));
 
 #ifdef _WINDOWS
-	sz_cpu = sizeof(zbx_perf_counter_data_t *) * (cpu_count + 1);
+	ZBX_UNUSED(error);
 
+	sz_cpu = sizeof(zbx_perf_counter_data_t *) * (cpu_count + 1);
 	collector = zbx_malloc(collector, sz + sz_cpu);
 	memset(collector, 0, sz + sz_cpu);
 
@@ -186,7 +165,7 @@ int	init_collector_data(char **error)
 		goto out;
 	}
 
-	if ((void *)(-1) == (collector = shmat(shm_id, NULL, 0)))
+	if ((void *)(-1) == (collector = (ZBX_COLLECTOR_DATA *)shmat(shm_id, NULL, 0)))
 	{
 		*error = zbx_dsprintf(*error, "cannot attach shared memory for collector: %s", zbx_strerror(errno));
 		goto out;
@@ -282,7 +261,7 @@ void	diskstat_shm_init()
 		exit(EXIT_FAILURE);
 	}
 
-	if ((void *)(-1) == (diskdevices = shmat(collector->diskstat_shmid, NULL, 0)))
+	if ((void *)(-1) == (diskdevices = (ZBX_DISKDEVICES_DATA *)shmat(collector->diskstat_shmid, NULL, 0)))
 	{
 		zabbix_log(LOG_LEVEL_CRIT, "cannot attach shared memory for disk statistics collector: %s",
 				zbx_strerror(errno));
@@ -326,7 +305,7 @@ void	diskstat_shm_reattach()
 			my_diskstat_shmid = ZBX_NONEXISTENT_SHMID;
 		}
 
-		if ((void *)(-1) == (diskdevices = shmat(collector->diskstat_shmid, NULL, 0)))
+		if ((void *)(-1) == (diskdevices = (ZBX_DISKDEVICES_DATA *)shmat(collector->diskstat_shmid, NULL, 0)))
 		{
 			zabbix_log(LOG_LEVEL_CRIT, "cannot attach shared memory for disk statistics collector: %s",
 					zbx_strerror(errno));
@@ -377,7 +356,7 @@ void	diskstat_shm_extend()
 		exit(EXIT_FAILURE);
 	}
 
-	if ((void *)(-1) == (new_diskdevices = shmat(new_shmid, NULL, 0)))
+	if ((void *)(-1) == (new_diskdevices = (ZBX_DISKDEVICES_DATA *)shmat(new_shmid, NULL, 0)))
 	{
 		zabbix_log(LOG_LEVEL_CRIT, "cannot attach shared memory for extending disk statistics collector: %s",
 				zbx_strerror(errno));
@@ -408,8 +387,8 @@ void	diskstat_shm_extend()
 	diskdevices = new_diskdevices;
 
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s() extended diskstat shared memory: old_max:%d new_max:%d old_size:%d"
-			" new_size:%d old_shmid:%d new_shmid:%d", __function_name, old_max, new_max, old_shm_size,
-			new_shm_size, old_shmid, collector->diskstat_shmid);
+			" new_size:%d old_shmid:%d new_shmid:%d", __function_name, old_max, new_max, (zbx_fs_size_t)old_shm_size,
+			(zbx_fs_size_t)new_shm_size, old_shmid, collector->diskstat_shmid);
 #endif
 }
 
