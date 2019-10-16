@@ -1,6 +1,7 @@
 Changes for 3.4.17alpha1 (unofficial)
 
 New features:
+..FG...... [ZBXNEXT-2946] added new key "wmi.getall" to collect all required wmi properties in a json document (MVekslers)
 ...G...... [ZBXNEXT-4898] added support IPv6 for 'net.dns' and 'net.dns.record' (MVekslers)
 
 Bug fixes:

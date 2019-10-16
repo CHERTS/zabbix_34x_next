@@ -643,6 +643,10 @@ class CHelpItems {
 				[
 					'key' => 'wmi.get[<namespace>,<query>]',
 					'description' => _('Execute WMI query and return the first selected object. Returns integer, float, string or text (depending on the request)')
+				],
+				[
+					'key' => 'wmi.getall[<namespace>,<query>]',
+					'description' => _('Execute WMI query and return the json document with all selected objects')
 				]
 			],
 			ITEM_TYPE_AGGREGATE => [

@@ -8,6 +8,7 @@
 [ZBXNEXT-1456] ability to filter for discovered items (https://support.zabbix.com/browse/ZBXNEXT-1456)
 [ZBXNEXT-1567] added item "vfs.dir.count" for counting directory entries (valdis) (https://support.zabbix.com/browse/ZBXNEXT-1567)
 [ZBXNEXT-2315] allow matching content in web monitoring headers (https://support.zabbix.com/browse/ZBXNEXT-2315)
+[ZBXNEXT-2946] added new key "wmi.getall" to collect all required wmi properties in a json document (MVekslers) (https://support.zabbix.com/browse/ZBXNEXT-2946)
 [ZBXNEXT-4577] improved performance of Zabbix server by replacing semaphores to pthread mutexes and read-write locks (vso, wiper) (https://support.zabbix.com/browse/ZBXNEXT-4577)
 [ZBXNEXT-4757] added support of "pused" mode for cache-related internal items (Sasha) (https://support.zabbix.com/browse/ZBXNEXT-4757)
 [ZBXNEXT-4898] added support IPv6 for 'net.dns' and 'net.dns.record' (MVekslers) (https://support.zabbix.com/browse/ZBXNEXT-4898)
