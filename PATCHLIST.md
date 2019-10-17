@@ -46,6 +46,7 @@
 [ZBX-16315] fixed Zabbix server not to cause foreign key constraint failure on Zabbix proxy when changing and sending configuration at the same time (vso) (https://support.zabbix.com/browse/ZBX-16315)
 [ZBX-16346] fixed compilation for Oracle Instant Client v18.5 and higher (asestakovs) (https://support.zabbix.com/browse/ZBX-16346)
 [ZBX-16368] fixed fping double call (akozlovs) (https://support.zabbix.com/browse/ZBX-16368)
+[ZBX-16428] fixed SIGBUS crash when mmap memory is not accessible (atumilovics) (https://support.zabbix.com/browse/ZBX-16428)
 [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso) (https://support.zabbix.com/browse/ZBX-16460)
 [ZBX-16534] fixed stdout and stderr redirection after external log rotation (akozlovs) (https://support.zabbix.com/browse/ZBX-16534)
 [ZBX-16545] fixed shell script execution timeout log message (atumilovics) (https://support.zabbix.com/browse/ZBX-16545)
