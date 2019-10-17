@@ -28,6 +28,7 @@
 [ZBX-14853] fixed error of vmware items caused by misconfigured vmware maxQueryMetrics parameter (MVekslers) (https://support.zabbix.com/browse/ZBX-14853)
 [ZBX-14876] added a new optional parameter <regex_excl_dir> to items vfs.dir.size[] and vfs.dir.count[] (viktors) (https://support.zabbix.com/browse/ZBX-14876)
 [ZBX-15225] improved handling of timeouts in vfs.dir.size and vfs.dir.count items on Windows agent (asitals) (https://support.zabbix.com/browse/ZBX-15225)
+[ZBX-15301] fixed monotonous lag behind in Windows "system.localtime" (MVekslers) (https://support.zabbix.com/browse/ZBX-15301)
 [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris) (https://support.zabbix.com/browse/ZBX-15552)
 [ZBX-15609] added missing optional parameter "<regex_excl_dir>" for "vfs.dir.count" and "vfs.dir.size" item keys in item helper (Ivo) (https://support.zabbix.com/browse/ZBX-15609)
 [ZBX-15675] added support for more than 64 CPUs in Windows agent (kalimulin) (https://support.zabbix.com/browse/ZBX-15675)

@@ -154,12 +154,11 @@ const char	*get_program_name(const char *path)
  ******************************************************************************/
 void	zbx_timespec(zbx_timespec_t *ts)
 {
-	static zbx_timespec_t	*last_ts = NULL;
-	static int		corr = 0;
+	static ZBX_THREAD_LOCAL zbx_timespec_t	last_ts = {0, 0};
+	static ZBX_THREAD_LOCAL int		corr = 0;
 #ifdef _WINDOWS
-	LARGE_INTEGER	tickPerSecond, tick;
-	static int	boottime = 0;
-	BOOL		rc = FALSE;
+	static ZBX_THREAD_LOCAL LARGE_INTEGER	tickPerSecond = {0};
+	struct _timeb				tb;
 #else
 	struct timeval	tv;
 	int		rc = -1;
@@ -167,34 +166,62 @@ void	zbx_timespec(zbx_timespec_t *ts)
 	struct timespec	tp;
 #	endif
 #endif
-
-	if (NULL == last_ts)
-		last_ts = zbx_calloc(last_ts, 1, sizeof(zbx_timespec_t));
-
 #ifdef _WINDOWS
-	if (TRUE == (rc = QueryPerformanceFrequency(&tickPerSecond)))
-	{
-		if (TRUE == (rc = QueryPerformanceCounter(&tick)))
+
+	if (0 == tickPerSecond.QuadPart)
+		QueryPerformanceFrequency(&tickPerSecond);
+
+	_ftime(&tb);
+
+	ts->sec = (int)tb.time;
+	ts->ns = tb.millitm * 1000000;
+
+	if (0 != tickPerSecond.QuadPart)
 		{
-			ts->ns = (int)(1000000000 * (tick.QuadPart % tickPerSecond.QuadPart) / tickPerSecond.QuadPart);
+		LARGE_INTEGER	tick;
 
-			tick.QuadPart = tick.QuadPart / tickPerSecond.QuadPart;
+		if (TRUE == QueryPerformanceCounter(&tick))
+		{
+			static ZBX_THREAD_LOCAL LARGE_INTEGER	last_tick = {0};
 
-			if (0 == boottime)
-				boottime = (int)(time(NULL) - tick.QuadPart);
+			if (0 < last_tick.QuadPart)
+			{
+				LARGE_INTEGER	qpc_tick = {0}, ntp_tick = {0};
 
-			ts->sec = (int)(tick.QuadPart + boottime);
+				/* _ftime () returns precision in milliseconds, but 'ns' could be increased up to 1ms */
+				if (last_ts.sec == ts->sec && last_ts.ns > ts->ns && 1000000 > (last_ts.ns - ts->ns))
+				{
+					ts->ns = last_ts.ns;
 		}
+				else
+				{
+					ntp_tick.QuadPart = tickPerSecond.QuadPart * (ts->sec - last_ts.sec) +
+							tickPerSecond.QuadPart * (ts->ns - last_ts.ns) / 1000000000;
 	}
 
-	if (TRUE != rc)
+				/* host system time can shift backwards, then correction is not reasonable */
+				if (0 <= ntp_tick.QuadPart)
+					qpc_tick.QuadPart = tick.QuadPart - last_tick.QuadPart - ntp_tick.QuadPart;
+
+				if (0 < qpc_tick.QuadPart && qpc_tick.QuadPart < tickPerSecond.QuadPart)
 	{
-		struct _timeb   tb;
+					int	ns = (int)(1000000000 * qpc_tick.QuadPart / tickPerSecond.QuadPart);
 
-		_ftime(&tb);
+					if (1000000 > ns)	/* value less than 1 millisecond */
+					{
+						ts->ns += ns;
 
-		ts->sec = (int)tb.time;
-		ts->ns = tb.millitm * 1000000;
+						while (ts->ns >= 1000000000)
+						{
+							ts->sec++;
+							ts->ns -= 1000000000;
+						}
+					}
+				}
+			}
+
+			last_tick = tick;
+		}
 	}
 #else	/* not _WINDOWS */
 #ifdef HAVE_TIME_CLOCK_GETTIME
@@ -218,7 +245,7 @@ void	zbx_timespec(zbx_timespec_t *ts)
 	}
 #endif	/* not _WINDOWS */
 
-	if (last_ts->ns == ts->ns && last_ts->sec == ts->sec)
+	if (last_ts.ns == ts->ns && last_ts.sec == ts->sec)
 	{
 		ts->ns += ++corr;
 
@@ -230,8 +257,8 @@ void	zbx_timespec(zbx_timespec_t *ts)
 	}
 	else
 	{
-		last_ts->sec = ts->sec;
-		last_ts->ns = ts->ns;
+		last_ts.sec = ts->sec;
+		last_ts.ns = ts->ns;
 		corr = 0;
 	}
 }
