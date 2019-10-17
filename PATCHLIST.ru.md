@@ -67,4 +67,5 @@
 [DEV-1164] expanded ZBX_THREAD_LOCAL define to __thread for gcc,clang
 [DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro
 [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
+[DBS-002] added Latest data in host settings page (mgrigorev)
 ~~~~

@@ -360,6 +360,14 @@ function get_header_host_table($current_element, $hostid, $lld_ruleid = 0) {
 	 * the count of rows
 	 */
 	if ($lld_ruleid == 0) {
+		// latest data
+		if (!$is_template) {
+			$latestdata = new CSpan([
+				new CLink(_('Latest data'), 'latest.php?filter_set=1&hostids[]=' . $db_host['hostid'])
+			]);
+		}
+		$list->addItem($latestdata);
+
 		// applications
 		$applications = new CSpan([
 			new CLink(_('Applications'), 'applications.php?hostid='.$db_host['hostid']),
