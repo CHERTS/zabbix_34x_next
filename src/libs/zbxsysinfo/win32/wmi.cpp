@@ -71,7 +71,7 @@ typedef int	(*zbx_parse_wmi_t)(IEnumWbemClassObject *pEnumerator, zbx_vector_wmi
 extern "C" int	put_variant_json(const char *prop_json, const char *prop_err, VARIANT *vtProp, struct zbx_json *jdoc,
 		char **error);
 
-ZBX_THREAD_LOCAL static int	com_initialized = 0;
+static ZBX_THREAD_LOCAL int	com_initialized = 0;
 
 extern "C" int	zbx_co_initialize()
 {

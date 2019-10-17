@@ -22,7 +22,7 @@
 #include "perfmon.h"
 #include "log.h"
 
-ZBX_THREAD_LOCAL static zbx_perf_counter_id_t	*PerfCounterList = NULL;
+static ZBX_THREAD_LOCAL zbx_perf_counter_id_t	*PerfCounterList = NULL;
 
 /* This struct contains mapping between built-in English counter names and PDH indexes. */
 /* If you change it then you also need to add enum values to zbx_builtin_counter_ref_t.  */

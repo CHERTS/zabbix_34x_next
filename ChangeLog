@@ -18,6 +18,7 @@ Bug fixes:
 ...G...PS. [ZBX-16750] fixed broken validation of peer certificate issuer and subject strings in TLS connect, fixed logging (Andris)
 ...G...PS. [DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
 ...G...PS. [DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
+...G...PS. [DEV-1164] expanded ZBX_THREAD_LOCAL define to __thread for gcc,clang
 
 --------------------------------------------------------------------------------
 Changes for 3.4.16 (unofficial)

@@ -90,9 +90,9 @@ int	zbx_regexp_compile(const char *pattern, zbx_regexp_t **regexp, const char **
  ****************************************************************************************************/
 static int	regexp_prepare(const char *pattern, int flags, zbx_regexp_t **regexp, const char **error)
 {
-	ZBX_THREAD_LOCAL static zbx_regexp_t	*curr_regexp = NULL;
-	ZBX_THREAD_LOCAL static char		*curr_pattern = NULL;
-	ZBX_THREAD_LOCAL static int		curr_flags = 0;
+	static ZBX_THREAD_LOCAL zbx_regexp_t	*curr_regexp = NULL;
+	static ZBX_THREAD_LOCAL char		*curr_pattern = NULL;
+	static ZBX_THREAD_LOCAL int		curr_flags = 0;
 	int					ret = SUCCEED;
 
 	if (NULL == curr_regexp || 0 != strcmp(curr_pattern, pattern) || curr_flags != flags)
@@ -147,7 +147,7 @@ static int	regexp_exec(const char *string, const zbx_regexp_t *regexp, int flags
 #define MATCHES_BUFF_SIZE	(MAX_REQUESTED_MATCHES * 3)
 
 	int				result = 0, r = 0;
-	ZBX_THREAD_LOCAL static int	matches_buff[MATCHES_BUFF_SIZE];
+	static ZBX_THREAD_LOCAL int	matches_buff[MATCHES_BUFF_SIZE];
 	int				*ovector = NULL;
 	int				ovecsize = count * 2 + count;
 #if defined(PCRE_EXTRA_MATCH_LIMIT) && defined(PCRE_EXTRA_MATCH_LIMIT_RECURSION)

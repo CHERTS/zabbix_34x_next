@@ -47,9 +47,9 @@ extern ZBX_THREAD_LOCAL int		server_num, process_num;
 
 #include "../libs/zbxcrypto/tls.h"
 
-ZBX_THREAD_LOCAL static ZBX_ACTIVE_BUFFER	buffer;
-ZBX_THREAD_LOCAL static zbx_vector_ptr_t	active_metrics;
-ZBX_THREAD_LOCAL static zbx_vector_ptr_t	regexps;
+static ZBX_THREAD_LOCAL ZBX_ACTIVE_BUFFER	buffer;
+static ZBX_THREAD_LOCAL zbx_vector_ptr_t	active_metrics;
+static ZBX_THREAD_LOCAL zbx_vector_ptr_t	regexps;
 
 #ifdef _WINDOWS
 LONG WINAPI	DelayLoadDllExceptionFilter(PEXCEPTION_POINTERS excpointers)
@@ -550,7 +550,7 @@ static int	refresh_active_checks(const char *host, unsigned short port)
 {
 	const char	*__function_name = "refresh_active_checks";
 
-	ZBX_THREAD_LOCAL static int	last_ret = SUCCEED;
+	static ZBX_THREAD_LOCAL int	last_ret = SUCCEED;
 	int				ret;
 	char				*tls_arg1, *tls_arg2;
 	zbx_socket_t			s;
