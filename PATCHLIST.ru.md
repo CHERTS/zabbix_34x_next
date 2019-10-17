@@ -21,6 +21,7 @@
 [ZBX-11970] fixed style for some enumerators and structure type declarations (abs, Andris) (https://support.zabbix.com/browse/ZBX-11970)
 [ZBX-12671] refactoring the code base to support the compiler flag -Wstrict-prototypes (https://support.zabbix.com/browse/ZBX-12671)
 [ZBX-12983] fixed compilation warnings under Windows (valdis) (https://support.zabbix.com/browse/ZBX-12983)
+[ZBX-13155] excluded src/libs/zbxself from agent compilation (https://support.zabbix.com/browse/ZBX-13155)
 [ZBX-13186] Show discovery error "Value should be a JSON object" in zabbix log file (https://support.zabbix.com/browse/ZBX-13186)
 [ZBX-13266] improved performance of the SQL queries with lot of IDs in the condition (https://support.zabbix.com/browse/ZBX-13266)
 [ZBX-14624] fixed agent collector not releasing connection to missing/removed disk devices (Andris, yurii) (https://support.zabbix.com/browse/ZBX-14624)

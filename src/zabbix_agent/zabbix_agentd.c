@@ -24,7 +24,6 @@
 #include "log.h"
 #include "zbxconf.h"
 #include "zbxgetopt.h"
-#include "zbxself.h"
 
 #ifndef _WINDOWS
 #	include "../libs/zbxnix/control.h"
