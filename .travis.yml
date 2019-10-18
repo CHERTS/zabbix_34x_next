@@ -20,7 +20,7 @@ matrix:
         make
         make dbschema
         make gettext
-	make dist
+        make dist
   - os: linux
     if: type == cron
     compiler: gcc
