@@ -15,19 +15,18 @@ matrix:
     compiler: gcc
     script:
       - |
-        chmod a+x create/bin/*.{sh,pl}
-        bash bootstrap.sh
+        ./bootstrap.sh
         ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql > build.log 2>&1 || (cat build.log && exit 1)
         make
         make dbschema
         make gettext
+	make dist
   - os: linux
     if: type == cron
     compiler: gcc
-    env: COVERITY_SCAN_PROJECT_NAME="zabbix_34x_next" COVERITY_SCAN_BRANCH_PATTERN="*" COVERITY_SCAN_NOTIFICATION_EMAIL="sleuthhound@gmail.com" COVERITY_SCAN_BUILD_COMMAND_PREPEND="bash bootstrap.sh && ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql" COVERITY_SCAN_BUILD_COMMAND="make"
+    env: COVERITY_SCAN_PROJECT_NAME="zabbix_34x_next" COVERITY_SCAN_BRANCH_PATTERN="*" COVERITY_SCAN_NOTIFICATION_EMAIL="sleuthhound@gmail.com" COVERITY_SCAN_BUILD_COMMAND_PREPEND="./bootstrap.sh && ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql" COVERITY_SCAN_BUILD_COMMAND="make"
     script:
       - |
         if [ ! -z ${COVERITY_SCAN_TOKEN+x} ]; then
-          chmod a+x create/bin/*.{sh,pl}
           curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash || true
         fi
