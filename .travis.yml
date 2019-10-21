@@ -3,20 +3,30 @@ dist: bionic
 
 language: c
 
-os:
-  - linux
+addons:
+  apt:
+    update: true
+    packages: [ autoconf, automake, wget, unzip, gettext, libxml2-dev, libssl-dev, libcurl4-openssl-dev, libsnmp-dev, libevent-dev, libsqlite3-dev, libpcre2-dev, libssh2-1-dev, libiksemel-dev, libmariadbclient-dev-compat, libopenipmi-dev, unixodbc-dev, libldap2-dev ]
 
-compiler:
-  - gcc
-
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y autoconf automake wget unzip gettext libxml2-dev libssl-dev libcurl4-openssl-dev libsnmp-dev libevent-dev libsqlite3-dev libpcre2-dev libssh2-1-dev libiksemel-dev libmariadbclient-dev-compat libopenipmi-dev unixodbc-dev libldap2-dev
-
-script:
-  - chmod a+x create/bin/*.{sh,pl}
-  - bash bootstrap.sh
-  - ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql
-  - make
-  - make dbschema
-  - make gettext
+matrix:
+  include:
+  - os: linux
+    if: type != cron
+    compiler: gcc
+    script:
+      - |
+        ./bootstrap.sh
+        ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql > build.log 2>&1 || (cat build.log && exit 1)
+        make
+        make dbschema
+        make gettext
+        make dist
+  - os: linux
+    if: type == cron
+    compiler: gcc
+    env: COVERITY_SCAN_PROJECT_NAME="zabbix_34x_next" COVERITY_SCAN_BRANCH_PATTERN="*" COVERITY_SCAN_NOTIFICATION_EMAIL="sleuthhound@gmail.com" COVERITY_SCAN_BUILD_COMMAND_PREPEND="./bootstrap.sh && ./configure --with-libpthread --with-libpcre --with-libcurl --with-libxml2 --with-net-snmp --with-openssl --enable-ipv6 --with-ssh2 --with-jabber --with-openipmi --with-unixodbc --with-ldap --enable-server --enable-proxy --enable-agent --enable-java --sysconfdir=/etc/zabbix --with-mysql" COVERITY_SCAN_BUILD_COMMAND="make"
+    script:
+      - |
+        if [ ! -z ${COVERITY_SCAN_TOKEN+x} ]; then
+          curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash || true
+        fi
