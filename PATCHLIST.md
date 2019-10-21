@@ -24,6 +24,7 @@
 [ZBX-13155] excluded src/libs/zbxself from agent compilation (https://support.zabbix.com/browse/ZBX-13155)
 [ZBX-13186] Show discovery error "Value should be a JSON object" in zabbix log file (https://support.zabbix.com/browse/ZBX-13186)
 [ZBX-13266] improved performance of the SQL queries with lot of IDs in the condition (https://support.zabbix.com/browse/ZBX-13266)
+[ZBX-14441] fixed windows agent "eventlog" key for reading big event log files of windows 2003 (MVekslers) (https://support.zabbix.com/browse/ZBX-14441)
 [ZBX-14624] fixed agent collector not releasing connection to missing/removed disk devices (Andris, yurii) (https://support.zabbix.com/browse/ZBX-14624)
 [ZBX-14853] fixed error of vmware items caused by misconfigured vmware maxQueryMetrics parameter (MVekslers) (https://support.zabbix.com/browse/ZBX-14853)
 [ZBX-14876] added a new optional parameter <regex_excl_dir> to items vfs.dir.size[] and vfs.dir.count[] (viktors) (https://support.zabbix.com/browse/ZBX-14876)
