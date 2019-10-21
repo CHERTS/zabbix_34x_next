@@ -365,8 +365,8 @@ function get_header_host_table($current_element, $hostid, $lld_ruleid = 0) {
 			$latestdata = new CSpan([
 				new CLink(_('Latest data'), 'latest.php?filter_set=1&hostids[]=' . $db_host['hostid'])
 			]);
+			$list->addItem($latestdata);
 		}
-		$list->addItem($latestdata);
 
 		// applications
 		$applications = new CSpan([
