@@ -1925,13 +1925,13 @@ ZBX_THREAD_ENTRY(active_checks_thread, args)
 	{
 		zbx_update_env(zbx_time());
 
-		if (now >= nextsend)
+		if ((now = time(NULL)) >= nextsend)
 		{
 			send_buffer(activechk_args.host, activechk_args.port);
 			nextsend = time(NULL) + 1;
 		}
 
-		if ((now = time(NULL)) >= nextsend)
+		if (now >= nextrefresh)
 		{
 			zbx_setproctitle("active checks #%d [getting list of active checks]", process_num);
 
