@@ -96,7 +96,7 @@ after_build:
   - cmd: 7z a zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\bin\%ZBX_OUTPUT%\*.exe %APPVEYOR_BUILD_FOLDER%\bin\%ZBX_OUTPUT%\*.dll
 
 artifacts:
-  - path: c:\projects\zabbix\bin\zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip
+  - path: bin\zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip
     name: Zabbix agent v%APPVEYOR_BUILD_VERSION%-%PLATFORM% for Windows 
 
 notifications:
