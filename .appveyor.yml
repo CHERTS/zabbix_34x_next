@@ -10,6 +10,7 @@ matrix:
 
 platform:
     - x64
+    - x86
 
 configuration:
     - Release
@@ -20,10 +21,10 @@ environment:
         BUILDER: CMake
         GENERATOR: "NMake Makefiles"
         APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-#      - PLATFORM: x86
-#        BUILDER: CMake
-#        GENERATOR: "NMake Makefiles"
-#        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      - PLATFORM: x86
+        BUILDER: CMake
+        GENERATOR: "NMake Makefiles"
+        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
 init:
   - cmd: git config --global core.autocrlf input
@@ -45,9 +46,15 @@ install:
     - mkdir C:\projects\deps\libs\pcre
 
 build_script:
+    - if "%PLATFORM%"=="x86" set OPENSSL_PLATFORM=Win32
+    - if "%PLATFORM%"=="x64" set OPENSSL_PLATFORM=Win64
+    - if "%PLATFORM%"=="x86" set ZBX_PLATFORM=i386
+    - if "%PLATFORM%"=="x64" set ZBX_PLATFORM=AMD64
     - ps: 'Write-Host "Running BUILDER: $env:BUILDER" -ForegroundColor Magenta'
     - ps: 'Write-Host "Running GENERATOR: $env:GENERATOR" -ForegroundColor Magenta'
     - ps: 'Write-Host "Running CONFIGURATION: $env:CONFIGURATION" -ForegroundColor Magenta'
+    - ps: 'Write-Host "Running OPENSSL_PLATFORM: $env:OPENSSL_PLATFORM" -ForegroundColor Magenta'
+    - ps: 'Write-Host "Running ZBX_PLATFORM: $env:ZBX_PLATFORM" -ForegroundColor Magenta'
     - cd C:\projects\deps\pcre
     - mkdir build
     - cd build
@@ -70,9 +77,9 @@ build_script:
     - ps: 'Write-Host "Running APPVEYOR_REPO_COMMIT_SHORT: $env:APPVEYOR_REPO_COMMIT_SHORT" -ForegroundColor Magenta'
     - cd build\win32\project
     - copy ..\include\config.h ..\..\..\include\ >nul 2>&1
-    - nmake CPU=AMD64 TLS=openssl TLSINCDIR="C:\OpenSSL-v111-Win64\include" TLSLIBDIR="C:\OpenSSL-v111-Win64\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_agent
-    - nmake CPU=AMD64 TLS=openssl TLSINCDIR="C:\OpenSSL-v111-Win64\include" TLSLIBDIR="C:\OpenSSL-v111-Win64\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_sender
-    - nmake CPU=AMD64 TLS=openssl TLSINCDIR="C:\OpenSSL-v111-Win64\include" TLSLIBDIR="C:\OpenSSL-v111-Win64\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_get
+    - nmake CPU=%ZBX_PLATFORM% TLS=openssl TLSINCDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\include" TLSLIBDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_agent
+    - nmake CPU=%ZBX_PLATFORM% TLS=openssl TLSINCDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\include" TLSLIBDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_sender
+    - nmake CPU=%ZBX_PLATFORM% TLS=openssl TLSINCDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\include" TLSLIBDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_get
 
 notifications:
   - provider: Email
