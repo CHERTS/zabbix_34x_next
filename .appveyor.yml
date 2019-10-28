@@ -49,6 +49,12 @@ build_script:
     - if "%PLATFORM%"=="x64" set OPENSSL_PLATFORM=Win64
     - if "%PLATFORM%"=="x86" set ZBX_PLATFORM=i386
     - if "%PLATFORM%"=="x64" set ZBX_PLATFORM=AMD64
+    - if "%PLATFORM%"=="x86" set ZBX_OUTPUT=win32
+    - if "%PLATFORM%"=="x64" set ZBX_OUTPUT=win64
+    - if "%PLATFORM%"=="x86" set OPENSSL_DLL_1=libcrypto-1_1.dll
+    - if "%PLATFORM%"=="x86" set OPENSSL_DLL_2=libssl-1_1.dll
+    - if "%PLATFORM%"=="x64" set OPENSSL_DLL_1=libcrypto-1_1-x64.dll
+    - if "%PLATFORM%"=="x64" set OPENSSL_DLL_2=libssl-1_1-x64.dll
     - ps: 'Write-Host "Running BUILDER: $env:BUILDER" -ForegroundColor Magenta'
     - ps: 'Write-Host "Running GENERATOR: $env:GENERATOR" -ForegroundColor Magenta'
     - ps: 'Write-Host "Running CONFIGURATION: $env:CONFIGURATION" -ForegroundColor Magenta'
@@ -79,6 +85,18 @@ build_script:
     - nmake CPU=%ZBX_PLATFORM% TLS=openssl TLSINCDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\include" TLSLIBDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_agent
     - nmake CPU=%ZBX_PLATFORM% TLS=openssl TLSINCDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\include" TLSLIBDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_sender
     - nmake CPU=%ZBX_PLATFORM% TLS=openssl TLSINCDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\include" TLSLIBDIR="C:\OpenSSL-v111-%OPENSSL_PLATFORM%\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_get
+
+after_build:
+  - ps: 'Write-Host "Copy OPENSSL_DLL_1: $env:OPENSSL_DLL_1" -ForegroundColor Magenta'
+  - cmd: copy /Y C:\OpenSSL-v111-%OPENSSL_PLATFORM%\bin\%OPENSSL_DLL_1% C:\projects\zabbix\bin\%ZBX_OUTPUT%
+  - ps: 'Write-Host "Copy OPENSSL_DLL_2: $env:OPENSSL_DLL_2" -ForegroundColor Magenta'
+  - cmd: copy /Y C:\OpenSSL-v111-%OPENSSL_PLATFORM%\bin\%OPENSSL_DLL_2% C:\projects\zabbix\bin\%ZBX_OUTPUT%
+  - ps: 'Write-Host "Create archive zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip" -ForegroundColor Magenta'
+  - cmd: 7z a zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\zabbix\bin\%ZBX_OUTPUT%\*.exe %APPVEYOR_BUILD_FOLDER%\zabbix\bin\%ZBX_OUTPUT%\*.dll
+
+artifacts:
+  - path: zabbix-agent-%APPVEYOR_BUILD_VERSION%.zip
+    name: Zabbix agent v%APPVEYOR_BUILD_VERSION%-%PLATFORM% for Windows 
 
 notifications:
   - provider: Email
