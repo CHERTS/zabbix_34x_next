@@ -1,0 +1,59 @@
+image: Visual Studio 2017
+
+matrix:
+    fast_finish: false
+
+platform:
+    - x64
+
+configuration:
+    - Release
+
+environment:
+    matrix:
+        - TOOLCHAIN: msvc15
+
+install:
+    - set ZBX_VER=3.4.16
+    - set PCRE_VER=8.43
+    - mkdir C:\projects\deps
+    - mkdir C:\projects\deps\libs
+    - cd C:\projects\deps
+    - appveyor DownloadFile https://ftp.pcre.org/pub/pcre/pcre-%PCRE_VER%.zip -FileName pcre.zip
+    - 7z e -y pcre.zip -oC:\projects\deps\pcre
+    - mkdir C:\projects\deps\libs\pcre
+    - mkdir C:\projects\zabbix
+    - cd C:\projects\zabbix
+    - appveyor DownloadFile https://github.com/CHERTS/zabbix_34x_next/releases/download/v%ZBX_VER%/zabbix-%ZBX_VER%.tar.gz
+    - tar xzf zabbix-%ZBX_VER%.tar.gz --strip-components=1
+
+build: false
+
+build_script:
+    - echo %configuration%
+    - call ci\appveyor\set-env.bat %TOOLCHAIN% %PLATFORM%
+    - cd C:\projects\deps\pcre
+    - mkdir build
+    - cd build
+    - cmake -G "NMake Makefiles"
+      "-DCMAKE_BUILD_TYPE=%configuration%"
+      "-DCMAKE_INSTALL_PREFIX=C:\projects\deps\libs\pcre"
+      "-DPCRE_BUILD_PCRECPP=OFF"
+      "-DPCRE_SUPPORT_UNICODE_PROPERTIES=ON"
+      "-DPCRE_SUPPORT_UTF=ON"
+      "-DCMAKE_C_FLAGS_RELEASE:string="/MT"" ..
+    - nmake install
+    - cd C:\projects\zabbix
+    - cd build\win32\project
+    - copy ..\include\config.h ..\..\..\include\ >nul 2>&1
+    - nmake CPU=AMD64 TLS=openssl TLSINCDIR="C:\OpenSSL-v111-Win64\include" TLSLIBDIR="C:\OpenSSL-v111-Win64\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_agent
+    - nmake CPU=AMD64 TLS=openssl TLSINCDIR="C:\OpenSSL-v111-Win64\include" TLSLIBDIR="C:\OpenSSL-v111-Win64\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_sender
+    - nmake CPU=AMD64 TLS=openssl TLSINCDIR="C:\OpenSSL-v111-Win64\include" TLSLIBDIR="C:\OpenSSL-v111-Win64\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_get
+
+notifications:
+  - provider: Email
+    to:
+      - sleuthhound@programs74.ru
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true
