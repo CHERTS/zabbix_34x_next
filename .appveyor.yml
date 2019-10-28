@@ -27,15 +27,12 @@ environment:
 
 init:
   - git config --global core.autocrlf input
-  - ps: 'Write-Host "Building Zabbix branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
+  - ps: 'Write-Host "Building Zabbix Next branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
   #- ps: |
   #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
   #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
 
 install:
     - set ZBX_VER=3.4.16
@@ -48,12 +45,14 @@ install:
     - mkdir C:\projects\deps\libs\pcre
 
 build_script:
-    - echo %configuration%
+    - ps: 'Write-Host "Running BUILDER: $env:BUILDER" -ForegroundColor Magenta'
+    - ps: 'Write-Host "Running GENERATOR: $env:GENERATOR" -ForegroundColor Magenta'
+    - ps: 'Write-Host "Running CONFIGURATION: $env:CONFIGURATION" -ForegroundColor Magenta'
     - cd C:\projects\deps\pcre
     - mkdir build
     - cd build
-    - cmake -G "NMake Makefiles"
-      "-DCMAKE_BUILD_TYPE=%configuration%"
+    - cmake -G "%GENERATOR%"
+      "-DCMAKE_BUILD_TYPE=%CONFIGURATION%"
       "-DCMAKE_INSTALL_PREFIX=C:\projects\deps\libs\pcre"
       "-DPCRE_BUILD_PCRECPP=OFF"
       "-DPCRE_SUPPORT_UNICODE_PROPERTIES=ON"
@@ -61,6 +60,15 @@ build_script:
       "-DCMAKE_C_FLAGS_RELEASE:string="/MT"" ..
     - nmake install
     - cd C:\projects\zabbix
+    - ps: >-
+        $env:APPVEYOR_REPO_COMMIT_SHORT = $env:APPVEYOR_REPO_COMMIT.Substring(0, 7)
+        ((Get-Content -path C:\projects\zabbix\include\version.h  -Raw) -replace '{ZABBIX_REVISION}','$env:APPVEYOR_REPO_COMMIT_SHORT') | Set-Content -Path C:\projects\zabbix\include\version.h.new
+        New-Alias exists Test-Path
+        if (exists -Path C:\projects\zabbix\include\version.h.new) {
+          Remove-Item -Path C:\projects\zabbix\include\version.h -Force
+          Move-Item -Path C:\projects\zabbix\include\version.h.new -Destination C:\projects\zabbix\include\version.h
+        }
+    - ps: 'Write-Host "Running APPVEYOR_REPO_COMMIT_SHORT: $env:APPVEYOR_REPO_COMMIT_SHORT" -ForegroundColor Magenta'
     - cd build\win32\project
     - copy ..\include\config.h ..\..\..\include\ >nul 2>&1
     - nmake CPU=AMD64 TLS=openssl TLSINCDIR="C:\OpenSSL-v111-Win64\include" TLSLIBDIR="C:\OpenSSL-v111-Win64\lib" PCREINCDIR="C:\projects\deps\libs\pcre\include" PCRELIBDIR="C:\projects\deps\libs\pcre\lib" /f Makefile_agent
