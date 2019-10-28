@@ -26,7 +26,7 @@ environment:
 #        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
 init:
-  - git config --global core.autocrlf input
+  - cmd: git config --global core.autocrlf input
   - ps: 'Write-Host "Building Zabbix Next branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
   #- ps: |
   #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
@@ -60,11 +60,10 @@ build_script:
       "-DCMAKE_C_FLAGS_RELEASE:string="/MT"" ..
     - nmake install
     - cd C:\projects\zabbix
-    - ps: >-
+    - ps: |
         $env:APPVEYOR_REPO_COMMIT_SHORT = $env:APPVEYOR_REPO_COMMIT.Substring(0, 7)
         ((Get-Content -path C:\projects\zabbix\include\version.h  -Raw) -replace '{ZABBIX_REVISION}','$env:APPVEYOR_REPO_COMMIT_SHORT') | Set-Content -Path C:\projects\zabbix\include\version.h.new
-        New-Alias exists Test-Path
-        if (exists -Path C:\projects\zabbix\include\version.h.new) {
+        if (Test-Path -Path C:\projects\zabbix\include\version.h.new) {
           Remove-Item -Path C:\projects\zabbix\include\version.h -Force
           Move-Item -Path C:\projects\zabbix\include\version.h.new -Destination C:\projects\zabbix\include\version.h
         }
