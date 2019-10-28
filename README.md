@@ -1,6 +1,6 @@
 # Continued development of Zabbix version 3.4.x
 
-[![Build Status](https://travis-ci.org/CHERTS/zabbix_34x_next.svg?branch=master)](https://travis-ci.org/CHERTS/zabbix_34x_next) [![Build Status](https://ci.appveyor.com/api/projects/status/github/CHERTS/zabbix_34x_next?svg=true)](https://ci.appveyor.com/project/CHERTS/zabbix-34x-next) [![Coverity Scan Build Status](https://scan.coverity.com/projects/19344/badge.svg)](https://scan.coverity.com/projects/zabbix_34x_next)
+[![Build Status](https://travis-ci.org/CHERTS/zabbix_34x_next.svg?branch=master)](https://travis-ci.org/CHERTS/zabbix_34x_next) [![Build status](https://ci.appveyor.com/api/projects/status/oq6c61rk2kl04nfo?svg=true)](https://ci.appveyor.com/project/CHERTS/zabbix-34x-next) [![Coverity Scan Build Status](https://scan.coverity.com/projects/19344/badge.svg)](https://scan.coverity.com/projects/zabbix_34x_next)
 
 [По-русски / In Russian](README.ru.md)
 
