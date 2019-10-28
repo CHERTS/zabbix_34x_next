@@ -1,4 +1,9 @@
+version: 1.0.{build}
+
 image: Visual Studio 2017
+
+clone_folder: c:\projects\zabbix
+shallow_clone: true
 
 matrix:
     fast_finish: false
@@ -11,7 +16,26 @@ configuration:
 
 environment:
     matrix:
-        - TOOLCHAIN: msvc15
+      - PLATFORM: x64
+        BUILDER: CMake
+        GENERATOR: "NMake Makefiles"
+        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+#      - PLATFORM: x86
+#        BUILDER: CMake
+#        GENERATOR: "NMake Makefiles"
+#        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+
+init:
+  - git config --global core.autocrlf input
+  - ps: 'Write-Host "Building Zabbix branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
+  #- ps: |
+  #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
+  #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
 
 install:
     - set ZBX_VER=3.4.16
@@ -22,16 +46,9 @@ install:
     - appveyor DownloadFile https://ftp.pcre.org/pub/pcre/pcre-%PCRE_VER%.zip -FileName pcre.zip
     - 7z e -y pcre.zip -oC:\projects\deps\pcre
     - mkdir C:\projects\deps\libs\pcre
-    - mkdir C:\projects\zabbix
-    - cd C:\projects\zabbix
-    - appveyor DownloadFile https://github.com/CHERTS/zabbix_34x_next/releases/download/v%ZBX_VER%/zabbix-%ZBX_VER%.tar.gz
-    - tar xzf zabbix-%ZBX_VER%.tar.gz --strip-components=1
-
-build: false
 
 build_script:
     - echo %configuration%
-    - call ci\appveyor\set-env.bat %TOOLCHAIN% %PLATFORM%
     - cd C:\projects\deps\pcre
     - mkdir build
     - cd build
