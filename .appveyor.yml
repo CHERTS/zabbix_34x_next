@@ -71,7 +71,7 @@ build_script:
       "-DPCRE_SUPPORT_UTF=ON"
       "-DCMAKE_C_FLAGS_RELEASE:string="/MT"" ..
     - nmake install
-    - cd C:\projects\zabbix
+    - cd %APPVEYOR_BUILD_FOLDER%
     - ps: |
         $env:APPVEYOR_REPO_COMMIT_SHORT = $env:APPVEYOR_REPO_COMMIT.Substring(0, 7)
         ((Get-Content -path $env:APPVEYOR_BUILD_FOLDER\include\version.h  -Raw) -replace '{ZABBIX_REVISION}','$env:APPVEYOR_REPO_COMMIT_SHORT') | Set-Content -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new
@@ -92,10 +92,11 @@ after_build:
   - ps: 'Write-Host "Copy OPENSSL_DLL_2: $env:OPENSSL_DLL_2" -ForegroundColor Magenta'
   - cmd: copy /Y C:\OpenSSL-v111-%OPENSSL_PLATFORM%\bin\%OPENSSL_DLL_2% C:\projects\zabbix\bin\%ZBX_OUTPUT%
   - ps: 'Write-Host "Create archive zabbix-agent-$env:APPVEYOR_BUILD_VERSION-$env:PLATFORM.zip" -ForegroundColor Magenta'
+  - cd %APPVEYOR_BUILD_FOLDER%\bin
   - cmd: 7z a zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\bin\%ZBX_OUTPUT%\*.exe %APPVEYOR_BUILD_FOLDER%\bin\%ZBX_OUTPUT%\*.dll
 
 artifacts:
-  - path: zabbix-agent-%APPVEYOR_BUILD_VERSION%.zip
+  - path: %APPVEYOR_BUILD_FOLDER%\bin\zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip
     name: Zabbix agent v%APPVEYOR_BUILD_VERSION%-%PLATFORM% for Windows 
 
 notifications:
