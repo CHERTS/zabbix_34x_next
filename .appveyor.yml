@@ -74,10 +74,10 @@ build_script:
     - cd C:\projects\zabbix
     - ps: |
         $env:APPVEYOR_REPO_COMMIT_SHORT = $env:APPVEYOR_REPO_COMMIT.Substring(0, 7)
-        ((Get-Content -path C:\projects\zabbix\include\version.h  -Raw) -replace '{ZABBIX_REVISION}','$env:APPVEYOR_REPO_COMMIT_SHORT') | Set-Content -Path C:\projects\zabbix\include\version.h.new
-        if (Test-Path -Path C:\projects\zabbix\include\version.h.new) {
-          Remove-Item -Path C:\projects\zabbix\include\version.h -Force
-          Move-Item -Path C:\projects\zabbix\include\version.h.new -Destination C:\projects\zabbix\include\version.h
+        ((Get-Content -path $env:APPVEYOR_BUILD_FOLDER\include\version.h  -Raw) -replace '{ZABBIX_REVISION}','$env:APPVEYOR_REPO_COMMIT_SHORT') | Set-Content -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new
+        if (Test-Path -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new) {
+          Remove-Item -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h -Force
+          Move-Item -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new -Destination $env:APPVEYOR_BUILD_FOLDER\include\version.h
         }
     - ps: 'Write-Host "Running APPVEYOR_REPO_COMMIT_SHORT: $env:APPVEYOR_REPO_COMMIT_SHORT" -ForegroundColor Magenta'
     - cd build\win32\project
@@ -91,8 +91,8 @@ after_build:
   - cmd: copy /Y C:\OpenSSL-v111-%OPENSSL_PLATFORM%\bin\%OPENSSL_DLL_1% C:\projects\zabbix\bin\%ZBX_OUTPUT%
   - ps: 'Write-Host "Copy OPENSSL_DLL_2: $env:OPENSSL_DLL_2" -ForegroundColor Magenta'
   - cmd: copy /Y C:\OpenSSL-v111-%OPENSSL_PLATFORM%\bin\%OPENSSL_DLL_2% C:\projects\zabbix\bin\%ZBX_OUTPUT%
-  - ps: 'Write-Host "Create archive zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip" -ForegroundColor Magenta'
-  - cmd: 7z a zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\zabbix\bin\%ZBX_OUTPUT%\*.exe %APPVEYOR_BUILD_FOLDER%\zabbix\bin\%ZBX_OUTPUT%\*.dll
+  - ps: 'Write-Host "Create archive zabbix-agent-$env:APPVEYOR_BUILD_VERSION-$env:PLATFORM.zip" -ForegroundColor Magenta'
+  - cmd: 7z a zabbix-agent-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\bin\%ZBX_OUTPUT%\*.exe %APPVEYOR_BUILD_FOLDER%\bin\%ZBX_OUTPUT%\*.dll
 
 artifacts:
   - path: zabbix-agent-%APPVEYOR_BUILD_VERSION%.zip
