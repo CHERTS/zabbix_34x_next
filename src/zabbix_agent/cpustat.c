@@ -153,17 +153,17 @@ int	init_cpu_collector(ZBX_CPUS_STAT_DATA *pcpus)
 
 	if (pcpus->count <= 64)
 	{
-	for (idx = 0; idx <= pcpus->count; idx++)
-	{
-		if (0 == idx)
+		for (idx = 0; idx <= pcpus->count; idx++)
+		{
+			if (0 == idx)
 				StringCchPrintf(cpu, ARRSIZE(cpu), L"_Total");
-		else
-			_itow_s(idx - 1, cpu, ARRSIZE(cpu), 10);
+			else
+				_itow_s(idx - 1, cpu, ARRSIZE(cpu), 10);
 
 			if (ERROR_SUCCESS != zbx_PdhMakeCounterPath(__function_name, &cpe, counterPath))
-			goto clean;
+				goto clean;
 
-		if (NULL == (pcpus->cpu_counter[idx] = add_perf_counter(NULL, counterPath, MAX_COLLECTOR_PERIOD,
+			if (NULL == (pcpus->cpu_counter[idx] = add_perf_counter(NULL, counterPath, MAX_COLLECTOR_PERIOD,
 					&error)))
 			{
 				goto clean;
@@ -225,7 +225,9 @@ int	init_cpu_collector(ZBX_CPUS_STAT_DATA *pcpus)
 		goto clean;
 
 	if (NULL == (pcpus->queue_counter = add_perf_counter(NULL, counterPath, MAX_COLLECTOR_PERIOD, &error)))
+	{
 		goto clean;
+	}
 
 	ret = SUCCEED;
 clean:
@@ -286,7 +288,7 @@ void	free_cpu_collector(ZBX_CPUS_STAT_DATA *pcpus)
 {
 	const char	*__function_name = "free_cpu_collector";
 #ifdef _WINDOWS
-	int		idx;
+	int	idx;
 #endif
 	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __function_name);
 
@@ -800,13 +802,13 @@ int	get_cpustat(AGENT_RESULT *result, int cpu_num, int state, int mode)
 		for (i = 0; i < ZBX_CPU_STATE_COUNT; i++)
 		{
 			if (cpu->h_counter[i][idx_curr] > cpu->h_counter[i][idx_base])
-			total += cpu->h_counter[i][idx_curr] - cpu->h_counter[i][idx_base];
+				total += cpu->h_counter[i][idx_curr] - cpu->h_counter[i][idx_base];
 		}
 
 		/* current counter might be less than previous due to guest time sometimes not being fully included */
 		/* in user time by "/proc/stat" */
 		if (cpu->h_counter[state][idx_curr] > cpu->h_counter[state][idx_base])
-		counter = cpu->h_counter[state][idx_curr] - cpu->h_counter[state][idx_base];
+			counter = cpu->h_counter[state][idx_curr] - cpu->h_counter[state][idx_base];
 		else
 			counter = 0;
 	}

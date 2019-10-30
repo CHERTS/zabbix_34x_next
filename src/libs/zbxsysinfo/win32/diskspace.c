@@ -107,8 +107,8 @@ static const char	*get_drive_type_string(UINT type)
 static void	add_fs_to_json(wchar_t *path, struct zbx_json *j)
 {
 	wchar_t	fs_name[MAX_PATH + 1], *long_path = NULL;
-	char		*utf8;
-	size_t		sz;
+	char	*utf8;
+	size_t	sz;
 
 	utf8 = zbx_unicode_to_utf8(path);
 	sz = strlen(utf8);
@@ -193,7 +193,7 @@ int	VFS_FS_DISCOVERY(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	/* search volumes for mount point folder paths */
 	do
-		{
+	{
 		while (FALSE == GetVolumePathNamesForVolumeName(volume_name, buffer, size_dw, &size_dw))
 		{
 			if (ERROR_MORE_DATA != GetLastError())
@@ -202,7 +202,7 @@ int	VFS_FS_DISCOVERY(AGENT_REQUEST *request, AGENT_RESULT *result)
 				SET_MSG_RESULT(result, zbx_strdup(NULL, "Cannot obtain a list of filesystems."));
 				ret = SYSINFO_RET_FAIL;
 				goto out;
-		}
+			}
 
 			buffer = (wchar_t*)zbx_realloc(buffer, size_dw * sizeof(wchar_t));
 		}
@@ -212,7 +212,7 @@ int	VFS_FS_DISCOVERY(AGENT_REQUEST *request, AGENT_RESULT *result)
 			/* add mount point folder paths but skip drive letters */
 			if (3 < sz)
 				add_fs_to_json(p, &j);
-	}
+		}
 
 	} while (FALSE != FindNextVolume(volume, volume_name, ARRSIZE(volume_name)));
 
@@ -223,8 +223,8 @@ int	VFS_FS_DISCOVERY(AGENT_REQUEST *request, AGENT_RESULT *result)
 	}
 	else
 	{
-	zbx_json_close(&j);
-	SET_STR_RESULT(result, zbx_strdup(NULL, j.buffer));
+		zbx_json_close(&j);
+		SET_STR_RESULT(result, zbx_strdup(NULL, j.buffer));
 		ret = SYSINFO_RET_OK;
 	}
 

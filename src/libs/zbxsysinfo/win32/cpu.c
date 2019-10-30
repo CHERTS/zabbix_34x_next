@@ -45,7 +45,7 @@ int	get_cpu_num_win32(void)
 	typedef DWORD (WINAPI *GETACTIVEPC)(WORD);
 
 	ZBX_THREAD_LOCAL static GETACTIVEPC	get_act;
-	SYSTEM_INFO	sysInfo;
+	SYSTEM_INFO				sysInfo;
 	PSYS_LPI_EX				buffer = NULL;
 	int					cpu_count = 0;
 

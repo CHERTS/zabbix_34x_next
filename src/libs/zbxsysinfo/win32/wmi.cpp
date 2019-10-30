@@ -276,7 +276,7 @@ extern "C" static int	parse_all(IEnumWbemClassObject *pEnumerator, zbx_vector_wm
  *             error         - [OUT] the error description                    *
  *                                                                            *
  * Return value: SYSINFO_RET_OK   - *vtProp contains the retrieved WMI value  *
- *               SYSINFO_RET_FAIL - retreiving WMI value failed               *
+ *               SYSINFO_RET_FAIL - retrieving WMI value failed               *
  *                                                                            *
  * Comments: *vtProp must be initialized with VariantInit(),                  *
  *           wmi_* must not be NULL. The callers must convert value to the    *
@@ -331,8 +331,8 @@ extern "C" int	zbx_wmi_get_variant(const char *wmi_namespace, const char *wmi_qu
 	if (FAILED(hres))
 	{
 		*error = zbx_dsprintf(*error, "Failed to execute WMI query %s.", wmi_query);
-			goto exit;
-		}
+		goto exit;
+	}
 
 	if (NULL != pEnumerator)
 		ret = parse_value_cb(pEnumerator, wmi_values, error);
@@ -372,7 +372,7 @@ exit:
 extern "C" void	zbx_wmi_get(const char *wmi_namespace, const char *wmi_query, char **utf8_value)
 {
 	VARIANT				*vtProp;
-	HRESULT		hres;
+	HRESULT				hres;
 	zbx_vector_wmi_instance_t	wmi_values;
 	char				*error = NULL;
 
@@ -423,8 +423,8 @@ extern "C" int	WMI_GET(AGENT_REQUEST *request, AGENT_RESULT *result)
 {
 	char				*wmi_namespace, *wmi_query, *error = NULL;
 	VARIANT				*vtProp;
-	HRESULT		hres;
-	int		ret = SYSINFO_RET_FAIL;
+	HRESULT				hres;
+	int				ret = SYSINFO_RET_FAIL;
 	zbx_vector_wmi_instance_t	wmi_values;
 
 	if (2 != request->nparam)
