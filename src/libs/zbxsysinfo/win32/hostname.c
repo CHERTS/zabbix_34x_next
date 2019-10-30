@@ -29,7 +29,7 @@ int	SYSTEM_HOSTNAME(AGENT_REQUEST *request, AGENT_RESULT *result)
 	DWORD	dwSize = 256;
 	wchar_t	computerName[256];
 	char	*type, buffer[256];
-	int	netbios, rc;
+	int	netbios;
 
 	if (1 < request->nparam)
 	{
