@@ -982,6 +982,8 @@ static int	process_proxyconfig_table(const ZBX_TABLE *table, struct zbx_json_par
 
 	zabbix_log(LOG_LEVEL_DEBUG, "In %s() table:'%s'", __function_name, table->table);
 
+	memset(fields, 0, sizeof(fields));
+
 	/************************************************************************************/
 	/* T1. RECEIVED JSON (jp_obj) DATA FORMAT                                           */
 	/************************************************************************************/

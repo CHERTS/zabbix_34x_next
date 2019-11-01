@@ -191,7 +191,7 @@ static int	vmware_service_get_counter_value_by_id(zbx_vmware_service_t *service,
 
 	zbx_vmware_perf_entity_t	*entity;
 	zbx_vmware_perf_counter_t	*perfcounter;
-	zbx_ptr_pair_t			*perfvalue;
+	zbx_ptr_pair_t			*perfvalue = NULL;
 	int				i, ret = SYSINFO_RET_FAIL;
 	zbx_uint64_t			value;
 
@@ -252,8 +252,6 @@ static int	vmware_service_get_counter_value_by_id(zbx_vmware_service_t *service,
 		ret = SYSINFO_RET_OK;
 		goto out;
 	}
-
-
 
 	if (SUCCEED == is_uint64(perfvalue->second, &value))
 	{

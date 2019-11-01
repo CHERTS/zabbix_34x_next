@@ -69,6 +69,9 @@
 [DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
 [DEV-1164] expanded ZBX_THREAD_LOCAL define to __thread for gcc,clang
 [DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro
+[DEV-1334] fixed undefined variable error with openssl without psk support
+[DEV-1334] fixed clang warnings
+[DEV-1334] fixed coverity warnings
 [DBS-001] fixed format string is defined in proxy_tasks.c and timer.c (mgrigorev)
 [DBS-002] added Latest data in host settings page (mgrigorev)
 ~~~~

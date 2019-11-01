@@ -384,7 +384,7 @@ static int	zbx_get_snmp_response_error(const struct snmp_session *ss, const DC_I
 
 	if (STAT_SUCCESS == status)
 	{
-		zbx_snprintf(error, max_error_len, "SNMP error: %s", snmp_errstring(response->errstat));
+		zbx_snprintf(error, max_error_len, "SNMP error: %s", response ? snmp_errstring(response->errstat) : "");
 		ret = NOTSUPPORTED;
 	}
 	else if (STAT_ERROR == status)
@@ -1015,7 +1015,7 @@ static int	zbx_oid_is_new(zbx_hashset_t *hs, size_t root_len, const oid *p_oid, 
  * Author: Alexander Vladishev, Aleksandrs Saveljevs                          *
  *                                                                            *
  ******************************************************************************/
-static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const char *OID, char *error,
+static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const char *snmp_oid, char *error,
 		size_t max_error_len, int *max_succeed, int *min_fail, int max_vars, int bulk,
 		zbx_snmp_walk_cb_func walk_cb_func, void *walk_cb_arg)
 {
@@ -1024,44 +1024,44 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 	struct snmp_pdu		*pdu, *response;
 	oid			anOID[MAX_OID_LEN], rootOID[MAX_OID_LEN];
 	size_t			anOID_len = MAX_OID_LEN, rootOID_len = MAX_OID_LEN, root_string_len, root_numeric_len;
-	char			snmp_oid[MAX_STRING_LEN];
+	char			oid_index[MAX_STRING_LEN];
 	struct variable_list	*var;
-	int			status, level, running, num_vars, check_oid_increase = 1, ret = SUCCEED;
+	int			status, level, running, num_vars = 0, check_oid_increase = 1, ret = SUCCEED;
 	AGENT_RESULT		snmp_result;
 	zbx_hashset_t		oids_seen;
 
-	zabbix_log(LOG_LEVEL_DEBUG, "In %s() type:%d oid:'%s' bulk:%d", __function_name, (int)item->type, OID, bulk);
+	zabbix_log(LOG_LEVEL_DEBUG, "In %s() type:%d OID:'%s' bulk:%d", __function_name, (int)item->type, snmp_oid, bulk);
 
 	if (ITEM_TYPE_SNMPv1 == item->type)	/* GetBulkRequest-PDU available since SNMPv2 */
 		bulk = SNMP_BULK_DISABLED;
 
 	/* create OID from string */
-	if (NULL == snmp_parse_oid(OID, rootOID, &rootOID_len))
+	if (NULL == snmp_parse_oid(snmp_oid, rootOID, &rootOID_len))
 	{
-		zbx_snprintf(error, max_error_len, "snmp_parse_oid(): cannot parse OID \"%s\".", OID);
+		zbx_snprintf(error, max_error_len, "snmp_parse_oid(): cannot parse OID \"%s\".", snmp_oid);
 		ret = CONFIG_ERROR;
 		goto out;
 	}
 
-	if (-1 == zbx_snmp_print_oid(snmp_oid, sizeof(snmp_oid), rootOID, rootOID_len, ZBX_OID_INDEX_STRING))
+	if (-1 == zbx_snmp_print_oid(oid_index, sizeof(oid_index), rootOID, rootOID_len, ZBX_OID_INDEX_STRING))
 	{
 		zbx_snprintf(error, max_error_len, "zbx_snmp_print_oid(): cannot print OID \"%s\" with string indices.",
-				OID);
+				snmp_oid);
 		ret = CONFIG_ERROR;
 		goto out;
 	}
 
-	root_string_len = strlen(snmp_oid);
+	root_string_len = strlen(oid_index);
 
-	if (-1 == zbx_snmp_print_oid(snmp_oid, sizeof(snmp_oid), rootOID, rootOID_len, ZBX_OID_INDEX_NUMERIC))
+	if (-1 == zbx_snmp_print_oid(oid_index, sizeof(oid_index), rootOID, rootOID_len, ZBX_OID_INDEX_NUMERIC))
 	{
 		zbx_snprintf(error, max_error_len, "zbx_snmp_print_oid(): cannot print OID \"%s\""
-				" with numeric indices.", OID);
+				" with numeric indices.", snmp_oid);
 		ret = CONFIG_ERROR;
 		goto out;
 	}
 
-	root_numeric_len = strlen(snmp_oid);
+	root_numeric_len = strlen(oid_index);
 
 	/* copy rootOID to anOID */
 	memcpy(anOID, rootOID, rootOID_len * sizeof(oid));
@@ -1126,7 +1126,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 
 			goto next;
 		}
-		else if (STAT_SUCCESS != status || SNMP_ERR_NOERROR != response->errstat)
+		else if (STAT_SUCCESS != status || (NULL != response && SNMP_ERR_NOERROR != response->errstat))
 		{
 			ret = zbx_get_snmp_response_error(ss, &item->interface, status, response, error, max_error_len);
 			running = 0;
@@ -1134,6 +1134,8 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 		}
 
 		/* process response */
+		if (NULL != response)
+		{
 		for (num_vars = 0, var = response->variables; NULL != var; num_vars++, var = var->next_variable)
 		{
 			/* verify if we are in the same subtree */
@@ -1185,12 +1187,12 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 					break;
 				}
 
-				if (SUCCEED != zbx_snmp_choose_index(snmp_oid, sizeof(snmp_oid), var->name,
+					if (SUCCEED != zbx_snmp_choose_index(oid_index, sizeof(oid_index), var->name,
 						var->name_length, root_string_len, root_numeric_len))
 				{
 					zbx_snprintf(error, max_error_len, "zbx_snmp_choose_index():"
 							" cannot choose appropriate index while walking for"
-							" OID \"%s\".", OID);
+								" OID \"%s\".", snmp_oid);
 					ret = NOTSUPPORTED;
 					running = 0;
 					break;
@@ -1201,7 +1203,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 				if (SUCCEED == zbx_snmp_set_result(var, &snmp_result) &&
 						NULL != GET_STR_RESULT(&snmp_result))
 				{
-					walk_cb_func(walk_cb_arg, OID, snmp_oid, snmp_result.str);
+						walk_cb_func(walk_cb_arg, snmp_oid, oid_index, snmp_result.str);
 				}
 				else
 				{
@@ -1210,7 +1212,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 					msg = GET_MSG_RESULT(&snmp_result);
 
 					zabbix_log(LOG_LEVEL_DEBUG, "cannot get index '%s' string value: %s",
-							snmp_oid, NULL != msg && NULL != *msg ? *msg : "(null)");
+								oid_index, NULL != msg && NULL != *msg ? *msg : "(null)");
 				}
 
 				free_result(&snmp_result);
@@ -1231,6 +1233,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 				running = 0;
 				break;
 			}
+		}
 		}
 
 		if (*max_succeed < num_vars)
@@ -1312,7 +1315,7 @@ retry:
 			__function_name, status, ss->s_snmp_errno, NULL == response ? (long)-1 : response->errstat,
 			mapping_num);
 
-	if (STAT_SUCCESS == status && SNMP_ERR_NOERROR == response->errstat)
+	if (STAT_SUCCESS == status && NULL != response && SNMP_ERR_NOERROR == response->errstat)
 	{
 		for (i = 0, var = response->variables;; i++, var = var->next_variable)
 		{
@@ -1402,7 +1405,8 @@ retry:
 				*min_fail = mapping_num;
 		}
 	}
-	else if (STAT_SUCCESS == status && SNMP_ERR_NOSUCHNAME == response->errstat && 0 != response->errindex)
+	else if (STAT_SUCCESS == status && NULL != response && SNMP_ERR_NOSUCHNAME == response->errstat &&
+			0 != response->errindex)
 	{
 		/* If a request PDU contains a bad variable, the specified behavior is different between SNMPv1 and */
 		/* later versions. In SNMPv1, the whole PDU is rejected and "response->errindex" is set to indicate */
@@ -1455,8 +1459,8 @@ retry:
 		}
 	}
 	else if (1 < mapping_num &&
-			((STAT_SUCCESS == status && SNMP_ERR_TOOBIG == response->errstat) || STAT_TIMEOUT == status ||
-			(STAT_ERROR == status && SNMPERR_TOO_LONG == ss->s_snmp_errno)))
+			((STAT_SUCCESS == status && NULL != response && SNMP_ERR_TOOBIG == response->errstat) ||
+			STAT_TIMEOUT == status || (STAT_ERROR == status && SNMPERR_TOO_LONG == ss->s_snmp_errno)))
 	{
 		/* Since we are trying to obtain multiple values from the SNMP agent, the response that it has to  */
 		/* generate might be too big. It seems to be required by the SNMP standard that in such cases the  */

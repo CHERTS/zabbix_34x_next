@@ -552,7 +552,10 @@ static void	procstat_add(const char *procname, const char *username, const char 
 
 	/* initialize the created query */
 	query = (zbx_procstat_query_t *)PROCSTAT_PTR_NULL(procstat_ref.addr, query_offset);
+	header->queries = query_offset;
 
+	if (NULL != query)
+	{
 	memset(query, 0, sizeof(zbx_procstat_query_t));
 
 	query->procname = procstat_strdup(procstat_ref.addr, procname);
@@ -561,7 +564,7 @@ static void	procstat_add(const char *procname, const char *username, const char 
 	query->flags = flags;
 	query->last_accessed = time(NULL);
 	query->next = header->queries;
-	header->queries = query_offset;
+	}
 
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);
 }

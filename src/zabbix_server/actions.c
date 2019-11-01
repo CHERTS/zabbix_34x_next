@@ -941,11 +941,13 @@ static int	check_auto_registration_condition(const DB_EVENT *event, DB_CONDITION
 				switch (condition->operator)
 				{
 					case CONDITION_OPERATOR_LIKE:
-						if (NULL != strstr(row[0], condition->value))
+						if (NULL != row[0] && NULL != condition->value &&
+								NULL != strstr(row[0], condition->value))
 							ret = SUCCEED;
 						break;
 					case CONDITION_OPERATOR_NOT_LIKE:
-						if (NULL == strstr(row[0], condition->value))
+						if (NULL != row[0] && NULL != condition->value &&
+								NULL != strstr(row[0], condition->value))
 							ret = SUCCEED;
 						break;
 					default:
