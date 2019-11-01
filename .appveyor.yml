@@ -73,8 +73,8 @@ build_script:
     - nmake install
     - cd %APPVEYOR_BUILD_FOLDER%
     - ps: |
-        $env:APPVEYOR_REPO_COMMIT_SHORT = $env:APPVEYOR_REPO_COMMIT.Substring(0, 7)
-        ((Get-Content -path $env:APPVEYOR_BUILD_FOLDER\include\version.h  -Raw) -replace '{ZABBIX_REVISION}','$env:APPVEYOR_REPO_COMMIT_SHORT') | Set-Content -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new
+        $env:APPVEYOR_REPO_COMMIT_SHORT = $env:APPVEYOR_REPO_COMMIT.Substring(0, 8)
+        ((Get-Content -path $env:APPVEYOR_BUILD_FOLDER\include\version.h  -Raw) -replace '{ZABBIX_REVISION}',$env:APPVEYOR_REPO_COMMIT_SHORT) | Set-Content -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new
         if (Test-Path -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new) {
           Remove-Item -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h -Force
           Move-Item -Path $env:APPVEYOR_BUILD_FOLDER\include\version.h.new -Destination $env:APPVEYOR_BUILD_FOLDER\include\version.h
