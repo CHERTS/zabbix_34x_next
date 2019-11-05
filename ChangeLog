@@ -17,6 +17,7 @@ Bug fixes:
 ...G...PS. [ZBX-15428] improved regular expression performance by studying compiled pattern (vso)
 ...G...... [ZBX-15675] added support for more than 64 CPUs in Windows agent (kalimulin)
 ...G...... [ZBX-15685] fixed zabbix_sender failing to report the error due to closed connection (arimdjonoks)
+...G...PS. [ZBX-15899] added output sanitization to prevent invalid UTF-8 sequences in regexp-based text replacement (Andris)
 .......PS. [ZBX-16368] fixed fping double call (akozlovs)
 ...G...... [ZBX-16428] fixed SIGBUS crash when mmap memory is not accessible (atumilovics)
 ...G...PS. [ZBX-16534] fixed stdout and stderr redirection after external log rotation (akozlovs)

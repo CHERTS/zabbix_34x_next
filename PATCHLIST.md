@@ -40,6 +40,7 @@
 [ZBX-15675] added support for more than 64 CPUs in Windows agent (kalimulin) (https://support.zabbix.com/browse/ZBX-15675)
 [ZBX-15685] fixed zabbix_sender failing to report the error due to closed connection (arimdjonoks) (https://support.zabbix.com/browse/ZBX-15685)
 [ZBX-15898] fixed compilation warning regarding too large integer constant (akozlovs) (https://support.zabbix.com/browse/ZBX-15898)
+[ZBX-15899] added output sanitization to prevent invalid UTF-8 sequences in regexp-based text replacement (Andris) (https://support.zabbix.com/browse/ZBX-15899)
 [ZBX-15915] fixed linking error if round() is undefined (https://support.zabbix.com/browse/ZBX-15915)
 [ZBX-15955] fixed security vulnerability - accepting connections from not allowed addresses (Andris, vso) (https://support.zabbix.com/browse/ZBX-15955)
 [ZBX-15962] added mounted filesystems to vfs.fs.discovery of windows agent (asestakovs) (https://support.zabbix.com/browse/ZBX-15962)
