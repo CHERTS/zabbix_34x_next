@@ -34,6 +34,7 @@
 [ZBX-15178] fixed wrong behaviour when referencing unexisting capture groups in item regexp preprocessing, general pcre code improvements (Andris, kalimulin) (https://support.zabbix.com/browse/ZBX-15178)
 [ZBX-15225] improved handling of timeouts in vfs.dir.size and vfs.dir.count items on Windows agent (asitals) (https://support.zabbix.com/browse/ZBX-15225)
 [ZBX-15301] fixed monotonous lag behind in Windows "system.localtime" (MVekslers) (https://support.zabbix.com/browse/ZBX-15301)
+[ZBX-15428] improved regular expression performance by studying compiled pattern (vso) (https://support.zabbix.com/browse/ZBX-15428)
 [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris) (https://support.zabbix.com/browse/ZBX-15552)
 [ZBX-15609] added missing optional parameter "<regex_excl_dir>" for "vfs.dir.count" and "vfs.dir.size" item keys in item helper (Ivo) (https://support.zabbix.com/browse/ZBX-15609)
 [ZBX-15675] added support for more than 64 CPUs in Windows agent (kalimulin) (https://support.zabbix.com/browse/ZBX-15675)

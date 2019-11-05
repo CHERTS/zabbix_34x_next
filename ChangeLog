@@ -14,6 +14,7 @@ Bug fixes:
 ...G...PS. [ZBX-15106] improved error messages for item preprocessing, general pcre code improvements (Andris, wiper)
 ...G....S. [ZBX-15178] fixed wrong behaviour when referencing unexisting capture groups in item regexp preprocessing, general pcre code improvements (Andris, kalimulin)
 ...G...... [ZBX-15301] fixed monotonous lag behind in Windows "system.localtime" (MVekslers)
+...G...PS. [ZBX-15428] improved regular expression performance by studying compiled pattern (vso)
 ...G...... [ZBX-15675] added support for more than 64 CPUs in Windows agent (kalimulin)
 ...G...... [ZBX-15685] fixed zabbix_sender failing to report the error due to closed connection (arimdjonoks)
 .......PS. [ZBX-16368] fixed fping double call (akozlovs)
