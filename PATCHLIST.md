@@ -28,6 +28,7 @@
 [ZBX-14624] fixed agent collector not releasing connection to missing/removed disk devices (Andris, yurii) (https://support.zabbix.com/browse/ZBX-14624)
 [ZBX-14853] fixed error of vmware items caused by misconfigured vmware maxQueryMetrics parameter (MVekslers) (https://support.zabbix.com/browse/ZBX-14853)
 [ZBX-14876] added a new optional parameter <regex_excl_dir> to items vfs.dir.size[] and vfs.dir.count[] (viktors) (https://support.zabbix.com/browse/ZBX-14876)
+[ZBX-15010] fixed regexp compilation error for patterns with referenced subpatterns (vjaceslavs) (https://support.zabbix.com/browse/ZBX-15010)
 [ZBX-15090] fixed memory leak when validating regular expression preprocessing step parameters during LLD (wiper); improved coding style to meet guidelines (https://support.zabbix.com/browse/ZBX-15090)
 [ZBX-15225] improved handling of timeouts in vfs.dir.size and vfs.dir.count items on Windows agent (asitals) (https://support.zabbix.com/browse/ZBX-15225)
 [ZBX-15301] fixed monotonous lag behind in Windows "system.localtime" (MVekslers) (https://support.zabbix.com/browse/ZBX-15301)
