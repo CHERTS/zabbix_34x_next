@@ -31,6 +31,7 @@
 [ZBX-15010] fixed regexp compilation error for patterns with referenced subpatterns (vjaceslavs) (https://support.zabbix.com/browse/ZBX-15010)
 [ZBX-15090] fixed memory leak when validating regular expression preprocessing step parameters during LLD (wiper); improved coding style to meet guidelines (https://support.zabbix.com/browse/ZBX-15090)
 [ZBX-15106] improved error messages for item preprocessing, general pcre code improvements (Andris, wiper) (https://support.zabbix.com/browse/ZBX-15106)
+[ZBX-15178] fixed wrong behaviour when referencing unexisting capture groups in item regexp preprocessing, general pcre code improvements (Andris, kalimulin) (https://support.zabbix.com/browse/ZBX-15178)
 [ZBX-15225] improved handling of timeouts in vfs.dir.size and vfs.dir.count items on Windows agent (asitals) (https://support.zabbix.com/browse/ZBX-15225)
 [ZBX-15301] fixed monotonous lag behind in Windows "system.localtime" (MVekslers) (https://support.zabbix.com/browse/ZBX-15301)
 [ZBX-15552] fixed compilation with LibreSSL as OpenSSL replacement and OpenSSL without PSK support (Andris) (https://support.zabbix.com/browse/ZBX-15552)
