@@ -23,7 +23,7 @@
 
 struct zbx_regexp
 {
-	pcre	*pcre_regexp;
+	pcre			*pcre_regexp;
 	struct pcre_extra	*extra;
 };
 
@@ -60,8 +60,8 @@ zbx_regmatch_t;
  ******************************************************************************/
 static int	regexp_compile(const char *pattern, int flags, zbx_regexp_t **regexp, const char **err_msg_static)
 {
-	int	error_offset = -1;
-	pcre	*pcre_regexp;
+	int			error_offset = -1;
+	pcre			*pcre_regexp;
 	struct pcre_extra	*extra;
 
 #ifdef PCRE_NO_AUTO_CAPTURE
@@ -100,8 +100,8 @@ static int	regexp_compile(const char *pattern, int flags, zbx_regexp_t **regexp,
 			return FAIL;
 		}
 
-	*regexp = (zbx_regexp_t *)zbx_malloc(NULL, sizeof(zbx_regexp_t));
-	(*regexp)->pcre_regexp = pcre_regexp;
+		*regexp = (zbx_regexp_t *)zbx_malloc(NULL, sizeof(zbx_regexp_t));
+		(*regexp)->pcre_regexp = pcre_regexp;
 		(*regexp)->extra = extra;
 	}
 	else
@@ -207,7 +207,7 @@ static int	regexp_exec(const char *string, const zbx_regexp_t *regexp, int flags
 	static ZBX_THREAD_LOCAL int	matches_buff[MATCHES_BUFF_SIZE];
 	int				*ovector = NULL;
 	int				ovecsize = 3 * count;		/* see pcre_exec() in "man pcreapi" why 3 */
-	struct pcre_extra	extra, *pextra;
+	struct pcre_extra		extra, *pextra;
 #if defined(PCRE_EXTRA_MATCH_LIMIT) && defined(PCRE_EXTRA_MATCH_LIMIT_RECURSION) && !defined(_WINDOWS)
 	static unsigned long int	recursion_limit = 0;
 
@@ -245,7 +245,6 @@ static int	regexp_exec(const char *string, const zbx_regexp_t *regexp, int flags
 	pextra->match_limit_recursion = recursion_limit;
 #endif
 #endif
-
 	/* see "man pcreapi" about pcre_exec() return value and 'ovector' size and layout */
 	if (0 <= (r = pcre_exec(regexp->pcre_regexp, pextra, string, strlen(string), flags, 0, ovector, ovecsize)))
 	{
@@ -484,7 +483,7 @@ static int	regexp_sub(const char *string, const char *pattern, const char *outpu
 {
 	const char	*error = NULL;
 	zbx_regexp_t	*regexp = NULL;
-	zbx_regmatch_t	 match[ZBX_REGEXP_GROUPS_MAX];
+	zbx_regmatch_t	match[ZBX_REGEXP_GROUPS_MAX];
 	unsigned int	i;
 
 	if (NULL == string)
