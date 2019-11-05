@@ -15,6 +15,7 @@ Bug fixes:
 .......PS. [ZBX-16368] fixed fping double call (akozlovs)
 ...G...... [ZBX-16428] fixed SIGBUS crash when mmap memory is not accessible (atumilovics)
 ...G...PS. [ZBX-16534] fixed stdout and stderr redirection after external log rotation (akozlovs)
+...G...... [ZBX-16595] optimized active logs checks monitoring when buffer flushing fails (arimdjonoks)
 ...G...... [ZBX-16596] added handling of BOM to detect encoding for vfs.file.contents, vfs.file.regex and vfs.file.regmatch (arimdjonoks)
 .......PS. [ZBX-16664] fixed IPMI poller skips processing if one of the elements is missing information (akozlovs)
 ........S. [ZBX-16671] fixed server crashing when linking web scenario template (arimdjonoks)

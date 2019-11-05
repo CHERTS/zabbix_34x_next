@@ -53,6 +53,7 @@
 [ZBX-16460] fixed Zabbix daemon termination on FreeBSD (vso) (https://support.zabbix.com/browse/ZBX-16460)
 [ZBX-16534] fixed stdout and stderr redirection after external log rotation (akozlovs) (https://support.zabbix.com/browse/ZBX-16534)
 [ZBX-16545] fixed shell script execution timeout log message (atumilovics) (https://support.zabbix.com/browse/ZBX-16545)
+[ZBX-16595] optimized active logs checks monitoring when buffer flushing fails (arimdjonoks) (https://support.zabbix.com/browse/ZBX-16595)
 [ZBX-16596] added handling of BOM to detect encoding for vfs.file.contents, vfs.file.regex and vfs.file.regmatch (arimdjonoks) (https://support.zabbix.com/browse/ZBX-16596)
 [ZBX-16612] fixed possibility of high CPU usage on Windows (vso) (https://support.zabbix.com/browse/ZBX-16612)
 [ZBX-16664] fixed IPMI poller skips processing if one of the elements is missing information (akozlovs) (https://support.zabbix.com/browse/ZBX-16664)
