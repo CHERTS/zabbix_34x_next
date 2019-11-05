@@ -9,6 +9,7 @@ Bug fixes:
 ....I..... [ZBX-11764] fixed automake scripts; thanks to Tomasz Kłoczko for the patch (akozlovs)
 ...G...... [ZBX-13155] excluded src/libs/zbxself from agent compilation
 ...G...... [ZBX-14441] fixed windows agent "eventlog" key for reading big event log files of windows 2003 (MVekslers)
+........S. [ZBX-15090] fixed memory leak when validating regular expression preprocessing step parameters during LLD (wiper)
 ...G...... [ZBX-15301] fixed monotonous lag behind in Windows "system.localtime" (MVekslers)
 ...G...... [ZBX-15675] added support for more than 64 CPUs in Windows agent (kalimulin)
 ...G...... [ZBX-15685] fixed zabbix_sender failing to report the error due to closed connection (arimdjonoks)
