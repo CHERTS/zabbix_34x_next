@@ -28,6 +28,7 @@ Bug fixes:
 ........S. [ZBX-16711] ensuring errbuf is emptied before every curl_easy_perform request (arimdjonoks)
 ...G...PS. [ZBX-16750] fixed broken validation of peer certificate issuer and subject strings in TLS connect, fixed logging (Andris)
 ...G...PS. [ZBX-16767] fixed possible null pointer arithmetic; thanks to Mikhail Grigorev for the patch (asestakovs)
+..F....... [ZBX-16784] fixed Oracle performance by using "between" operator in SQL queries (averza)
 ...G...PS. [DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
 ...G...PS. [DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
 ........S. [DEV-1052] added limit for memory allocation in regex preprocessing steps

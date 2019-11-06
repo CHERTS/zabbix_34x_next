@@ -70,6 +70,7 @@
 [ZBX-16711] ensuring errbuf is emptied before every curl_easy_perform request (arimdjonoks) (https://support.zabbix.com/browse/ZBX-16711)
 [ZBX-16750] fixed broken validation of peer certificate issuer and subject strings in TLS connect, fixed logging (Andris) (https://support.zabbix.com/browse/ZBX-16750)
 [ZBX-16767] fixed possible null pointer arithmetic; thanks to Mikhail Grigorev for the patch (asestakovs) (https://support.zabbix.com/browse/ZBX-16767)
+[ZBX-16784] fixed Oracle performance by using "between" operator in SQL queries (averza) (https://support.zabbix.com/browse/ZBX-16784)
 [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
 [DEV-698] removed unused local variables
 [DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
