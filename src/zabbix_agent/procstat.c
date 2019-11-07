@@ -360,7 +360,7 @@ static size_t	procstat_strdup(void *base, const char *str)
  *          other process.                                                    *
  *                                                                            *
  * Comments: This function logs critical error and exits in the case of       *
- *           shared memory segement operation failure.                        *
+ *           shared memory segment operation failure.                         *
  *                                                                            *
  ******************************************************************************/
 static void	procstat_reattach(void)
@@ -556,14 +556,14 @@ static void	procstat_add(const char *procname, const char *username, const char 
 
 	if (NULL != query)
 	{
-	memset(query, 0, sizeof(zbx_procstat_query_t));
+		memset(query, 0, sizeof(zbx_procstat_query_t));
 
-	query->procname = procstat_strdup(procstat_ref.addr, procname);
-	query->username = procstat_strdup(procstat_ref.addr, username);
-	query->cmdline = procstat_strdup(procstat_ref.addr, cmdline);
-	query->flags = flags;
-	query->last_accessed = time(NULL);
-	query->next = header->queries;
+		query->procname = procstat_strdup(procstat_ref.addr, procname);
+		query->username = procstat_strdup(procstat_ref.addr, username);
+		query->cmdline = procstat_strdup(procstat_ref.addr, cmdline);
+		query->flags = flags;
+		query->last_accessed = time(NULL);
+		query->next = header->queries;
 	}
 
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);

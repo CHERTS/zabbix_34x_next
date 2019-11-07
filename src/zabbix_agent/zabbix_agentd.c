@@ -367,7 +367,7 @@ static int	parse_commandline(int argc, char **argv, ZBX_TASK_EX *t)
 
 	for (i = 0; NULL != longopts[i].name; i++)
 	{
-		ch = longopts[i].val;
+		ch = (char)longopts[i].val;
 
 		if ('h' == ch || 'V' == ch)
 			continue;
@@ -527,7 +527,7 @@ static void	set_defaults(void)
 		CONFIG_LOAD_MODULE_PATH = zbx_strdup(CONFIG_LOAD_MODULE_PATH, LIBDIR "/modules");
 
 	if (NULL == CONFIG_PID_FILE)
-		CONFIG_PID_FILE = "/tmp/zabbix_agentd.pid";
+		CONFIG_PID_FILE = (char *)"/tmp/zabbix_agentd.pid";
 #endif
 	if (NULL == CONFIG_LOG_TYPE_STR)
 		CONFIG_LOG_TYPE_STR = zbx_strdup(CONFIG_LOG_TYPE_STR, ZBX_OPTION_LOGTYPE_FILE);
@@ -625,7 +625,7 @@ static int	add_serveractive_host_cb(const char *host, unsigned short port)
 
 	CONFIG_ACTIVE_FORKS++;
 	CONFIG_ACTIVE_ARGS = (ZBX_THREAD_ACTIVECHK_ARGS *)zbx_realloc(CONFIG_ACTIVE_ARGS,
-					sizeof(ZBX_THREAD_ACTIVECHK_ARGS) * CONFIG_ACTIVE_FORKS);
+			sizeof(ZBX_THREAD_ACTIVECHK_ARGS) * CONFIG_ACTIVE_FORKS);
 
 	CONFIG_ACTIVE_ARGS[CONFIG_ACTIVE_FORKS - 1].host = zbx_strdup(NULL, host);
 	CONFIG_ACTIVE_ARGS[CONFIG_ACTIVE_FORKS - 1].port = port;

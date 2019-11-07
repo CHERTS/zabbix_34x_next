@@ -788,12 +788,12 @@ int	process_eventslog6(const char *server, unsigned short port, const char *even
 			if (SUCCEED != zbx_parse_eventlog_message6(eventlog_name_w, render_context, &event_bookmarks[i],
 					&lastlogsize, &evt_severity, &evt_timestamp, &evt_provider, &evt_source,
 					&evt_message, &evt_eventid, &keywords, error))
-	{
+			{
 				goto out;
-	}
+			}
 
 			switch (evt_severity)
-	{
+			{
 				case WINEVENT_LEVEL_LOG_ALWAYS:
 				case WINEVENT_LEVEL_INFO:
 					if (0 != (keywords & WINEVENT_KEYWORD_AUDIT_FAILURE))

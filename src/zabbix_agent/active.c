@@ -94,7 +94,7 @@ static void	init_active_metrics(void)
 	{
 		zabbix_log(LOG_LEVEL_DEBUG, "buffer: first allocation for %d elements", CONFIG_BUFFER_SIZE);
 		sz = CONFIG_BUFFER_SIZE * sizeof(ZBX_ACTIVE_BUFFER_ELEMENT);
-		buffer.data = zbx_malloc(buffer.data, sz);
+		buffer.data = (ZBX_ACTIVE_BUFFER_ELEMENT *)zbx_malloc(buffer.data, sz);
 		memset(buffer.data, 0, sz);
 		buffer.count = 0;
 		buffer.pcount = 0;
@@ -229,7 +229,7 @@ static void	add_check(const char *key, const char *key_orig, int refresh, zbx_ui
 		goto out;
 	}
 
-	metric = zbx_malloc(NULL, sizeof(ZBX_ACTIVE_METRIC));
+	metric = (ZBX_ACTIVE_METRIC *)zbx_malloc(NULL, sizeof(ZBX_ACTIVE_METRIC));
 
 	/* add new metric */
 	metric->key = zbx_strdup(NULL, key);
