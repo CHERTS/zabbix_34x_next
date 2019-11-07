@@ -24,12 +24,12 @@
 #define ZBX_STR(str)	ZBX_STR2(str)
 
 #define APPLICATION_NAME	"Zabbix Agent"
-#define ZABBIX_REVDATE		"10 October 2019"
+#define ZABBIX_REVDATE		"07 November 2019"
 #define ZABBIX_VERSION_MAJOR	3
 #define ZABBIX_VERSION_MINOR	4
 #define ZABBIX_VERSION_PATCH	17
 #define ZABBIX_VERSION_REVISION	{ZABBIX_REVISION}
-#define ZABBIX_VERSION_RC	"alpha1"
+#define ZABBIX_VERSION_RC	"rc1"
 #ifdef _WINDOWS
 #      define ZABBIX_VERSION_RC_NUM    0
 #endif
