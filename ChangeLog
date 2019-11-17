@@ -34,6 +34,7 @@ Bug fixes:
 ...G...PS. [DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
 ........S. [DEV-1052] added limit for memory allocation in regex preprocessing steps
 ...G...PS. [DEV-1164] expanded ZBX_THREAD_LOCAL define to __thread for gcc,clang
+...G...PS. [DEV-1311] hide false positive coverity defect CID 186018
 ...G...PS. [DEV-1334] fixed undefined variable error with openssl without psk support; fixed clang warnings; fixed coverity warnings
 
 --------------------------------------------------------------------------------

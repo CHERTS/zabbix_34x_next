@@ -79,6 +79,7 @@
 [DEV-1052] added limit for memory allocation in regex preprocessing steps
 [DEV-1164] expanded ZBX_THREAD_LOCAL define to __thread for gcc,clang
 [DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro
+[DEV-1311] hide false positive coverity defect CID 186018
 [DEV-1334] fixed undefined variable error with openssl without psk support
 [DEV-1334] fixed clang warnings
 [DEV-1334] fixed coverity warnings

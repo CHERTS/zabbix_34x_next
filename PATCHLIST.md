@@ -77,6 +77,8 @@
 [DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
 [DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
 [DEV-1052] added limit for memory allocation in regex preprocessing steps
+[DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro
+[DEV-1311] hide false positive coverity defect CID 186018
 [DEV-1164] expanded ZBX_THREAD_LOCAL define to __thread for gcc,clang
 [DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro
 [DEV-1334] fixed undefined variable error with openssl without psk support
