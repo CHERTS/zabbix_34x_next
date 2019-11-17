@@ -32,7 +32,7 @@ static HANDLE		system_log_handle = INVALID_HANDLE_VALUE;
 static char		log_filename[MAX_STRING_LEN];
 static int		log_type = LOG_TYPE_UNDEFINED;
 static zbx_mutex_t	log_access = ZBX_MUTEX_NULL;
-static int		log_level = LOG_LEVEL_WARNING;
+static int			log_level = LOG_LEVEL_WARNING;
 
 #ifdef _WINDOWS
 #	define LOCK_LOG		zbx_mutex_lock(log_access)
@@ -150,8 +150,8 @@ static void	rotate_log(const char *filename)
 	static zbx_uint64_t	old_size = ZBX_MAX_UINT64; /* redirect stdout and stderr */
 
 	if (0 != zbx_stat(filename, &buf))
-		{
-			zbx_redirect_stdio(filename);
+	{
+		zbx_redirect_stdio(filename);
 		return;
 	}
 
@@ -227,6 +227,7 @@ static void	lock_log(void)
 {
 	sigset_t	mask;
 
+	/* block signals to prevent deadlock on log file mutex when signal handler attempts to lock log */
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGUSR1);
 	sigaddset(&mask, SIGUSR2);
@@ -430,7 +431,7 @@ void	__zbx_zabbix_log(int level, const char *fmt, ...)
 		LOCK_LOG;
 
 		if (0 != CONFIG_LOG_FILE_SIZE)
-		rotate_log(log_filename);
+			rotate_log(log_filename);
 
 		if (NULL != (log_file = fopen(log_filename, "a+")))
 		{
