@@ -43,7 +43,7 @@
 #endif
 
 #ifdef WITH_HOSTNAME_METRIC
-extern ZBX_METRIC      parameter_hostname;
+extern ZBX_METRIC	parameter_hostname;
 #endif
 
 static ZBX_METRIC	*commands = NULL;
@@ -354,6 +354,8 @@ static void	add_request_param(AGENT_REQUEST *request, char *pvalue)
  * Parameters: itemkey - complete item key                                    *
  *                                                                            *
  * Return value: request - structure filled with data from item key           *
+ *                                                                            *
+ * Comments: thread-safe                                                      *
  *                                                                            *
  ******************************************************************************/
 int	parse_item_key(const char *itemkey, AGENT_REQUEST *request)
@@ -1411,7 +1413,7 @@ int	zbx_execute_threaded_metric(zbx_metric_func_t metric_func, AGENT_REQUEST *re
 	zbx_metric_thread_args_t	metric_args = {metric_func, request, result, ZBX_MUTEX_THREAD_DENIED |
 							ZBX_MUTEX_LOGGING_DENIED};
 	DWORD				rc;
-	BOOL					terminate_thread = FALSE;
+	BOOL				terminate_thread = FALSE;
 
 	zabbix_log(LOG_LEVEL_DEBUG, "In %s() key:'%s'", __function_name, request->key);
 

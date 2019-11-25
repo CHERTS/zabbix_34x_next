@@ -134,38 +134,38 @@ int	zbx_locks_create(char **error)
 	for (i = 0; i < ZBX_RWLOCK_COUNT; i++)
 	{
 		if (0 != pthread_rwlock_init(&shared_lock->rwlocks[i], &rwa))
-	{
+		{
 			*error = zbx_dsprintf(*error, "cannot create rwlock: %s", zbx_strerror(errno));
 			return FAIL;
 		}
 	}
 #else
-		union semun	semopts;
-		int		i;
+	union semun	semopts;
+	int		i;
 
 	if (-1 == (ZBX_SEM_LIST_ID = semget(IPC_PRIVATE, ZBX_MUTEX_COUNT + ZBX_RWLOCK_COUNT, 0600)))
-		{
-			*error = zbx_dsprintf(*error, "cannot create semaphore set: %s", zbx_strerror(errno));
-			return FAIL;
-		}
+	{
+		*error = zbx_dsprintf(*error, "cannot create semaphore set: %s", zbx_strerror(errno));
+		return FAIL;
+	}
 
-		/* set default semaphore value */
+	/* set default semaphore value */
 
-		semopts.val = 1;
+	semopts.val = 1;
 	for (i = 0; ZBX_MUTEX_COUNT + ZBX_RWLOCK_COUNT > i; i++)
-		{
-			if (-1 != semctl(ZBX_SEM_LIST_ID, i, SETVAL, semopts))
-				continue;
+	{
+		if (-1 != semctl(ZBX_SEM_LIST_ID, i, SETVAL, semopts))
+			continue;
 
-			*error = zbx_dsprintf(*error, "cannot initialize semaphore: %s", zbx_strerror(errno));
+		*error = zbx_dsprintf(*error, "cannot initialize semaphore: %s", zbx_strerror(errno));
 
-			if (-1 == semctl(ZBX_SEM_LIST_ID, 0, IPC_RMID, 0))
-				zbx_error("cannot remove semaphore set %d: %s", ZBX_SEM_LIST_ID, zbx_strerror(errno));
+		if (-1 == semctl(ZBX_SEM_LIST_ID, 0, IPC_RMID, 0))
+			zbx_error("cannot remove semaphore set %d: %s", ZBX_SEM_LIST_ID, zbx_strerror(errno));
 
-			ZBX_SEM_LIST_ID = -1;
+		ZBX_SEM_LIST_ID = -1;
 
-			return FAIL;
-		}
+		return FAIL;
+	}
 #endif
 	return SUCCEED;
 }

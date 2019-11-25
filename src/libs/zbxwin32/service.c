@@ -400,3 +400,4 @@ void	set_parent_signal_handler(void)
 	signal(SIGINT, parent_signal_handler);
 	signal(SIGTERM, parent_signal_handler);
 }
+
