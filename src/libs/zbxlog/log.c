@@ -321,7 +321,7 @@ int	zabbix_open_log(int type, int level, const char *filename, char **error)
 		strscpy(log_filename, filename);
 		zbx_fclose(log_file);
 	}
-	else if (LOG_TYPE_CONSOLE == type)
+	else if (LOG_TYPE_CONSOLE == type || LOG_TYPE_UNDEFINED == type)
 	{
 		if (SUCCEED != zbx_mutex_create(&log_access, ZBX_MUTEX_LOG, error))
 		{
@@ -333,7 +333,7 @@ int	zabbix_open_log(int type, int level, const char *filename, char **error)
 		if (-1 == dup2(STDOUT_FILENO, STDERR_FILENO))
 			zbx_error("cannot redirect stderr to stdout: %s", zbx_strerror(errno));
 	}
-	else if (LOG_TYPE_UNDEFINED != type)
+	else
 	{
 		*error = zbx_strdup(*error, "unknown log type");
 		return FAIL;
@@ -612,7 +612,7 @@ void	__zbx_zabbix_log(int level, const char *fmt, ...)
 int	zbx_get_log_type(const char *logtype)
 {
 	const char	*logtypes[] = {ZBX_OPTION_LOGTYPE_SYSTEM, ZBX_OPTION_LOGTYPE_FILE, ZBX_OPTION_LOGTYPE_CONSOLE};
-	int			i;
+	int		i;
 
 	for (i = 0; i < (int)ARRSIZE(logtypes); i++)
 	{
