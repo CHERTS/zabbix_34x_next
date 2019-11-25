@@ -261,6 +261,7 @@ static int			destinations_count = 0;
 #if !defined(_WINDOWS)
 static void	send_signal_handler(int sig)
 {
+
 #define CASE_LOG_WARNING(signal) \
 	case signal:							\
 		zabbix_log(LOG_LEVEL_WARNING, "interrupted by signal " #signal " while executing operation"); \
@@ -354,7 +355,7 @@ static int	sender_threads_wait(ZBX_THREAD_HANDLE *threads, int threads_num, cons
 	}
 
 	if (threads_num == fail_count)
-	return FAIL;
+		return FAIL;
 	else if (SUCCEED_PARTIAL == old_status || 0 != sp_count || 0 != fail_count)
 		return SUCCEED_PARTIAL;
 	else
@@ -524,11 +525,12 @@ static	ZBX_THREAD_ENTRY(send_value, args)
 #endif
 
 #if !defined(_WINDOWS)
-	signal(SIGINT,  send_signal_handler);
+	signal(SIGINT, send_signal_handler);
 	signal(SIGQUIT, send_signal_handler);
 	signal(SIGTERM, send_signal_handler);
 	signal(SIGHUP, send_signal_handler);
 	signal(SIGALRM, send_signal_handler);
+	signal(SIGPIPE, send_signal_handler);
 #endif
 	switch (configured_tls_connect_mode)
 	{
@@ -703,7 +705,7 @@ static void	zbx_fill_from_config_file(char **dst, char *src)
 	}
 }
 
-static void    zbx_load_config(const char *config_file)
+static void	zbx_load_config(const char *config_file)
 {
 	char	*cfg_source_ip = NULL, *cfg_active_hosts = NULL, *cfg_hostname = NULL, *cfg_tls_connect = NULL,
 		*cfg_tls_ca_file = NULL, *cfg_tls_crl_file = NULL, *cfg_tls_server_cert_issuer = NULL,
@@ -1183,8 +1185,16 @@ int	main(int argc, char **argv)
 	parse_commandline(argc, argv);
 
 	if (NULL != CONFIG_FILE)
-	zbx_load_config(CONFIG_FILE);
+		zbx_load_config(CONFIG_FILE);
 
+#ifndef _WINDOWS
+	if (SUCCEED != zbx_locks_create(&error))
+	{
+		zbx_error("cannot create locks: %s", error);
+		zbx_free(error);
+		exit(EXIT_FAILURE);
+	}
+#endif
 	if (SUCCEED != zabbix_open_log(LOG_TYPE_UNDEFINED, CONFIG_LOG_LEVEL, NULL, &error))
 	{
 		zbx_error("cannot open log: %s", error);
