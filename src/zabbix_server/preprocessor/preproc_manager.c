@@ -188,7 +188,7 @@ static zbx_list_item_t	*preprocessor_get_queued_item(zbx_preprocessing_manager_t
 	{
 		zbx_list_iterator_peek(&iterator, (void **)&request);
 
-		if (REQUEST_STATE_QUEUED == request->state && NULL != item)
+		if (REQUEST_STATE_QUEUED == request->state)
 		{
 			/* queued item is found */
 			item = iterator.current;
