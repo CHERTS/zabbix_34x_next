@@ -384,7 +384,7 @@ static int	zbx_get_snmp_response_error(const struct snmp_session *ss, const DC_I
 
 	if (STAT_SUCCESS == status)
 	{
-		zbx_snprintf(error, max_error_len, "SNMP error: %s", response ? snmp_errstring(response->errstat) : "");
+		zbx_snprintf(error, max_error_len, "SNMP error: %s", snmp_errstring(response->errstat));
 		ret = NOTSUPPORTED;
 	}
 	else if (STAT_ERROR == status)
@@ -1019,18 +1019,16 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 		size_t max_error_len, int *max_succeed, int *min_fail, int max_vars, int bulk,
 		zbx_snmp_walk_cb_func walk_cb_func, void *walk_cb_arg)
 {
-	const char		*__function_name = "zbx_snmp_walk";
-
 	struct snmp_pdu		*pdu, *response;
 	oid			anOID[MAX_OID_LEN], rootOID[MAX_OID_LEN];
 	size_t			anOID_len = MAX_OID_LEN, rootOID_len = MAX_OID_LEN, root_string_len, root_numeric_len;
 	char			oid_index[MAX_STRING_LEN];
 	struct variable_list	*var;
-	int			status, level, running, num_vars = 0, check_oid_increase = 1, ret = SUCCEED;
+	int			status, level, running, num_vars, check_oid_increase = 1, ret = SUCCEED;
 	AGENT_RESULT		snmp_result;
 	zbx_hashset_t		oids_seen;
 
-	zabbix_log(LOG_LEVEL_DEBUG, "In %s() type:%d OID:'%s' bulk:%d", __function_name, (int)item->type, snmp_oid, bulk);
+	zabbix_log(LOG_LEVEL_DEBUG, "In %s() type:%d OID:'%s' bulk:%d", __func__, (int)item->type, snmp_oid, bulk);
 
 	if (ITEM_TYPE_SNMPv1 == item->type)	/* GetBulkRequest-PDU available since SNMPv2 */
 		bulk = SNMP_BULK_DISABLED;
@@ -1101,7 +1099,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 		status = snmp_synch_response(ss, pdu, &response);
 
 		zabbix_log(LOG_LEVEL_DEBUG, "%s() snmp_synch_response() status:%d s_snmp_errno:%d errstat:%ld"
-				" max_vars:%d", __function_name, status, ss->s_snmp_errno,
+				" max_vars:%d", __func__, status, ss->s_snmp_errno,
 				NULL == response ? (long)-1 : response->errstat, max_vars);
 
 		if (1 < max_vars &&
@@ -1126,7 +1124,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 
 			goto next;
 		}
-		else if (STAT_SUCCESS != status || (NULL != response && SNMP_ERR_NOERROR != response->errstat))
+		else if (STAT_SUCCESS != status || SNMP_ERR_NOERROR != response->errstat)
 		{
 			ret = zbx_get_snmp_response_error(ss, &item->interface, status, response, error, max_error_len);
 			running = 0;
@@ -1134,8 +1132,6 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 		}
 
 		/* process response */
-		if (NULL != response)
-		{
 		for (num_vars = 0, var = response->variables; NULL != var; num_vars++, var = var->next_variable)
 		{
 			/* verify if we are in the same subtree */
@@ -1187,12 +1183,12 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 					break;
 				}
 
-					if (SUCCEED != zbx_snmp_choose_index(oid_index, sizeof(oid_index), var->name,
+				if (SUCCEED != zbx_snmp_choose_index(oid_index, sizeof(oid_index), var->name,
 						var->name_length, root_string_len, root_numeric_len))
 				{
 					zbx_snprintf(error, max_error_len, "zbx_snmp_choose_index():"
 							" cannot choose appropriate index while walking for"
-								" OID \"%s\".", snmp_oid);
+							" OID \"%s\".", snmp_oid);
 					ret = NOTSUPPORTED;
 					running = 0;
 					break;
@@ -1203,7 +1199,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 				if (SUCCEED == zbx_snmp_set_result(var, &snmp_result) &&
 						NULL != GET_STR_RESULT(&snmp_result))
 				{
-						walk_cb_func(walk_cb_arg, snmp_oid, oid_index, snmp_result.str);
+					walk_cb_func(walk_cb_arg, snmp_oid, oid_index, snmp_result.str);
 				}
 				else
 				{
@@ -1212,7 +1208,7 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 					msg = GET_MSG_RESULT(&snmp_result);
 
 					zabbix_log(LOG_LEVEL_DEBUG, "cannot get index '%s' string value: %s",
-								oid_index, NULL != msg && NULL != *msg ? *msg : "(null)");
+							oid_index, NULL != msg && NULL != *msg ? *msg : "(null)");
 				}
 
 				free_result(&snmp_result);
@@ -1234,7 +1230,6 @@ static int	zbx_snmp_walk(struct snmp_session *ss, const DC_ITEM *item, const cha
 				break;
 			}
 		}
-		}
 
 		if (*max_succeed < num_vars)
 			*max_succeed = num_vars;
@@ -1246,7 +1241,7 @@ next:
 	if (0 == check_oid_increase)
 		zbx_hashset_destroy(&oids_seen);
 out:
-	zabbix_log(LOG_LEVEL_DEBUG, "End of %s():%s", __function_name, zbx_result_string(ret));
+	zabbix_log(LOG_LEVEL_DEBUG, "End of %s():%s", __func__, zbx_result_string(ret));
 
 	return ret;
 }
