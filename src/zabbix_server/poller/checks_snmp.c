@@ -1456,7 +1456,7 @@ retry:
 		}
 	}
 	else if (1 < mapping_num &&
-			((STAT_SUCCESS == status && NULL != response && SNMP_ERR_TOOBIG == response->errstat) ||
+			((STAT_SUCCESS == status && SNMP_ERR_TOOBIG == response->errstat) ||
 			STAT_TIMEOUT == status || (STAT_ERROR == status && SNMPERR_TOO_LONG == ss->s_snmp_errno)))
 	{
 		/* Since we are trying to obtain multiple values from the SNMP agent, the response that it has to  */
