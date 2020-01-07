@@ -74,6 +74,7 @@
 [ZBX-16784] fixed Oracle performance by using "between" operator in SQL queries (averza) (https://support.zabbix.com/browse/ZBX-16784)
 [ZBX-16790] fixed log rotation on Windows (https://support.zabbix.com/browse/ZBX-16790)
 [ZBX-16915] fixed memory leak (mabele) (https://support.zabbix.com/browse/ZBX-16915)
+[ZBX-17036] fixed memory leak and wrong type cast (https://support.zabbix.com/browse/ZBX-17036)
 [DEV-732] fixed warnings reported by cppcheck static analysis; updated "cppcheck-static-analysis" targer in backend-build Jenkins job
 [DEV-698] removed unused local variables
 [DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
