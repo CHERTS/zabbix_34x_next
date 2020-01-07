@@ -18,6 +18,7 @@
 **/
 
 #include "common.h"
+#include "comms.h"
 
 #if defined(_WINDOWS)
 int	__zbx_open(const char *pathname, int flags)
@@ -107,7 +108,7 @@ int	zbx_read(int fd, char *buf, size_t count, const char *encoding)
 	if ((zbx_offset_t)-1 == (offset = zbx_lseek(fd, 0, SEEK_CUR)))
 		return -1;
 
-	if (0 >= (nbytes = read(fd, buf, count)))
+	if (0 >= (nbytes = read(fd, buf, (unsigned int)count)))
 		return (int)nbytes;
 
 	find_cr_lf_szbyte(encoding, &cr, &lf, &szbyte);
