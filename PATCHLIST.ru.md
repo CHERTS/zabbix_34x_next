@@ -79,6 +79,7 @@
 [DEV-698] removed unused local variables
 [DEV-699] implementation of zbx_vector_XXX_clear_ext() as typed function
 [DEV-699] changed type name to 'zbx_ ## __id ## _free_func_t' for function 'zbx_vector_ ## __id ## _clear_ext()'
+[DEV-764] added ability to compile Zabbix as C++ code for stronger type safety and new class of warnings
 [DEV-1052] added limit for memory allocation in regex preprocessing steps
 [DEV-1164] expanded ZBX_THREAD_LOCAL define to __thread for gcc,clang
 [DEV-1287] added filename-length-max=99 option to AM_INIT_AUTOMAKE macro

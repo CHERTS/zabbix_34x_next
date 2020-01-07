@@ -1133,7 +1133,7 @@ static int	scheduler_parse_filter_r(zbx_scheduler_filter_t **filter, const char 
 			return FAIL;
 	}
 
-	filter_new = zbx_malloc(NULL, sizeof(zbx_scheduler_filter_t));
+	filter_new = (zbx_scheduler_filter_t *)zbx_malloc(NULL, sizeof(zbx_scheduler_filter_t));
 	filter_new->start = start;
 	filter_new->end = end;
 	filter_new->step = step;
@@ -1722,7 +1722,7 @@ int	zbx_interval_preproc(const char *interval_str, int *simple_interval, zbx_cus
 		{
 			zbx_flexible_interval_t	*new_interval;
 
-			new_interval = zbx_malloc(NULL, sizeof(zbx_flexible_interval_t));
+			new_interval = (zbx_flexible_interval_t *)zbx_malloc(NULL, sizeof(zbx_flexible_interval_t));
 
 			if (SUCCEED != (ret = flexible_interval_parse(new_interval, interval_str,
 					(NULL == delim ? (int)strlen(interval_str) : (int)(delim - interval_str)))))
@@ -1739,7 +1739,7 @@ int	zbx_interval_preproc(const char *interval_str, int *simple_interval, zbx_cus
 		{
 			zbx_scheduler_interval_t	*new_interval;
 
-			new_interval = zbx_malloc(NULL, sizeof(zbx_scheduler_interval_t));
+			new_interval = (zbx_scheduler_interval_t *)zbx_malloc(NULL, sizeof(zbx_scheduler_interval_t));
 			memset(new_interval, 0, sizeof(zbx_scheduler_interval_t));
 
 			if (SUCCEED != (ret = scheduler_interval_parse(new_interval, interval_str,
@@ -1769,7 +1769,7 @@ out:
 	}
 	else if (NULL != custom_intervals)
 	{
-		*custom_intervals = zbx_malloc(NULL, sizeof(zbx_custom_interval_t));
+		*custom_intervals = (zbx_custom_interval_t *)zbx_malloc(NULL, sizeof(zbx_custom_interval_t));
 		(*custom_intervals)->flexible = flexible;
 		(*custom_intervals)->scheduling = scheduling;
 	}
@@ -1833,7 +1833,7 @@ int	calculate_item_nextcheck(zbx_uint64_t seed, int item_type, int simple_interv
 	}
 	else
 	{
-		int	current_delay = 0, try = 0;
+		int	current_delay = 0, attempt = 0;
 		time_t	next_interval, t, tmax, scheduled_check = 0;
 
 		/* first try to parse out and calculate scheduled intervals */
@@ -1860,7 +1860,7 @@ int	calculate_item_nextcheck(zbx_uint64_t seed, int item_type, int simple_interv
 				nextcheck = current_delay * (int)(t / (time_t)current_delay) +
 						(int)(seed % (zbx_uint64_t)current_delay);
 
-				if (0 == try)
+				if (0 == attempt)
 				{
 					while (nextcheck <= t)
 						nextcheck += current_delay;
@@ -1884,7 +1884,7 @@ int	calculate_item_nextcheck(zbx_uint64_t seed, int item_type, int simple_interv
 			{
 				/* 'nextcheck' is beyond the current interval */
 				t = next_interval;
-				try++;
+				attempt++;
 			}
 			else
 				break;	/* nextcheck is within the current interval */
@@ -2885,7 +2885,7 @@ int	uint64_array_add(zbx_uint64_t **values, int *alloc, int *num, zbx_uint64_t v
 		}
 
 		*alloc += alloc_step;
-		*values = zbx_realloc(*values, *alloc * sizeof(zbx_uint64_t));
+		*values = (uint64_t *)zbx_realloc(*values, *alloc * sizeof(zbx_uint64_t));
 	}
 
 	memmove(&(*values)[index + 1], &(*values)[index], sizeof(zbx_uint64_t) * (*num - index));

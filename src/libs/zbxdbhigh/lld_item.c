@@ -346,7 +346,7 @@ static int	lld_items_keys_compare_func(const void *d1, const void *d2)
 /* items - applications hashset support */
 static zbx_hash_t	lld_item_application_hash_func(const void *data)
 {
-	const zbx_lld_item_application_t	*item_application = data;
+	const zbx_lld_item_application_t	*item_application = (zbx_lld_item_application_t *)data;
 	zbx_hash_t				hash;
 
 	hash = ZBX_DEFAULT_HASH_ALGO(&item_application->item_ref, sizeof(item_application->item_ref),
@@ -539,7 +539,7 @@ static void	lld_items_get(const zbx_vector_ptr_t *item_prototypes, zbx_vector_pt
 
 		item_prototype = (zbx_lld_item_prototype_t *)item_prototypes->values[index];
 
-		item = zbx_malloc(NULL, sizeof(zbx_lld_item_t));
+		item = (zbx_lld_item_t *)zbx_malloc(NULL, sizeof(zbx_lld_item_t));
 
 		ZBX_STR2UINT64(item->itemid, row[0]);
 		item->parent_itemid = itemid;
@@ -662,7 +662,7 @@ static void	lld_items_get(const zbx_vector_ptr_t *item_prototypes, zbx_vector_pt
 
 	for (i = items->values_num - 1; i >= 0; i--)
 	{
-		item = items->values[i];
+		item = (zbx_lld_item_t *)items->values[i];
 
 		if (0 != item->master_itemid)
 		{
@@ -905,7 +905,7 @@ static void	lld_items_validate(zbx_uint64_t hostid, zbx_vector_ptr_t *items, cha
 		char	*sql = NULL;
 		size_t	sql_alloc = 256, sql_offset = 0;
 
-		sql = zbx_malloc(sql, sql_alloc);
+		sql = (char *)zbx_malloc(sql, sql_alloc);
 
 		zbx_snprintf_alloc(&sql, &sql_alloc, &sql_offset,
 				"select key_"
@@ -987,8 +987,8 @@ static int	substitute_formula_macros(char **data, const struct zbx_json_parse *j
 
 	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __function_name);
 
-	exp = zbx_malloc(NULL, exp_alloc);
-	tmp = zbx_malloc(NULL, tmp_alloc);
+	exp = (char *)zbx_malloc(NULL, exp_alloc);
+	tmp = (char *)zbx_malloc(NULL, tmp_alloc);
 
 	for (e = *data; SUCCEED == zbx_function_find(e, &f_pos, &par_l, &par_r, error, max_error_len); e += par_r + 1)
 	{
@@ -1069,7 +1069,7 @@ static zbx_lld_item_t	*lld_item_make(const zbx_lld_item_prototype_t *item_protot
 
 	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __function_name);
 
-	item = zbx_malloc(NULL, sizeof(zbx_lld_item_t));
+	item = (zbx_lld_item_t *)zbx_malloc(NULL, sizeof(zbx_lld_item_t));
 
 	item->itemid = 0;
 	item->parent_itemid = item_prototype->itemid;
@@ -1424,7 +1424,7 @@ static void	lld_items_make(const zbx_vector_ptr_t *item_prototypes, const zbx_ve
 		{
 			item_index_local.lld_row = (zbx_lld_row_t *)lld_rows->values[j];
 
-			if (NULL == (item_index = zbx_hashset_search(items_index, &item_index_local)))
+			if (NULL == (item_index = (zbx_lld_item_index_t *)zbx_hashset_search(items_index, &item_index_local)))
 			{
 				if (NULL != (item = lld_item_make(item_prototype, item_index_local.lld_row, error)))
 				{
@@ -1564,7 +1564,7 @@ static void	lld_item_save(zbx_uint64_t hostid, const zbx_vector_ptr_t *item_prot
 	{
 		const zbx_lld_item_prototype_t	*item_prototype;
 
-		item_prototype = item_prototypes->values[index];
+		item_prototype = (zbx_lld_item_prototype_t *)item_prototypes->values[index];
 		item->itemid = (*itemid)++;
 
 		zbx_db_insert_add_values(db_insert, item->itemid, item->name, item->key, hostid,
@@ -1590,7 +1590,7 @@ static void	lld_item_save(zbx_uint64_t hostid, const zbx_vector_ptr_t *item_prot
 	{
 		zbx_lld_item_t	*dependent;
 
-		dependent = item->dependent_items.values[index];
+		dependent = (zbx_lld_item_t *)item->dependent_items.values[index];
 		dependent->master_itemid = item->itemid;
 		lld_item_save(hostid, item_prototypes, dependent, itemid, itemdiscoveryid, db_insert,
 				db_insert_idiscovery);
@@ -2001,7 +2001,7 @@ static int	lld_items_save(zbx_uint64_t hostid, const zbx_vector_ptr_t *item_prot
 		zbx_lld_item_prototype_t	*item_prototype;
 		int				index;
 
-		sql = zbx_malloc(NULL, sql_alloc);
+		sql = (char *)zbx_malloc(NULL, sql_alloc);
 		DBbegin_multiple_update(&sql, &sql_alloc, &sql_offset);
 
 		for (i = 0; i < items->values_num; i++)
@@ -2502,7 +2502,7 @@ static void	lld_items_applications_save(zbx_hashset_t *items_applications, const
 	/* count new item-application links */
 	zbx_hashset_iter_reset(items_applications, &iter);
 
-	while (NULL != (item_application = zbx_hashset_iter_next(&iter)))
+	while (NULL != (item_application = (zbx_lld_item_application_t *)zbx_hashset_iter_next(&iter)))
 	{
 		if (0 == item_application->itemappid)
 			new_item_applications++;
@@ -2516,7 +2516,7 @@ static void	lld_items_applications_save(zbx_hashset_t *items_applications, const
 
 	zbx_hashset_iter_reset(items_applications, &iter);
 
-	while (NULL != (item_application = zbx_hashset_iter_next(&iter)))
+	while (NULL != (item_application = (zbx_lld_item_application_t *)zbx_hashset_iter_next(&iter)))
 	{
 		if (0 != item_application->itemappid)
 		{
@@ -2897,7 +2897,7 @@ static void	lld_item_links_populate(const zbx_vector_ptr_t *item_prototypes, con
 		{
 			item_index_local.lld_row = (zbx_lld_row_t *)lld_rows->values[j];
 
-			if (NULL == (item_index = zbx_hashset_search(items_index, &item_index_local)))
+			if (NULL == (item_index = (zbx_lld_item_index_t *)zbx_hashset_search(items_index, &item_index_local)))
 				continue;
 
 			if (0 == (item_index->item->flags & ZBX_FLAG_LLD_ITEM_DISCOVERED))
@@ -3033,7 +3033,7 @@ static void	lld_item_application_prototypes_get(const zbx_vector_ptr_t *item_pro
 		item_application_prototype = (zbx_lld_item_application_ref_t *)zbx_malloc(NULL,
 				sizeof(zbx_lld_item_application_ref_t));
 
-		item_application_prototype->application_prototype = application_prototypes->values[index];
+		item_application_prototype->application_prototype = (zbx_lld_application_prototype_t *)application_prototypes->values[index];
 		item_application_prototype->applicationid = 0;
 
 		ZBX_STR2UINT64(itemid, row[1]);
@@ -3157,7 +3157,7 @@ static void	lld_application_make(const zbx_lld_application_prototype_t *applicat
 	application_index_local.application_prototypeid = application_prototype->application_prototypeid;
 	application_index_local.lld_row = lld_row;
 
-	if (NULL == (application_index = zbx_hashset_search(applications_index, &application_index_local)))
+	if (NULL == (application_index = (zbx_lld_application_index_t *)zbx_hashset_search(applications_index, &application_index_local)))
 	{
 		application = (zbx_lld_application_t *)zbx_malloc(NULL, sizeof(zbx_lld_application_t));
 		application->applicationid = 0;
@@ -3270,7 +3270,7 @@ static void	lld_applications_make(const zbx_vector_ptr_t *application_prototypes
 	{
 		for (j = 0; j < lld_rows->values_num; j++)
 		{
-			lld_application_make(application_prototypes->values[i], lld_rows->values[j], applications,
+			lld_application_make((zbx_lld_application_prototype_t *)application_prototypes->values[i], (zbx_lld_row_t *)lld_rows->values[j], applications,
 					applications_index);
 		}
 	}
@@ -3361,7 +3361,7 @@ static void	lld_applications_validate(zbx_uint64_t hostid, zbx_uint64_t lld_rule
 			application_index_local.application_prototypeid = application->application_prototypeid;
 			application_index_local.lld_row = application->lld_row;
 
-			if (NULL == (application_index = zbx_hashset_search(applications_index,
+			if (NULL == (application_index = (zbx_lld_application_index_t *)zbx_hashset_search(applications_index,
 					&application_index_local)))
 			{
 				THIS_SHOULD_NEVER_HAPPEN;
@@ -3419,7 +3419,7 @@ static void	lld_applications_validate(zbx_uint64_t hostid, zbx_uint64_t lld_rule
 				continue;
 			}
 
-			application = applications->values[index];
+			application = (zbx_lld_application_t *)applications->values[index];
 
 			/* only discovered applications can be 'shared' between discovery rules */
 			if (ZBX_FLAG_DISCOVERY_CREATED != atoi(row[2]))
@@ -3503,7 +3503,7 @@ static void	lld_applications_validate(zbx_uint64_t hostid, zbx_uint64_t lld_rule
 				continue;
 			}
 
-			application = applications->values[index];
+			application = (zbx_lld_application_t *)applications->values[index];
 
 			/* add a pseudo application to remove the application discovery record */
 			/* of the shared application and current discovery rule                */
@@ -3612,7 +3612,7 @@ static void	lld_items_applications_make(const zbx_vector_ptr_t *item_prototypes,
 
 	for (i = 0; i < items->values_num; i++)
 	{
-		item = items->values[i];
+		item = (zbx_lld_item_t *)items->values[i];
 
 		if (0 == (item->flags & ZBX_FLAG_LLD_ITEM_DISCOVERED))
 			continue;
@@ -3620,7 +3620,7 @@ static void	lld_items_applications_make(const zbx_vector_ptr_t *item_prototypes,
 		/* if item is discovered its prototype must be in item_prototypes vector */
 		index = zbx_vector_ptr_bsearch(item_prototypes, &item->parent_itemid,
 				ZBX_DEFAULT_UINT64_PTR_COMPARE_FUNC);
-		item_prototype = item_prototypes->values[index];
+		item_prototype = (zbx_lld_item_prototype_t *)item_prototypes->values[index];
 
 		application_index_local.lld_row = item->lld_row;
 
@@ -3631,14 +3631,14 @@ static void	lld_items_applications_make(const zbx_vector_ptr_t *item_prototypes,
 
 		for (j = 0; j < item_prototype->applications.values_num; j++)
 		{
-			itemapp_prototype = item_prototype->applications.values[j];
+			itemapp_prototype = (zbx_lld_item_application_ref_t *)item_prototype->applications.values[j];
 
 			if (NULL != itemapp_prototype->application_prototype)
 			{
 				application_index_local.application_prototypeid =
 						itemapp_prototype->application_prototype->application_prototypeid;
 
-				if (NULL == (application_index = zbx_hashset_search(applications_index,
+				if (NULL == (application_index = (zbx_lld_application_index_t *)zbx_hashset_search(applications_index,
 						&application_index_local)))
 				{
 					continue;
@@ -3663,10 +3663,10 @@ static void	lld_items_applications_make(const zbx_vector_ptr_t *item_prototypes,
 				item_application_local.application_ref.applicationid = itemapp_prototype->applicationid;
 			}
 
-			if (NULL == (item_application = zbx_hashset_search(items_applications,
+			if (NULL == (item_application = (zbx_lld_item_application_t *)zbx_hashset_search(items_applications,
 					&item_application_local)))
 			{
-				item_application = zbx_hashset_insert(items_applications, &item_application_local,
+				item_application = (zbx_lld_item_application_t *)zbx_hashset_insert(items_applications, &item_application_local,
 						sizeof(zbx_lld_item_application_t));
 			}
 
@@ -3833,7 +3833,7 @@ static void	lld_link_dependent_items(zbx_vector_ptr_t *items, zbx_hashset_t *ite
 		item_index_local.parent_itemid = item->master_itemid;
 		item_index_local.lld_row = (zbx_lld_row_t *)item->lld_row;
 
-		if (NULL == (item_index = zbx_hashset_search(items_index, &item_index_local)))
+		if (NULL == (item_index = (zbx_lld_item_index_t *)zbx_hashset_search(items_index, &item_index_local)))
 		{
 			/* dependent item without master item should be removed */
 			THIS_SHOULD_NEVER_HAPPEN;

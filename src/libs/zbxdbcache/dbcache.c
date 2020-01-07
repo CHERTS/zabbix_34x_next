@@ -356,7 +356,7 @@ static void	dc_set_cache_disable_from(ZBX_DC_TREND *trends, unsigned char value_
 		if (0 == trends[i].disable_from || trends[i].disable_from > clock)
 			continue;
 
-		if (NULL != (trend = zbx_hashset_search(&cache->trends, &trends[i].itemid)))
+		if (NULL != (trend = (ZBX_DC_TREND *)zbx_hashset_search(&cache->trends, &trends[i].itemid)))
 			trend->disable_from = clock + SEC_PER_HOUR;
 	}
 
@@ -657,7 +657,7 @@ static void	DCflush_trends(ZBX_DC_TREND *trends, int *trends_num, int update_cac
 	}
 
 	itemids_alloc = MIN(ZBX_HC_SYNC_MAX, *trends_num);
-	itemids = zbx_malloc(itemids, itemids_alloc * sizeof(zbx_uint64_t));
+	itemids = (zbx_uint64_t *)zbx_malloc(itemids, itemids_alloc * sizeof(zbx_uint64_t));
 
 	for (i = 0; i < *trends_num; i++)
 	{
@@ -739,7 +739,7 @@ static void	DCflush_trend(ZBX_DC_TREND *trend, ZBX_DC_TREND **trends, int *trend
 	if (*trends_num == *trends_alloc)
 	{
 		*trends_alloc += 256;
-		*trends = zbx_realloc(*trends, *trends_alloc * sizeof(ZBX_DC_TREND));
+		*trends = (ZBX_DC_TREND *)zbx_realloc(*trends, *trends_alloc * sizeof(ZBX_DC_TREND));
 	}
 
 	memcpy(&(*trends)[*trends_num], trend, sizeof(ZBX_DC_TREND));
@@ -936,8 +936,8 @@ static void	DCmass_update_triggers(ZBX_DC_HISTORY *history, int history_num, zbx
 
 	zabbix_log(LOG_LEVEL_DEBUG, "In %s()", __function_name);
 
-	itemids = zbx_malloc(itemids, sizeof(zbx_uint64_t) * (size_t)history_num);
-	timespecs = zbx_malloc(timespecs, sizeof(zbx_timespec_t) * (size_t)history_num);
+	itemids = (zbx_uint64_t *)zbx_malloc(itemids, sizeof(zbx_uint64_t) * (size_t)history_num);
+	timespecs = (zbx_timespec_t *)zbx_malloc(timespecs, sizeof(zbx_timespec_t) * (size_t)history_num);
 
 	for (i = 0; i < history_num; i++)
 	{
@@ -1018,7 +1018,7 @@ static void	DCinventory_value_add(zbx_vector_ptr_t *inventory_values, const DC_I
 
 	zbx_format_value(value, sizeof(value), item->valuemapid, item->units, h->value_type);
 
-	inventory_value = zbx_malloc(NULL, sizeof(zbx_inventory_value_t));
+	inventory_value = (zbx_inventory_value_t *)zbx_malloc(NULL, sizeof(zbx_inventory_value_t));
 
 	inventory_value->hostid = item->host.hostid;
 	inventory_value->field_name = inventory_field;
@@ -1204,7 +1204,7 @@ static int	dc_history_set_value(ZBX_DC_HISTORY *hdata, unsigned char value_type,
 			if (ITEM_VALUE_TYPE_LOG != hdata->value_type)
 			{
 				dc_history_clean_value(hdata);
-				hdata->value.log = zbx_malloc(NULL, sizeof(zbx_log_value_t));
+				hdata->value.log = (zbx_log_value_t *)zbx_malloc(NULL, sizeof(zbx_log_value_t));
 				memset(hdata->value.log, 0, sizeof(zbx_log_value_t));
 			}
 			hdata->value.log->value = value->data.str;
@@ -1834,7 +1834,7 @@ static void	dc_add_proxy_history_meta(ZBX_DC_HISTORY *history, int history_num)
 		else
 		{
 			flags |= PROXY_HISTORY_FLAG_NOVALUE;
-			pvalue = "";
+			pvalue = (char *)"";
 		}
 
 		zbx_db_insert_add_values(&db_insert, h->itemid, h->ts.sec, h->ts.ns, pvalue, h->lastlogsize, h->mtime,
@@ -2195,22 +2195,22 @@ int	DCsync_history(int sync_type, int *total_num)
 	sync_start = time(NULL);
 
 	if (NULL == history)
-		history = zbx_malloc(history, ZBX_HC_SYNC_MAX * sizeof(ZBX_DC_HISTORY));
+		history = (ZBX_DC_HISTORY *)zbx_malloc(history, ZBX_HC_SYNC_MAX * sizeof(ZBX_DC_HISTORY));
 
 	if (NULL == history_float && NULL != history_float_cbs)
-		history_float = zbx_malloc(history_float, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_FLOAT));
+		history_float = (ZBX_HISTORY_FLOAT *)zbx_malloc(history_float, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_FLOAT));
 
 	if (NULL == history_integer && NULL != history_integer_cbs)
-		history_integer = zbx_malloc(history_integer, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_INTEGER));
+		history_integer = (ZBX_HISTORY_INTEGER *)zbx_malloc(history_integer, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_INTEGER));
 
 	if (NULL == history_string && NULL != history_string_cbs)
-		history_string = zbx_malloc(history_string, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_STRING));
+		history_string = (ZBX_HISTORY_STRING *)zbx_malloc(history_string, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_STRING));
 
 	if (NULL == history_text && NULL != history_text_cbs)
-		history_text = zbx_malloc(history_text, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_TEXT));
+		history_text = (ZBX_HISTORY_TEXT *)zbx_malloc(history_text, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_TEXT));
 
 	if (NULL == history_log && NULL != history_log_cbs)
-		history_log = zbx_malloc(history_log, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_LOG));
+		history_log = (ZBX_HISTORY_LOG *)zbx_malloc(history_log, ZBX_HC_SYNC_MAX * sizeof(ZBX_HISTORY_LOG));
 
 	if (0 != (program_type & ZBX_PROGRAM_TYPE_SERVER))
 	{
@@ -2255,8 +2255,8 @@ int	DCsync_history(int sync_type, int *total_num)
 			DC_ITEM			*items = NULL;
 			int			*errcodes = NULL, i;
 
-			items = zbx_malloc(items, sizeof(DC_ITEM) * (size_t)history_num);
-			errcodes = zbx_malloc(errcodes, sizeof(int) * (size_t)history_num);
+			items = (DC_ITEM *)zbx_malloc(items, sizeof(DC_ITEM) * (size_t)history_num);
+			errcodes = (int *)zbx_malloc(errcodes, sizeof(int) * (size_t)history_num);
 
 			zbx_vector_uint64_create(&itemids);
 			zbx_vector_uint64_reserve(&itemids, history_num);
@@ -2473,7 +2473,7 @@ static void	dc_string_buffer_realloc(size_t len)
 	}
 	while (string_values_alloc < string_values_offset + len);
 
-	string_values = zbx_realloc(string_values, string_values_alloc);
+	string_values = (char *)zbx_realloc(string_values, string_values_alloc);
 }
 
 static dc_item_value_t	*dc_local_get_history_slot(void)
@@ -2484,7 +2484,7 @@ static dc_item_value_t	*dc_local_get_history_slot(void)
 	if (item_values_alloc == item_values_num)
 	{
 		item_values_alloc += ZBX_STRUCT_REALLOC_STEP;
-		item_values = zbx_realloc(item_values, item_values_alloc * sizeof(dc_item_value_t));
+		item_values = (dc_item_value_t *)zbx_realloc(item_values, item_values_alloc * sizeof(dc_item_value_t));
 	}
 
 	return &item_values[item_values_num++];
@@ -3247,7 +3247,7 @@ static void	hc_copy_history_data(ZBX_DC_HISTORY *history, zbx_uint64_t itemid, z
 				history->value.str = zbx_strdup(NULL, data->value.str);
 				break;
 			case ITEM_VALUE_TYPE_LOG:
-				history->value.log = zbx_malloc(NULL, sizeof(zbx_log_value_t));
+				history->value.log = (zbx_log_value_t *)zbx_malloc(NULL, sizeof(zbx_log_value_t));
 				history->value.log->value = zbx_strdup(NULL, data->value.log->value);
 
 				if (NULL != data->value.log->source)
@@ -3513,7 +3513,7 @@ int	init_database_cache(char **error)
 	}
 
 	if (NULL == sql)
-		sql = zbx_malloc(sql, sql_alloc);
+		sql = (char *)zbx_malloc(sql, sql_alloc);
 out:
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);
 
