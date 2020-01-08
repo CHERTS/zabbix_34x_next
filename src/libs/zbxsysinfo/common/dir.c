@@ -572,7 +572,7 @@ static int	vfs_dir_size(AGENT_REQUEST *request, AGENT_RESULT *result, HANDLE tim
 		WIN32_FIND_DATA	data;
 		zbx_directory_item_t	*item;
 
-		item = list.values[--list.values_num];
+		item = (zbx_directory_item_t *)list.values[--list.values_num];
 
 		name = zbx_dsprintf(NULL, "%s\\*", item->path);
 
@@ -919,7 +919,7 @@ static int	vfs_dir_count(const AGENT_REQUEST *request, AGENT_RESULT *result, HAN
 		WIN32_FIND_DATA		data;
 		zbx_directory_item_t	*item;
 
-		item = list.values[--list.values_num];
+		item = (zbx_directory_item_t *)list.values[--list.values_num];
 
 		name = zbx_dsprintf(NULL, "%s\\*", item->path);
 
